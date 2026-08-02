@@ -1,0 +1,19 @@
+# red_line — standalone project ignores
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage
+.coverage.*
+coverage_project.json
+htmlcov/
+output/
+dist/
+build/
+*.egg-info/
+.ruff_cache/
+.mypy_cache/
+.benchmarks/
+
+# Private working document — kept locally, never published
+ISA.md

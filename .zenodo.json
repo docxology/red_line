@@ -1,0 +1,87 @@
+{
+  "title": "Personal Red Lines for Development",
+  "description": "<p>A versioned, evidence-gated personal security boundary and explicit No document for dual-use development work. It requires a complete, reviewable action intake before returning compliance, distinguishes outside-scope work from compliance, and records uncertainty as a blocking result rather than a permission. It is a personal auditability aid, not enforcement, legal compliance, semantic safety classification, or external certification.</p><p><strong>Subtitle:</strong> An Evidence-Gated Personal Security Boundary and Explicit No Document for Dual-Use Development</p><p>Code is MIT licensed; prose and figures are CC BY 4.0. See LICENSE in the repository.</p>",
+  "upload_type": "publication",
+  "publication_type": "workingpaper",
+  "creators": [
+    {
+      "name": "Friedman, Daniel Ari",
+      "affiliation": "Active Inference Institute",
+      "orcid": "0000-0001-6232-9096"
+    }
+  ],
+  "license": "cc-by-4.0",
+  "access_right": "open",
+  "version": "0.3.0",
+  "keywords": [
+    "red lines",
+    "AI governance",
+    "dual-use",
+    "cognitive security",
+    "hash-based canary",
+    "precommitment",
+    "open science",
+    "personal governance",
+    "global political thought",
+    "research ethics",
+    "sociotechnical systems"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/docxology/red_line",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/black_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/golden_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/white_line",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/line_set",
+      "relation": "isPartOf",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/witness_register",
+      "relation": "references",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.5281/zenodo.21754236",
+      "relation": "cites",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.21754238",
+      "relation": "cites",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.21754242",
+      "relation": "cites",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.21754244",
+      "relation": "cites",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.21754246",
+      "relation": "cites",
+      "scheme": "doi"
+    }
+  ],
+  "notes": "One of six related works (the line set and its witness register). The five sibling DOIs are listed in related_identifiers with relation 'cites'; this work's own DOI is recorded in CITATION.cff identifiers and the record link."
+}

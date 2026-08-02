@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "claim_classes": [
+    "descriptive",
+    "transfer",
+    "implementation",
+    "release"
+  ],
+  "verification_modes": [
+    "executable",
+    "source_bounded",
+    "render_validated",
+    "external_witness_condition"
+  ],
+  "claims": [
+    {
+      "claim_id": "CLM-001",
+      "claim": "The author has seven current, first-person red lines",
+      "claim_class": "implementation",
+      "supporting_surface": [
+        "src/red_line/registry/lines.py",
+        "manuscript/09_red_lines.md",
+        "beacon-binding tests"
+      ],
+      "status": "locally_bound_hash_pinned",
+      "verification_mode": "executable",
+      "stopping_point": "Not a universal ethics code and not exhaustive"
+    },
+    {
+      "claim_id": "CLM-002",
+      "claim": "Missing or unresolved required context cannot produce COMPLIANT",
+      "claim_class": "implementation",
+      "supporting_surface": [
+        "src/red_line/evaluation/evaluator.py",
+        "evaluator tests",
+        "docs/evaluator-semantics.md"
+      ],
+      "status": "executably_tested",
+      "verification_mode": "executable",
+      "stopping_point": "A verified record is still not independently true"
+    },
+    {
+      "claim_id": "CLM-003",
+      "claim": "Outside-scope work is distinct from compliance",
+      "claim_class": "implementation",
+      "supporting_surface": [
+        "Classification.OUTSIDE_SCOPE",
+        "assessment tests",
+        "manuscript section on evaluation"
+      ],
+      "status": "executably_tested",
+      "verification_mode": "executable",
+      "stopping_point": "Outside scope means only that this registry did not match"
+    },
+    {
+      "claim_id": "CLM-004",
+      "claim": "Less retained oversight narrows the release envelope",
+      "claim_class": "implementation",
+      "supporting_surface": [
+        "DeploymentTier",
+        "registry floors",
+        "monotonicity tests",
+        "tier figure"
+      ],
+      "status": "executably_tested_as_a_local_rule",
+      "verification_mode": "executable",
+      "stopping_point": "Oversight retention is not safety, legality, or enforcement"
+    },
+    {
+      "claim_id": "CLM-005",
+      "claim": "A named authorization does not release a block",
+      "claim_class": "implementation",
+      "supporting_surface": [
+        "ReviewAuthorization",
+        "ReviewFinding.blocks",
+        "oversight tests"
+      ],
+      "status": "executably_tested",
+      "verification_mode": "executable",
+      "stopping_point": "The author remains the sole local enforcer"
+    },
+    {
+      "claim_id": "CLM-006",
+      "claim": "Registry changes can be detected against a prior",
+      "claim_class": "implementation",
+      "supporting_surface": [
+        "canonical hash",
+        "per-line digests",
+        "verify_canary",
+        "docs/VERIFY.md"
+      ],
+      "status": "locally_reproducible_externally_conditional",
+      "verification_mode": "external_witness_condition",
+      "stopping_point": "Same-repository regeneration is self-referential; no signature or non-forgeability"
+    },
+    {
+      "claim_id": "CLM-007",
+      "claim": "The scholarship widens the questions asked of the instrument",
+      "claim_class": "transfer",
+      "supporting_surface": [
+        "docs/research-method.md",
+        "citations",
+        "transfer matrix",
+        "scholarship-intake bridge"
+      ],
+      "status": "interpretive_and_source_bounded",
+      "verification_mode": "source_bounded",
+      "stopping_point": "It is not a systematic review, global representation, or source endorsement"
+    },
+    {
+      "claim_id": "CLM-008",
+      "claim": "The rendered artifact is bound to the source tree for a specific validation run",
+      "claim_class": "release",
+      "supporting_surface": [
+        "deterministic figures",
+        "template validation",
+        "PDF/HTML inspection"
+      ],
+      "status": "requires_each_render_run_and_render_gate",
+      "verification_mode": "render_validated",
+      "stopping_point": "This is a per-run source-to-render claim; current pre-publication status, renderer boundary, and build-tool trust remain external residual risks"
+    },
+    {
+      "claim_id": "CLM-009",
+      "claim": "Structured assessment records preserve why a result blocked or passed",
+      "claim_class": "implementation",
+      "supporting_surface": [
+        "ActionAssessment.reason_codes",
+        "ReviewFinding",
+        "evaluator and oversight tests",
+        "docs/evaluator-semantics.md"
+      ],
+      "status": "executably_tested",
+      "verification_mode": "executable",
+      "stopping_point": "Codes preserve the local decision trace; they do not establish semantic truth or honest input"
+    },
+    {
+      "claim_id": "CLM-010",
+      "claim": "Every source-driven figure carries a bounded caption, alt text, and source binding",
+      "claim_class": "implementation",
+      "supporting_surface": [
+        "src/red_line/figures/",
+        "src/red_line/contracts/visual_bindings.py",
+        "data/source_claims.json",
+        "docs/visualization-briefs.md",
+        "rendered PDF/HTML"
+      ],
+      "status": "executably_tested_and_render_inspected",
+      "verification_mode": "render_validated",
+      "stopping_point": "Caption and source binding constrain interpretation; they do not make the underlying source or action true"
+    }
+  ]
+}

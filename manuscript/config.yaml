@@ -1,0 +1,74 @@
+# red_line — manuscript configuration.
+# A versioned personal red-line framework (beacon + canary) for development work.
+
+paper:
+  title: "Personal Red Lines for Development"
+  subtitle: "An Evidence-Gated Personal Security Boundary and Explicit No Document for Dual-Use Development"
+  version: "0.3.0"
+  date: "2026-07-17"
+  description: "A personal security boundary and explicit No document for dual-use development."
+  cover:
+    image: "assets/cover/red_line_cover.png"
+    alt: "Abstract editorial diagram of a red boundary, an amber signal, and a separated witness mark on a warm paper field."
+
+authors:
+  - name: "Daniel Ari Friedman"
+    orcid: "0000-0001-6232-9096"
+    email: "daniel@activeinference.institute"
+    affiliation: "Active Inference Institute"
+    corresponding: true
+
+publication:
+  doi: "10.5281/zenodo.21754240"
+  github_repository: "docxology/red_line"
+  repository_url: "https://github.com/docxology/red_line"
+  # DOI reserved on first public release; not minted in this pass.
+
+keywords:
+  - "red lines"
+  - "AI governance"
+  - "dual-use"
+  - "cognitive security"
+  - "hash-based canary"
+  - "precommitment"
+  - "open science"
+  - "personal governance"
+  - "global political thought"
+  - "research ethics"
+  - "sociotechnical systems"
+
+project_config:
+  source_framework:
+    author: "Alex Turner"
+    title: "A Red Line and Oversight Framework for Government AI Contracts"
+    url: "https://turntrout.com/red-line-framework"
+    date: "2026-07-15"
+
+render:
+  formats:
+    pdf: true
+    html: true
+    slides: false
+    docx: false
+    epub: false
+
+# Layout knobs the renderer reads. They live under `rendering:`, not `render:`;
+# `render:` carries only the format switches, so a fraction placed there is
+# silently ignored (that is how the cover fraction below sat dead for a while).
+#
+# figure_height_fraction raises the height cap the renderer injects into every
+# \includegraphics. At the template default of 0.50 the taller plates are
+# scaled down until their in-figure labels fall below 6pt, which breaks the
+# "shape and text repeat the meaning" accessibility contract. 0.92 keeps the
+# declared width binding for every current figure; the gate in
+# tests/test_figure_legibility.py measures the result rather than trusting it.
+rendering:
+  figure_height_fraction: 0.92
+  front_matter_figure_height_fraction: 0.92
+  cover_height_fraction: 0.56
+
+metadata:
+  license: "CC-BY-4.0 (prose); MIT (code)"
+  status: "living document — versioned and revisable; public diffability begins after release"
+  editorial_hero_image: "assets/cover/red_line_hero.png"
+  geometry: "left=0.33in,right=0.33in,top=0.55in,bottom=0.55in"

@@ -1,0 +1,70 @@
+# red_line — personal red-line framework (beacon + canary) for development work.
+# Standalone project; lineage of template_code_project.
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "red_line"
+dynamic = ["version"]
+description = "A personal security boundary and explicit No document for dual-use development"
+authors = [
+    {name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"},
+]
+requires-python = ">=3.10"
+# Pure-stdlib package (dataclasses, enum, hashlib, json, datetime, collections);
+# no third-party runtime dependencies. Test-only deps live under [dev] below.
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.12.0",
+]
+
+[project.urls]
+"Source framework" = "https://turntrout.com/red-line-framework"
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+
+[tool.coverage.run]
+source = ["red_line"]
+branch = true
+omit = [
+    "tests/*",
+    "*/__init__.py",
+    "*/test_*.py",
+]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+precision = 2
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["red_line*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "red_line.version.PROJECT_VERSION"}
+
+[tool.ruff]
+target-version = "py310"
+line-length = 110
+extend-exclude = ["output"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

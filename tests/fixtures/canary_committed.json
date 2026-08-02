@@ -1,0 +1,51 @@
+{
+  "statement": "As of this date these red lines stand unweakened; none has been removed or narrowed under pressure. If a line disappears without a dated, rationaled successor statement, treat that silence as signal.",
+  "issued_on": "2026-07-15",
+  "registry_digest": "72835fd81d1f7ecf70f47b1e0061cd56c385273dd846879ab639225913f5aad7",
+  "line_ids": [
+    "cogsec-integrity",
+    "downstream-transfer",
+    "dual-use-ablation",
+    "open-science-good-faith",
+    "provenance-and-consent",
+    "s1-human-control-force",
+    "s2-untargeted-profiling"
+  ],
+  "line_digests": [
+    [
+      "cogsec-integrity",
+      "absolute",
+      "a12a1e2a9a572127333143faeea4b1c03e79d579853bb3d15ed797a3c4f5de90"
+    ],
+    [
+      "downstream-transfer",
+      "strong",
+      "3c25097cd750fe0253c81608d1a61dea01ea2beef3346e48ef8f944861dc32e1"
+    ],
+    [
+      "dual-use-ablation",
+      "strong",
+      "1409cc4a5a219fdcc3b6a8f66ee5b9ab42da58fdc826230f9983ae451d8a53a0"
+    ],
+    [
+      "open-science-good-faith",
+      "strong",
+      "32f09eb036a509b64e5c5d96f39e2d0ef0d1a8aabaf4a477b4a033bb551bdd7f"
+    ],
+    [
+      "provenance-and-consent",
+      "strong",
+      "b67f9a7de26c8d08052858bcf7659d0a6eae3c56ea18bcc0602aef80f1122a98"
+    ],
+    [
+      "s1-human-control-force",
+      "canary",
+      "37ba0f17edc05c8bc2ca1dbd95499dba7a68510b8aafc59eea48b1b40aae7363"
+    ],
+    [
+      "s2-untargeted-profiling",
+      "canary",
+      "3e486401236f97159cb2410dd1ab53694348dd7a1d179d37538d40cea12ef271"
+    ]
+  ]
+}

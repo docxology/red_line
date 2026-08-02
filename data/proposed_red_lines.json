@@ -1,0 +1,239 @@
+{
+  "schema_version": "1.0",
+  "registry_effect": "none",
+  "decision_policy": "No candidate is a registry entry until the author records explicit assent and completes the adoption gates.",
+  "candidates": [
+    {
+      "id": "agent-autonomy-limit",
+      "title": "Human authority over irreversible / self-modifying agent actions",
+      "proposed_scope": [
+        "agent_action",
+        "auto_publish",
+        "auto_spend",
+        "autonomous_agent",
+        "irreversible_action",
+        "self_modification",
+        "unattended"
+      ],
+      "author_decision": "no_assent_recorded",
+      "scope_boundary": "Only unattended, self-modifying, irreversible, auto-publishing, or auto-spending agent actions; not ordinary scripted assistance or supervised tooling.",
+      "typed_exemption_design": {
+        "status": "not_defined_until_assent",
+        "match_modes": [
+          "any",
+          "all"
+        ],
+        "required_evidence_policy": "Every adopted exemption must name its conjunction semantics and verified human-control, reversibility, or authorization evidence."
+      },
+      "required_evidence_on_reconsideration": [
+        "human_control",
+        "authorization",
+        "reversibility",
+        "deployment"
+      ],
+      "false_positive_controls": [
+        "Teaching or supervised documentation alone does not block.",
+        "Description prose cannot supply an undeclared capability scope."
+      ],
+      "positive_cases": [
+        "Declared autonomous_agent plus irreversible_action with missing human-control evidence blocks."
+      ],
+      "negative_cases": [
+        "Ordinary scripted assistance with an accountable operator remains outside this candidate."
+      ]
+    },
+    {
+      "id": "authorship-attribution",
+      "title": "Honest authorship, credit, and AI-assistance disclosure",
+      "proposed_scope": [
+        "ai_disclosure",
+        "attribution",
+        "authorship",
+        "byline",
+        "citation",
+        "collaborators",
+        "credit",
+        "plagiarism"
+      ],
+      "author_decision": "no_assent_recorded",
+      "scope_boundary": "Attribution, credit, plagiarism, citation, byline, and AI-assistance disclosure in published work; not private drafting or ordinary editing.",
+      "typed_exemption_design": {
+        "status": "not_defined_until_assent",
+        "match_modes": [
+          "any",
+          "all"
+        ],
+        "required_evidence_policy": "Every adopted exemption must name collaborator consent, provenance, and disclosure evidence with explicit any/all semantics."
+      },
+      "required_evidence_on_reconsideration": [
+        "authorship",
+        "provenance",
+        "affected_parties",
+        "legal_basis"
+      ],
+      "false_positive_controls": [
+        "Private drafting without a publication claim is outside this candidate.",
+        "A title or description cannot launder an undeclared authorship scope."
+      ],
+      "positive_cases": [
+        "Declared plagiarism or ai_disclosure in a release context without provenance blocks."
+      ],
+      "negative_cases": [
+        "Ordinary editing with no publication or attribution claim does not block."
+      ]
+    },
+    {
+      "id": "human-subjects-ethics",
+      "title": "Consent / review / withdrawal for research on persons",
+      "proposed_scope": [
+        "cognitive_experiment",
+        "human_study",
+        "human_subjects",
+        "irb",
+        "participant_enrollment",
+        "participant_intervention",
+        "research_participants"
+      ],
+      "author_decision": "no_assent_recorded",
+      "scope_boundary": "Enrollment, intervention, identifiable participant data, withdrawal, and review of research on persons; not anonymous aggregate or non-human work.",
+      "typed_exemption_design": {
+        "status": "not_defined_until_assent",
+        "match_modes": [
+          "any",
+          "all"
+        ],
+        "required_evidence_policy": "Every adopted exemption must name consent, review, withdrawal, and data-provenance evidence with explicit any/all semantics."
+      },
+      "required_evidence_on_reconsideration": [
+        "affected_parties",
+        "legal_basis",
+        "data_provenance",
+        "human_control"
+      ],
+      "false_positive_controls": [
+        "Aggregate research without individualized output stays outside this candidate.",
+        "Free-text claims cannot substitute for verified consent or review evidence."
+      ],
+      "positive_cases": [
+        "Declared human_subjects plus participant_intervention without verified consent or review blocks."
+      ],
+      "negative_cases": [
+        "Anonymous aggregate analysis without individualized intervention does not block."
+      ]
+    },
+    {
+      "id": "student-relationship-data",
+      "title": "No repurposing of student data or the teaching relationship",
+      "proposed_scope": [
+        "carceral_data",
+        "coursework_reuse",
+        "ferpa",
+        "grade_data",
+        "student_data",
+        "student_profiling",
+        "student_records"
+      ],
+      "author_decision": "no_assent_recorded",
+      "scope_boundary": "Student records, grades, coursework reuse, profiling, and carceral education relationships; not public teaching materials or de-identified pedagogy.",
+      "typed_exemption_design": {
+        "status": "not_defined_until_assent",
+        "match_modes": [
+          "any",
+          "all"
+        ],
+        "required_evidence_policy": "Every adopted exemption must name student consent, role authority, purpose limitation, and retention or flow-down evidence with explicit any/all semantics."
+      },
+      "required_evidence_on_reconsideration": [
+        "affected_parties",
+        "legal_basis",
+        "data_provenance",
+        "purpose"
+      ],
+      "false_positive_controls": [
+        "Teaching alone does not block.",
+        "Description-only mentions are advisory and cannot substitute for declared student-data scope."
+      ],
+      "positive_cases": [
+        "Declared student_records plus coursework_reuse without verified authority and consent blocks."
+      ],
+      "negative_cases": [
+        "Public teaching materials or de-identified pedagogy without student records remain outside this candidate."
+      ]
+    },
+    {
+      "id": "fiduciary-integrity",
+      "title": "AII treasurer stewardship boundary",
+      "proposed_scope": [
+        "commingling",
+        "financial_misrepresentation",
+        "private_inurement",
+        "self_dealing",
+        "undisclosed_conflict"
+      ],
+      "author_decision": "no_assent_recorded",
+      "scope_boundary": "Treasurer stewardship, commingling, self-dealing, conflicts, private inurement, and financial misrepresentation; not ordinary software work.",
+      "typed_exemption_design": {
+        "status": "not_defined_until_assent",
+        "match_modes": [
+          "any",
+          "all"
+        ],
+        "required_evidence_policy": "Every adopted exemption must name charter authority, conflict disclosure, approvals, and transaction evidence with explicit any/all semantics."
+      },
+      "required_evidence_on_reconsideration": [
+        "authorization",
+        "legal_basis",
+        "affected_parties",
+        "provenance"
+      ],
+      "false_positive_controls": [
+        "Routine bookkeeping without declared fiduciary scope does not block.",
+        "This candidate cannot be activated by prose alone and requires separate charter confirmation."
+      ],
+      "positive_cases": [
+        "Declared self_dealing plus undisclosed_conflict with missing disclosure evidence blocks."
+      ],
+      "negative_cases": [
+        "Ordinary software work with no fiduciary scope remains outside this candidate."
+      ]
+    },
+    {
+      "id": "research-organism-welfare",
+      "title": "Welfare / permits in organismal fieldwork",
+      "proposed_scope": [
+        "animal_research",
+        "collecting_permit",
+        "ecological_harm",
+        "field_collection",
+        "organism_welfare",
+        "specimens"
+      ],
+      "author_decision": "no_assent_recorded",
+      "scope_boundary": "Organism collection, animal research, specimens, permits, and ecological harm; not ordinary simulations or literature review.",
+      "typed_exemption_design": {
+        "status": "not_defined_until_assent",
+        "match_modes": [
+          "any",
+          "all"
+        ],
+        "required_evidence_policy": "Every adopted exemption must name permits, welfare review, minimization, and chain-of-custody evidence with explicit any/all semantics."
+      },
+      "required_evidence_on_reconsideration": [
+        "legal_basis",
+        "data_provenance",
+        "deployment",
+        "affected_parties"
+      ],
+      "false_positive_controls": [
+        "Ecology or simulation alone does not block.",
+        "Narrative cannot substitute for declared scope, permit, or welfare evidence."
+      ],
+      "positive_cases": [
+        "Declared animal_research plus collecting_permit without verified welfare or permit evidence blocks."
+      ],
+      "negative_cases": [
+        "Ordinary simulation or literature review remains outside this candidate."
+      ]
+    }
+  ]
+}

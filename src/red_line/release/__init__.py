@@ -1,0 +1,77 @@
+"""Release assembly: provenance digests, input snapshots, manifests, and determinism."""
+
+from __future__ import annotations
+
+from .determinism import (
+    ARTIFACT_DIRECTORIES,
+    ARTIFACT_SUFFIXES,
+    RENDER_STAGES,
+    artifact_hashes,
+    classify_nondeterminism,
+    compare_artifacts,
+    pdf_text,
+    pdf_texts_equal,
+    template_full_pipeline,
+    template_render_passes,
+)
+from .manifest import (
+    RENDER_ONLY_VALIDATIONS,
+    RENDERED_SURFACE_ERROR,
+    build_manifest,
+    candidate_ledger,
+    candidate_validation,
+    decidable_failures,
+    release_ready,
+    render_validation,
+    template_validation,
+    undecided_before_render,
+)
+from .provenance import (
+    TEMPLATE_ROOT_ENV,
+    TEMPLATE_ROOT_MARKER,
+    TemplateRootUnavailable,
+    digest_tree,
+    find_template_root,
+    git_dirty,
+    git_revision,
+    require_template_root,
+    sha256_file,
+    template_root_candidates,
+)
+from .snapshot import analysis_metrics, build_snapshot, write_snapshot
+
+__all__ = [
+    "ARTIFACT_DIRECTORIES",
+    "ARTIFACT_SUFFIXES",
+    "RENDERED_SURFACE_ERROR",
+    "RENDER_ONLY_VALIDATIONS",
+    "RENDER_STAGES",
+    "TEMPLATE_ROOT_ENV",
+    "TEMPLATE_ROOT_MARKER",
+    "TemplateRootUnavailable",
+    "analysis_metrics",
+    "artifact_hashes",
+    "build_manifest",
+    "build_snapshot",
+    "candidate_ledger",
+    "candidate_validation",
+    "classify_nondeterminism",
+    "compare_artifacts",
+    "decidable_failures",
+    "digest_tree",
+    "find_template_root",
+    "git_dirty",
+    "git_revision",
+    "pdf_text",
+    "pdf_texts_equal",
+    "release_ready",
+    "render_validation",
+    "require_template_root",
+    "sha256_file",
+    "template_full_pipeline",
+    "template_render_passes",
+    "template_root_candidates",
+    "template_validation",
+    "undecided_before_render",
+    "write_snapshot",
+]

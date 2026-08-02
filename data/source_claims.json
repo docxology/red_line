@@ -1,0 +1,562 @@
+{
+  "schema_version": "1.0",
+  "source_document": "manuscript/references.bib",
+  "interpretive_ledger": "docs/research-method.md",
+  "record_policy": "Each record binds a cited source to a verified URL, locator, claim class, transferred question, stopping boundary, and manuscript use. Figure bindings below separately bind source-driven visual summaries to the source records. The source-specific prose remains in the human-readable research method.",
+  "locator_coverage": {
+    "sentinel": "not recorded",
+    "recorded": 22,
+    "not_recorded": 23,
+    "note": "edition_locator carries a real edition and locator only for the sources deepened in the second ledger table of docs/research-method.md. Every other record carries the sentinel rather than a locator derived from its own citation key. These counts are re-derived from records by red_line.contracts.source_claims.validate_source_claims."
+  },
+  "record_counts": {
+    "sources": 45,
+    "ledger_table_rows": 44,
+    "note": "sources is len(records); ledger_table_rows is the number of distinct rows across the two tables in docs/research-method.md. They differ because Kukutai and Taylor occupies a row in both tables while the Cugoano row cites two works. Both values are re-derived by red_line.contracts.source_claims.validate_source_claims."
+  },
+  "records": [
+    {
+      "source_id": "turner2026redline",
+      "edition_locator": "not recorded",
+      "verified_url": "https://turntrout.com/red-line-framework",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What bounded precommitment, oversight, review, and durability mechanism is useful here?",
+      "stopping_boundary": "Source mechanism, not this project's institutional authority, implementation proof, legal compliance, or universal ethics.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "sunzi1910artofwar",
+      "edition_locator": "not recorded",
+      "verified_url": "https://ctext.org/art-of-war/laying-plans/ens",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What situated question about information, deception, and strategic judgment should the audit keep visible?",
+      "stopping_boundary": "Not a modern ethics code or universal endorsement.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "kautilya2013arthasastra",
+      "edition_locator": "not recorded",
+      "verified_url": "https://academic.oup.com/book/8486",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What questions about administration, intelligence, law, and statecraft are relevant to review?",
+      "stopping_boundary": "Not a universal model of legitimate rule or project compliance.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "aristotle350politics",
+      "edition_locator": "not recorded",
+      "verified_url": "https://classics.mit.edu/Aristotle/politics.html",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What questions about law, constitutions, and distribution of authority are being transferred?",
+      "stopping_boundary": "Historically exclusionary civic frame; not a universal political standard.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "mahdi2000farabipolitical",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.iranicaonline.org/articles/farabi-vi/",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What situated questions about political order, knowledge, and human flourishing inform the audit?",
+      "stopping_boundary": "Not a democratic or rights-equivalent framework.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "darling2007asabiyya",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.cambridge.org/core/journals/comparative-studies-in-society-and-history/article/abs/social-cohesion-asabiyya-and-justice-in-the-late-medieval-middle-east/3117D292647ECD6472E9C77AA294D2A2",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What questions about social cohesion, justice, and political power remain visible?",
+      "stopping_boundary": "Historically situated theory of dynastic rule, not a universal model.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "machiavelli1513prince",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.gutenberg.org/ebooks/1232",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What incentive and power questions should a self-governance instrument confront?",
+      "stopping_boundary": "Diagnostic realism is not endorsement.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "wollstonecraft1792vindication",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.gutenberg.org/ebooks/3420",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What questions about education, reason, and equal standing should not disappear from the method?",
+      "stopping_boundary": "Not a complete account of intersectional justice.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "cugoano1787thoughts",
+      "edition_locator": "not recorded",
+      "verified_url": "https://quod.lib.umich.edu/e/eccodemo/K046227.0001.001/1%3A3?rgn=div1&view=fulltext",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What questions about liberty, consent, responsibility, and moral self-deception must remain situated?",
+      "stopping_boundary": "Not generic African representation or universal consensus; read in Atlantic context.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "cugoano2025sep",
+      "edition_locator": "not recorded",
+      "verified_url": "https://plato.stanford.edu/entries/cugoano/",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can a scholarly overview help bound interpretation of Cugoano?",
+      "stopping_boundary": "Not certification of a universal African philosophy.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "ostrom1990commons",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.cambridge.org/core/books/governing-the-commons/7AB7AE11BADA84409C34815CC288CD79",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What rules-in-use, monitoring, and self-governance questions transfer to a personal instrument?",
+      "stopping_boundary": "Commons cases do not automatically generalize to AI.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "scott1998seeingstate",
+      "edition_locator": "not recorded",
+      "verified_url": "https://yalebooks.yale.edu/book/9780300246759/seeing-like-a-state/",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can legibility and simplification create governance risk?",
+      "stopping_boundary": "Legibility is a risk as well as a capability; not a universal diagnosis.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "smith1999decolonizing",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.royalsociety.org.nz/150th-anniversary/tetakarangi/decolonizing-methodologieslinda-tuhiwai-smith-1999",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What questions about research power, extraction, and self-determination must shape the method?",
+      "stopping_boundary": "Not a decorative diversity citation or universal substitute for affected communities.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "kukutaitaylor2016ids",
+      "edition_locator": "English edited research monograph; ANU Press; opening agenda and governance chapters",
+      "verified_url": "https://press.anu.edu.au/publications/series/caepr/indigenous-data-sovereignty",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What collective authority, governance, and self-determined interests must be named when data about Indigenous peoples are collected or reused?",
+      "stopping_boundary": "Collective data sovereignty is not a universal consent shortcut or substitute for the authority of the affected community.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "nissenbaum2004contextual",
+      "edition_locator": "not recorded",
+      "verified_url": "https://digitalcommons.law.uw.edu/wlr/vol79/iss1/10/",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What context-specific information-norm questions should an intake ask?",
+      "stopping_boundary": "Not a substitute for jurisdiction-specific law.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "jobin2019global",
+      "edition_locator": "not recorded",
+      "verified_url": "https://doi.org/10.1038/s42256-019-0088-2",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What convergence and divergence questions arise when comparing AI principles?",
+      "stopping_boundary": "Survey finding, not consensus proof.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "selbst2019fairness",
+      "edition_locator": "not recorded",
+      "verified_url": "https://doi.org/10.1145/3287560.3287598",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can abstraction sever sociotechnical context in a fairness claim?",
+      "stopping_boundary": "Not a complete fairness taxonomy.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "birhane2020colonization",
+      "edition_locator": "not recorded",
+      "verified_url": "https://doi.org/10.2966/scrip.170220.389",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What questions about dependency, local needs, and coloniality should be asked?",
+      "stopping_boundary": "Not evidence that all imported systems have one effect.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "mohamed2020decolonial",
+      "edition_locator": "not recorded",
+      "verified_url": "https://doi.org/10.1007/s13347-020-00405-8",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What power questions does critical technical practice add to design review?",
+      "stopping_boundary": "Proposal, not a certification standard.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "unesco2021recommendation",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.unesco.org/en/legal-affairs/recommendation-ethics-artificial-intelligence?hub=1063",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What rights, dignity, and policy-action questions are useful as context?",
+      "stopping_boundary": "Recommendation, not project compliance.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "oecd2019principles",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.oecd.org/en/topics/ai-principles.html",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What values and implementation-guidance questions should remain explicit?",
+      "stopping_boundary": "Flexible, non-exhaustive principles, not legal approval.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "au2022datapolicy",
+      "edition_locator": "not recorded",
+      "verified_url": "https://au.int/fr/node/42078",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What regional data-governance and collective-interest questions should be surfaced?",
+      "stopping_boundary": "Regional policy is not interchangeable with global policy.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "tabassi2023airmf",
+      "edition_locator": "not recorded",
+      "verified_url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "claim_class": "implementation_context",
+      "transferred_question": "Which operational risk-management questions are relevant to future hardening?",
+      "stopping_boundary": "Voluntary framework, not a legal approval or Red Line compliance finding.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "rose2020zerotrust",
+      "edition_locator": "not recorded",
+      "verified_url": "https://csrc.nist.gov/pubs/sp/800/207/final",
+      "claim_class": "implementation_context",
+      "transferred_question": "Which continuous-verification and least-privilege questions are useful?",
+      "stopping_boundary": "Network trust model, not a human-governance solution.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "lascasas1552brief",
+      "edition_locator": "Spanish primary polemic; Griffin and Pagden ed./trans., Penguin 1992; Prologue and regional accounts",
+      "verified_url": "https://www.penguin.co.uk/books/35187/a-short-account-of-the-destruction-of-the-indies-by-bartolome-de-las-casas-ed-and-trans-by-nigel-griffin-intro-anthony-pagden/9780140445626",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can administrative and moral language conceal violence to affected people?",
+      "stopping_boundary": "Situated colonial polemic, not Indigenous testimony or universal authority.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "browne2015dark",
+      "edition_locator": "English critical monograph; Duke University Press; Introduction and chapters on racializing surveillance",
+      "verified_url": "https://read.dukeupress.edu/books/book/147/Dark-MattersOn-the-Surveillance-of-Blackness",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How do surveillance histories distribute visibility unevenly?",
+      "stopping_boundary": "Not a universal risk taxonomy or substitute for affected-community testimony.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "noble2018algorithms",
+      "edition_locator": "English critical monograph; NYU Press; Introduction and chapter 1",
+      "verified_url": "https://nyupress.org/9781479837243/algorithms-of-oppression/",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can classification and retrieval reproduce hierarchy while appearing neutral?",
+      "stopping_boundary": "Search-engine casework does not establish how every model behaves.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "eubanks2018automating",
+      "edition_locator": "English investigative scholarship; St. Martin's Press; case studies of automated welfare and risk systems",
+      "verified_url": "https://us.macmillan.com/books/9781250074317/automatinginequality",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can administrative automation move burdens onto people with least power to contest them?",
+      "stopping_boundary": "US case studies do not decide another jurisdiction's law or every automated decision.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "fricker2007epistemic",
+      "edition_locator": "English philosophical monograph; Oxford University Press; chapters on testimonial and hermeneutical injustice",
+      "verified_url": "https://academic.oup.com/book/32817",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How are credibility, testimony, and interpretive resources distributed through power?",
+      "stopping_boundary": "Does not independently verify an evidence record or resolve institutional remedy.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "couldry2019costs",
+      "edition_locator": "English critical monograph; Stanford University Press; chapters on data colonialism and political participation",
+      "verified_url": "https://www.sup.org/books/sociology/costs-connection",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can data extraction be examined as a power relation rather than only an information flow?",
+      "stopping_boundary": "Interpretive framework, not proof that all collection has identical effects.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "gray2019ghost",
+      "edition_locator": "English ethnographic/technical labor study; Houghton Mifflin Harcourt; case studies of hidden platform labor",
+      "verified_url": "https://marylgray.org/bio/on-demand/",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can apparently automated systems depend on invisible human judgment and precarious labor?",
+      "stopping_boundary": "Studied platforms do not exhaust global labor arrangements.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "brundage2018malicious",
+      "edition_locator": "English research report/preprint; arXiv:1802.07228; threat taxonomy and mitigation recommendations",
+      "verified_url": "https://arxiv.org/abs/1802.07228",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How should dual-use capability be considered across digital, physical, and political domains?",
+      "stopping_boundary": "Forecast and threat taxonomy, not an incident report, probability estimate, or safety guarantee.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "souppaya2022ssdf",
+      "edition_locator": "English implementation standard; final publication; practices and tasks by SSDF outcome",
+      "verified_url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "claim_class": "implementation_context",
+      "transferred_question": "Which provenance, review, and build-integrity practices should future release controls consider?",
+      "stopping_boundary": "Voluntary implementation context, not APT resistance or Red Line compliance.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "mitre2026attack",
+      "edition_locator": "English technical knowledge base; Enterprise tactics and techniques pages; `T1195`, `T1078`, `T1565`, `T1491`",
+      "verified_url": "https://attack.mitre.org/techniques/",
+      "claim_class": "implementation_context",
+      "transferred_question": "Which plausible adversary behaviors can be named without inventing a live incident?",
+      "stopping_boundary": "ATT&CK mapping is not evidence that an actor targeted this project and does not replace telemetry.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "slsa2026",
+      "edition_locator": "English implementation specification; approved v1.2; build/source tracks and provenance sections",
+      "verified_url": "https://slsa.dev/spec/v1.2/",
+      "claim_class": "implementation_context",
+      "transferred_question": "Which provenance and attestation questions should shape future release controls?",
+      "stopping_boundary": "Specification page is not a signed attestation and does not establish SLSA achievement.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "haraway1988situated",
+      "edition_locator": "English journal article; *Feminist Studies* 14(3), pp. 575–599",
+      "verified_url": "https://www.jstor.org/stable/3178066",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How can a review name its standpoint and partial perspective instead of performing a view from nowhere?",
+      "stopping_boundary": "Situated perspective does not make every account equally reliable and does not replace reviewable evidence.",
+      "uses": [
+        "manuscript",
+        "figure"
+      ]
+    },
+    {
+      "source_id": "jasanoff2003humility",
+      "edition_locator": "English journal article; *Minerva* 41(3), pp. 223–244",
+      "verified_url": "https://doi.org/10.1023/A:1025557512320",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How should framing, vulnerability, distribution, and learning remain visible when technical systems exceed prediction?",
+      "stopping_boundary": "A humility lens is not a local evaluator, public mandate, or legal finding.",
+      "uses": [
+        "manuscript",
+        "figure"
+      ]
+    },
+    {
+      "source_id": "costanzachock2020design",
+      "edition_locator": "English open-access monograph; MIT Press; chapters on power and participation",
+      "verified_url": "https://mitpress.mit.edu/9780262043458/design-justice",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "Who is centered, burdened, excluded, or able to contest a design decision?",
+      "stopping_boundary": "Community-led design questions do not establish consent, safety, or a universal process.",
+      "uses": [
+        "manuscript",
+        "figure"
+      ]
+    },
+    {
+      "source_id": "dignazioklein2020data",
+      "edition_locator": "English monograph; MIT Press; introduction and principles",
+      "verified_url": "https://mitpress.mit.edu/9780262044004/data-feminism/",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What power, classification, and invisible labor are hidden when data are treated as self-explanatory?",
+      "stopping_boundary": "Power-aware data practice is not an exhaustive ethics standard or proof about this action.",
+      "uses": [
+        "manuscript",
+        "figure"
+      ]
+    },
+    {
+      "source_id": "wassenaar2025duallist",
+      "edition_locator": "English control list; Category 5 Part 2 information-security entries and the 2013 intrusion-software addition",
+      "verified_url": "https://www.wassenaar.org/control-lists/",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What does a capability-keyed institutional control list bound, and where do its definitions over-reach?",
+      "stopping_boundary": "A control list is not a personal ethics, does not bind this project, and its categories are not evidence that any capability here is controlled.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "harris2016dualuse",
+      "edition_locator": "English edited policy study; American Academy of Arts and Sciences; introductory and concluding chapters",
+      "verified_url": "https://www.amacad.org/publication/governance-dual-use-technologies-theory-and-practice",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "How is dual-use governance layered across treaty regimes, export controls, institutional review, and researcher judgment?",
+      "stopping_boundary": "A comparative policy study does not evaluate this artifact and does not establish that a personal layer is sufficient.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "nrc2004biotechnology",
+      "edition_locator": "English consensus committee report; National Academies Press; the seven experiments of concern and the self-governance recommendations",
+      "verified_url": "https://nap.nationalacademies.org/catalog/10827/biotechnology-research-in-an-age-of-terrorism",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "Is researcher-level judgment before a project starts a named governance layer rather than an informal habit?",
+      "stopping_boundary": "A biosecurity report is not a warrant for a software refusal registry, and self-governance was proposed alongside institutional review, never instead of it.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "zongmatias2024refusal",
+      "edition_locator": "English peer-reviewed article; *ACM Journal on Responsible Computing* 1(1), pp. 1–23",
+      "verified_url": "https://doi.org/10.1145/3630107",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What structure does refusal have - autonomy, timing, power, and who bears its cost?",
+      "stopping_boundary": "The framework is written from the standpoint of people refusing an institution's collection; a practitioner declining paid work is not refusal from below and must not borrow its moral standing.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "crofts2020maven",
+      "edition_locator": "English peer-reviewed article; *Law, Technology and Humans* 2(1), pp. 75–90",
+      "verified_url": "https://doi.org/10.5204/lthj.v2i1.1313",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "What does a documented episode of collective worker refusal show about refusal's reach and its absorption?",
+      "stopping_boundary": "A single documented episode is not a base rate for refusal, and a company's stated principles are not evidence of what it later built.",
+      "uses": [
+        "manuscript"
+      ]
+    },
+    {
+      "source_id": "simpson2014mohawk",
+      "edition_locator": "English ethnographic and political monograph; Duke University Press; chapters developing refusal and ethnographic refusal",
+      "verified_url": "https://www.dukeupress.edu/mohawk-interruptus",
+      "claim_class": "descriptive_transfer",
+      "transferred_question": "Can refusal be a positive political stance with its own content rather than the absence of consent?",
+      "stopping_boundary": "Ethnographic and Indigenous refusal answers to sovereignty and settler-colonial history; the concept is borrowed, never the standing, and it is not a template for declining paid work.",
+      "uses": [
+        "manuscript"
+      ]
+    }
+  ],
+  "figure_bindings": {
+    "fig:scholarship-reading-map": [
+      "sunzi1910artofwar",
+      "kautilya2013arthasastra",
+      "aristotle350politics",
+      "mahdi2000farabipolitical",
+      "darling2007asabiyya",
+      "machiavelli1513prince",
+      "wollstonecraft1792vindication",
+      "cugoano1787thoughts",
+      "lascasas1552brief",
+      "ostrom1990commons",
+      "scott1998seeingstate",
+      "smith1999decolonizing",
+      "kukutaitaylor2016ids",
+      "nissenbaum2004contextual",
+      "jobin2019global",
+      "birhane2020colonization",
+      "mohamed2020decolonial",
+      "unesco2021recommendation",
+      "oecd2019principles",
+      "tabassi2023airmf"
+    ],
+    "fig:scholarship-transfer-matrix": [
+      "sunzi1910artofwar",
+      "kautilya2013arthasastra",
+      "mahdi2000farabipolitical",
+      "darling2007asabiyya",
+      "cugoano1787thoughts",
+      "wollstonecraft1792vindication",
+      "smith1999decolonizing",
+      "kukutaitaylor2016ids",
+      "birhane2020colonization",
+      "unesco2021recommendation",
+      "au2022datapolicy",
+      "tabassi2023airmf"
+    ],
+    "fig:scholarship-intake-bridge": [
+      "haraway1988situated",
+      "jasanoff2003humility",
+      "costanzachock2020design",
+      "dignazioklein2020data"
+    ]
+  }
+}
