@@ -1,8 +1,7 @@
 # Red Line — open release backlog
 
 This file contains only work that remains open after the private hardening and
-release-preflight pass. `ISA.md` is historical evidence, not a second task
-list. The current private release gate is recorded in
+release-preflight pass. The current private release gate is recorded in
 `output/reports/release_manifest.json`.
 
 ## P1 — author-controlled candidate lifecycle

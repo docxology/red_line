@@ -24,5 +24,5 @@ instruction that only makes sense one directory up does not travel with it.
   `working/red_line`. See [`STANDALONE.md`](STANDALONE.md).
 
 The current project contract, release limitations, and historical verification
-records belong in the README, development guide, TODO, and ISA; do not copy
+records belong in the README, development guide, and TODO; do not copy
 those documents into nested guidance files.
