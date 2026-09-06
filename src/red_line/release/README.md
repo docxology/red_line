@@ -1,6 +1,6 @@
 # release
 
-The release package turns a source checkout and a rendered artifact tree into recorded evidence: content digests, a deterministic input snapshot, a hash-addressed manifest, and a two-pass determinism report. It holds the logic that the release CLIs used to carry themselves.
+The release package turns a source checkout and a rendered artifact tree into recorded evidence: content digests, a deterministic input snapshot, a hash-addressed manifest, a two-pass determinism report, and a wheel-build preflight. It holds the logic that the release CLIs used to carry themselves.
 
 ## Layout
 
@@ -9,6 +9,7 @@ flowchart LR
   provenance["provenance.py<br/>digests and checkout state"] --> snapshot["snapshot.py"]
   provenance --> manifest["manifest.py"]
   provenance --> determinism["determinism.py"]
+  wheel_smoke["wheel_smoke.py<br/>clean-venv import proof"]
   snapshot --> determinism
   analysis["analysis/"] --> snapshot
   contracts["contracts/ validators"] --> manifest

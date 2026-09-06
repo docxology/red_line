@@ -4,12 +4,11 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 from pathlib import Path
-import shutil
 import subprocess
 import sys
-import tempfile
+
+from red_line.release import tree_digest, wheel_smoke
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -17,40 +16,6 @@ ROOT = Path(__file__).resolve().parent.parent
 def _run(command: list[str], *, cwd: Path = ROOT, env: dict[str, str] | None = None) -> None:
     print("+", " ".join(command))
     subprocess.run(command, cwd=cwd, env=env, check=True)
-
-
-def _tree_digest(path: Path) -> str:
-    digest = hashlib.sha256()
-    files = [child for child in sorted(path.rglob("*")) if child.is_file()]
-    if not files:
-        raise RuntimeError(f"figure generation produced no files in {path}")
-    for child in files:
-        digest.update(str(child.relative_to(path)).encode())
-        digest.update(child.read_bytes())
-    return digest.hexdigest()
-
-
-def _wheel_smoke() -> None:
-    uv = shutil.which("uv")
-    if uv is None:
-        raise RuntimeError("uv is required for the wheel build gate")
-    with tempfile.TemporaryDirectory(prefix="red-line-quality-") as temp:
-        dist = Path(temp) / "dist"
-        _run([uv, "build", "--wheel", "--out-dir", str(dist)])
-        wheel = next(dist.glob("*.whl"))
-        venv = Path(temp) / "venv"
-        _run([sys.executable, "-m", "venv", str(venv)])
-        python = venv / "bin" / "python"
-        if not python.exists():
-            python = venv / "Scripts" / "python.exe"
-        _run([str(python), "-m", "pip", "install", "--no-deps", str(wheel)])
-        _run(
-            [
-                str(python),
-                "-c",
-                "import red_line; assert red_line.__version__; assert red_line.PERSONAL_RED_LINES",
-            ]
-        )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -79,12 +44,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.as_of:
         canary_command.extend(["--as-of", args.as_of])
     _run(canary_command)
-    first = _tree_digest(ROOT / "output" / "figures")
+    first = tree_digest(ROOT / "output" / "figures")
     _run(figure_command)
-    second = _tree_digest(ROOT / "output" / "figures")
+    second = tree_digest(ROOT / "output" / "figures")
     if first != second:
         raise RuntimeError("figure generation is not byte deterministic")
-    _wheel_smoke()
+    print("+ wheel smoke: uv build + clean-venv import")
+    wheel_smoke(ROOT)
     if args.render:
         _run([python, "scripts/compare_render_artifacts.py"])
         # The comparison's render-only passes rewrite artifacts AFTER the

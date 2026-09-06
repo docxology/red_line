@@ -13,6 +13,7 @@ from .determinism import (
     pdf_texts_equal,
     template_full_pipeline,
     template_render_passes,
+    tree_digest,
 )
 from .manifest import (
     RENDER_ONLY_VALIDATIONS,
@@ -39,6 +40,7 @@ from .provenance import (
     template_root_candidates,
 )
 from .snapshot import analysis_metrics, build_snapshot, write_snapshot
+from .wheel_smoke import wheel_smoke
 
 __all__ = [
     "ARTIFACT_DIRECTORIES",
@@ -72,6 +74,8 @@ __all__ = [
     "template_render_passes",
     "template_root_candidates",
     "template_validation",
+    "tree_digest",
     "undecided_before_render",
+    "wheel_smoke",
     "write_snapshot",
 ]

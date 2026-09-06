@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 
 from red_line.contracts import validate_proposed_red_lines, validate_source_claims
-from scripts import quality_gate
+from red_line.release import tree_digest
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -56,4 +56,4 @@ def test_candidate_binding_requires_decision_row_not_free_text(tmp_path):
 
 def test_figure_tree_digest_rejects_empty_output(tmp_path):
     with pytest.raises(RuntimeError, match="produced no files"):
-        quality_gate._tree_digest(tmp_path)
+        tree_digest(tmp_path)

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from datetime import datetime, timezone
+import hashlib
 import os
 from pathlib import Path
 import shutil
@@ -33,6 +34,25 @@ def artifact_hashes(root: Path) -> dict[str, str]:
     for directory in ARTIFACT_DIRECTORIES:
         hashes.update(digest_tree(root, f"output/{directory}", ARTIFACT_SUFFIXES))
     return hashes
+
+
+def tree_digest(path: Path) -> str:
+    """Return one aggregate SHA-256 over every file under a directory.
+
+    Each child's root-relative path is digested followed by its bytes, in
+    sorted order, so any content, name, or presence change changes the value.
+    An empty directory raises instead of digesting to a trivially stable
+    value: an absent figure tree must fail the gate, never pass it.
+    """
+
+    digest = hashlib.sha256()
+    files = [child for child in sorted(path.rglob("*")) if child.is_file()]
+    if not files:
+        raise RuntimeError(f"figure generation produced no files in {path}")
+    for child in files:
+        digest.update(str(child.relative_to(path)).encode())
+        digest.update(child.read_bytes())
+    return digest.hexdigest()
 
 
 def pdf_text(path: Path) -> str | None:

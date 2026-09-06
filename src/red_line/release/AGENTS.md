@@ -1,6 +1,6 @@
 # release — Release editing guidance
 
-This folder owns release assembly: provenance digests, the deterministic release-input snapshot, the hash-addressed release manifest, and two-pass render-determinism comparison. Functions here return data structures; they never print, exit, or parse arguments. The CLIs under `scripts/` are thin wrappers around them.
+This folder owns release assembly: provenance digests, the deterministic release-input snapshot, the hash-addressed release manifest, two-pass render-determinism comparison, and the wheel-build preflight. Functions here return data structures; they never print, exit, or parse arguments. The CLIs under `scripts/` are thin wrappers around them.
 
 ## Public API inventory
 
@@ -25,11 +25,13 @@ This folder owns release assembly: provenance digests, the deterministic release
 | `release_ready` | <code>def&nbsp;release_ready(manifest:&nbsp;dict,&nbsp;*,&nbsp;strict:&nbsp;bool&nbsp;=&nbsp;False)&nbsp;-&gt;&nbsp;bool:</code> | Report whether manifest validation results satisfy the publication gate. | [manifest.py](manifest.py) |
 | `build_manifest` | <code>def&nbsp;build_manifest(</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;root:&nbsp;Path,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;*,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;as_of:&nbsp;str&nbsp;\|&nbsp;None&nbsp;=&nbsp;None,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;render_timestamp:&nbsp;str&nbsp;\|&nbsp;None&nbsp;=&nbsp;None,</code><br><code>)&nbsp;-&gt;&nbsp;dict:</code> | Assemble source, artifact, and validation bindings into one manifest. | [manifest.py](manifest.py) |
 | `artifact_hashes` | <code>def&nbsp;artifact_hashes(root:&nbsp;Path)&nbsp;-&gt;&nbsp;dict[str,&nbsp;str]:</code> | Digest every comparable rendered artifact under the output tree. | [determinism.py](determinism.py) |
+| `tree_digest` | <code>def&nbsp;tree_digest(path:&nbsp;Path)&nbsp;-&gt;&nbsp;str:</code> | Return one aggregate SHA-256 over every file under a directory; raise when it holds no files. | [determinism.py](determinism.py) |
 | `pdf_text` | <code>def&nbsp;pdf_text(path:&nbsp;Path)&nbsp;-&gt;&nbsp;str&nbsp;\|&nbsp;None:</code> | Extract laid-out PDF text, or `None` when extraction is unavailable. | [determinism.py](determinism.py) |
 | `pdf_texts_equal` | <code>def&nbsp;pdf_texts_equal(</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;first:&nbsp;dict[str,&nbsp;str&nbsp;\|&nbsp;None],</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;second:&nbsp;dict[str,&nbsp;str&nbsp;\|&nbsp;None],</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;pdf_paths:&nbsp;list[str],</code><br><code>)&nbsp;-&gt;&nbsp;bool:</code> | Report whether both passes extracted identical text for every expected PDF. | [determinism.py](determinism.py) |
 | `classify_nondeterminism` | <code>def&nbsp;classify_nondeterminism(</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;*,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;byte_identical:&nbsp;bool,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;non_pdf_equal:&nbsp;bool,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;pdf_text_equal:&nbsp;bool,</code><br><code>)&nbsp;-&gt;&nbsp;list[str]:</code> | Name the artifact drift observed between two passes, if any. | [determinism.py](determinism.py) |
 | `template_render_passes` | <code>def&nbsp;template_render_passes(root:&nbsp;Path)&nbsp;-&gt;&nbsp;Callable[[],&nbsp;None]:</code> | Build the callable that runs one canonical render pass in the sibling template. | [determinism.py](determinism.py) |
 | `compare_artifacts` | <code>def&nbsp;compare_artifacts(</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;root:&nbsp;Path,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;*,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;render:&nbsp;Callable[[],&nbsp;None]&nbsp;\|&nbsp;None&nbsp;=&nbsp;None,</code><br><code>)&nbsp;-&gt;&nbsp;dict:</code> | Compare two artifact passes for content-identical render output. | [determinism.py](determinism.py) |
+| `wheel_smoke` | <code>def&nbsp;wheel_smoke(root:&nbsp;Path)&nbsp;-&gt;&nbsp;None:</code> | Build the wheel and prove it imports in a clean venv; raise on any failing step. | [wheel_smoke.py](wheel_smoke.py) |
 
 ## Import direction
 

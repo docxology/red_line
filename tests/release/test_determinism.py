@@ -17,6 +17,8 @@ from red_line.release import (
     pdf_text,
     pdf_texts_equal,
     template_render_passes,
+    tree_digest,
+    wheel_smoke,
 )
 
 PDF_KEY = "output/pdf/manuscript.pdf"
@@ -59,6 +61,45 @@ class TestArtifactHashes:
         _artifact(tmp_path, "output/reports/render_determinism.json", "{}")
         assert artifact_hashes(tmp_path) == {}
         assert "reports" not in ARTIFACT_DIRECTORIES
+
+
+class TestTreeDigest:
+    def test_empty_tree_fails_instead_of_digesting_to_a_stable_value(self, tmp_path):
+        with pytest.raises(RuntimeError, match="produced no files"):
+            tree_digest(tmp_path)
+
+    def test_identical_trees_digest_identically(self, tmp_path):
+        _populated_tree(tmp_path)
+        first = tree_digest(tmp_path)
+        sibling = tmp_path / "sibling"
+        sibling.mkdir()
+        _populated_tree(sibling)
+        assert tree_digest(sibling) == first
+
+    def test_content_presence_and_name_changes_all_move_the_digest(self, tmp_path):
+        _populated_tree(tmp_path)
+        first = tree_digest(tmp_path)
+
+        _artifact(tmp_path, "output/figures/plate.svg", "<svg/><!--changed-->")
+        assert tree_digest(tmp_path) != first
+
+        _artifact(tmp_path, "output/figures/extra.svg", "<svg/>")
+        assert tree_digest(tmp_path) != first
+
+        plate = tmp_path / "output" / "figures" / "plate.svg"
+        plate.rename(plate.with_name("renamed.svg"))
+        assert tree_digest(tmp_path) != first
+
+
+class TestWheelSmoke:
+    def test_missing_uv_fails_loudly_rather_than_silently_skipping(self, tmp_path, monkeypatch):
+        empty_path_directory = tmp_path / "no-tools"
+        empty_path_directory.mkdir()
+        monkeypatch.setenv("PATH", str(empty_path_directory))
+
+        with pytest.raises(RuntimeError, match="uv is required"):
+            wheel_smoke(tmp_path)
+
 
 
 class TestPdfText:
