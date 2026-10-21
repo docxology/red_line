@@ -37,6 +37,11 @@ keywords:
   - "research ethics"
   - "sociotechnical systems"
 
+analysis:
+  scripts:
+    - build_figures.py
+    - build_release_data.py
+
 project_config:
   source_framework:
     author: "Alex Turner"

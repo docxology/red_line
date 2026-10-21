@@ -93,7 +93,16 @@ export RED_LINE_TEMPLATE_ROOT=/path/of/your/choosing/template
 `RED_LINE_TEMPLATE_ENVIRONMENT` optionally selects a separate renderer uv
 environment. Nested render commands remove the project's `UV_PROJECT_ENVIRONMENT`
 and `VIRTUAL_ENV` to avoid rebuilding the project environment as the engine.
-When it is unset, `red_line.release.provenance.find_template_root` searches the
+For the current engine's full core pipeline, use a real project checkout named
+`red_line` under the detached engine's `projects/working/` directory; its held
+fingerprints reject a symlinked project root. Run the release gate from that
+checkout. Set `TEMPLATE_ROOT_PYTHON` to the absolute prepared external engine
+interpreter. The declared `analysis.scripts` runs figure generation followed by
+the release-input snapshot. Contract validators, package checks and render
+comparison remain explicit parts of the outer quality gate rather than being
+rediscovered recursively as analysis scripts.
+
+When `RED_LINE_TEMPLATE_ROOT` is unset, `red_line.release.provenance.find_template_root` searches the
 ancestors of this project root for a directory named `template` that actually
 carries `scripts/pipeline/stage_03_render.py`, and reports `None` when there is
 none. Nothing is assumed to sit at a fixed relative path: the previous default,

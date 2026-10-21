@@ -33,6 +33,16 @@ import subprocess
 
 import pytest
 
+
+def test_engine_analysis_declares_only_data_producers():
+    root = Path(__file__).resolve().parents[1]
+    config = (root / "manuscript" / "config.yaml").read_text()
+    section = re.search(r"(?m)^analysis:\n((?:[ \t].*\n|\n)+)", config)
+    assert section is not None, "engine discovery would execute every script, including its own caller"
+    scripts = re.findall(r"(?m)^\s+- ([a-z_]+\.py)$", section.group(1))
+    assert scripts == ["build_figures.py", "build_release_data.py"]
+    assert all((root / "scripts" / script).is_file() for script in scripts)
+
 ROOT = Path(__file__).resolve().parents[1]
 GIT = shutil.which("git")
 

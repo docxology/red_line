@@ -54,6 +54,14 @@ project root for a directory named `template` that actually carries
 `scripts/pipeline/stage_03_render.py`, and reports `None` rather than inventing
 a path. The exact invocation is in [`docs/development.md`](docs/development.md).
 
+The current engine's full core pipeline requires a real checkout named
+`red_line` under its `projects/working/` directory; a symlink is accepted by
+render-only stages but rejected by pipeline fingerprints. A detached worktree
+of this repository satisfies that requirement. Run the release gate from that
+worktree and nominate the prepared external engine interpreter with
+`TEMPLATE_ROOT_PYTHON`. The engine's analysis declaration runs only the figure
+and release-input producers; the outer quality gate runs all contract checks.
+
 Two consequences follow, and both are designed rather than tolerated:
 
 - The **rendered-surface checks are skipped, not failed**, in a checkout with no
