@@ -17,6 +17,7 @@ from red_line.release import (
     pdf_text,
     pdf_texts_equal,
     template_render_passes,
+    template_full_pipeline,
     tree_digest,
     wheel_smoke,
 )
@@ -159,6 +160,35 @@ class TestClassifyNondeterminism:
 
 
 class TestTemplateRenderPasses:
+    def test_full_pipeline_uses_the_current_core_mode_cli(self, tmp_path, monkeypatch):
+        template_root = _template_checkout(tmp_path / "template")
+        bin_directory = tmp_path / "bin"
+        bin_directory.mkdir()
+        recording_uv = bin_directory / "uv"
+        log = tmp_path / "pipeline-invocation.txt"
+        recording_uv.write_text(
+            '#!/bin/sh\nprintf "%s\\n" "$*" > "$UV_INVOCATION_LOG"\n', encoding="utf-8"
+        )
+        recording_uv.chmod(0o755)
+        monkeypatch.setenv("PATH", str(bin_directory))
+        monkeypatch.setenv("RED_LINE_TEMPLATE_ROOT", str(template_root))
+        monkeypatch.setenv("UV_INVOCATION_LOG", str(log))
+
+        template_full_pipeline(tmp_path)()
+
+        assert log.read_text().strip() == (
+            "run python scripts/runner/execute_pipeline.py --project working/red_line --mode core"
+        )
+
+    def test_full_pipeline_requires_uv(self, tmp_path, monkeypatch):
+        bin_directory = tmp_path / "bin"
+        bin_directory.mkdir()
+        monkeypatch.setenv("PATH", str(bin_directory))
+        monkeypatch.setenv("RED_LINE_TEMPLATE_ROOT", str(_template_checkout(tmp_path / "template")))
+
+        with pytest.raises(RuntimeError, match="uv is required"):
+            template_full_pipeline(tmp_path)()
+
     def test_missing_uv_fails_loudly_rather_than_silently_skipping(self, tmp_path, monkeypatch):
         empty_path_directory = tmp_path / "no-tools"
         empty_path_directory.mkdir()

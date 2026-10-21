@@ -6,7 +6,7 @@ This folder holds the cross-cutting test suite for the project. The top level co
 
 ```mermaid
 flowchart TD
-  root["tests/ 919 collected"]
+  root["tests/ 921 collected"]
   top["top-level modules 280"]
   analysis["analysis/ 68"]
   canary["canary/ 43"]
@@ -18,7 +18,7 @@ flowchart TD
   model["model/ 36"]
   oversight["oversight/ 21"]
   registry["registry/ 12"]
-  release["release/ 86"]
+  release["release/ 88"]
   root --> top
   root --> analysis
   root --> canary
@@ -62,7 +62,7 @@ flowchart TD
 | model | [tests/model](model/README.md) | 36 | Core dataclasses, enums, and normalization helpers. |
 | oversight | [tests/oversight](oversight/README.md) | 21 | Review findings and transparency aggregation. |
 | registry | [tests/registry](registry/README.md) | 12 | Registry shape and provenance anchors. |
-| release | [tests/release](release/README.md) | 86 | Provenance digests, input snapshot, manifest, and render determinism. |
+| release | [tests/release](release/README.md) | 88 | Provenance digests, input snapshot, manifest, and render determinism. |
 
 ## Run
 
@@ -74,7 +74,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `919` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
+The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `921` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
 
 ## Related
 

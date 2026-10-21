@@ -120,7 +120,7 @@ def template_render_passes(root: Path) -> Callable[[], None]:
     return run_render
 
 
-def template_full_pipeline(root: Path) -> Callable[[], None]:  # pragma: no cover
+def template_full_pipeline(root: Path) -> Callable[[], None]:
     """Build the callable that runs the engine's full core pipeline once.
 
     The render-only passes of :func:`template_render_passes` rewrite the PDF
@@ -149,7 +149,8 @@ def template_full_pipeline(root: Path) -> Callable[[], None]:  # pragma: no cove
                 "scripts/runner/execute_pipeline.py",
                 "--project",
                 "working/red_line",
-                "--core-only",
+                "--mode",
+                "core",
             ],
             cwd=template_root,
             env=pipeline_env,
