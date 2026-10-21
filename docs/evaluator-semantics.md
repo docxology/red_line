@@ -96,7 +96,12 @@ unknown evidence. `complete()` uses today when its date is omitted, matching
 `evaluate_action`. Every stale or contradicted duplicate blocks; there is no
 automatic supersession. `Exemption.applicable(scope, context, date)` and
 `RedLine.applicable_exemptions` require an explicit date and the full context
-gate. They establish lexical eligibility, not substantive truth. The older
+gate. These are context-evidence predicates: they cannot validate a proposed
+action's unknown scope, ambiguity or tier consistency because they do not take
+that action. For action-aware dated applicability, use
+`evaluate_action(action, as_of=date)` and its `decision_trace`; an intake stop
+has an empty trace. Retain its classification alongside exemption IDs: a local
+exemption never compensates for another refusal. The older
 `satisfied`, `satisfied_exemptions` and `carved_out` helpers retain support-only
 semantics for compatibility and are deprecated for readiness decisions.
 `has_verified_evidence(kind)` without a date intentionally skips freshness.

@@ -16,7 +16,7 @@ This folder covers beacon bindings, contract-validator branch coverage, manuscri
 | [test_release_bindings.py](test_release_bindings.py) | Live validator passes and release-manifest bindings on the source tree. | 7 |
 | [test_release_hardening.py](test_release_hardening.py) | Candidate-ledger and source-claim binding regressions plus the figure-digest gate guard. | 3 |
 | [test_trust_model.py](test_trust_model.py) | Evidence, canary, immutability, and fixture-backed trust-boundary attacks. | 21 |
-| [test_formalism_bindings.py](test_formalism_bindings.py) | The formalism section's definitions and propositions re-derived from code, plus the auto-numbering structural gates. | 34 |
+| [test_formalism_bindings.py](test_formalism_bindings.py) | The formalism section's definitions and propositions re-derived from code, plus the auto-numbering structural gates. | 35 |
 
 ## Helpers
 

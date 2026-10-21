@@ -1,9 +1,9 @@
 """Tier-monotonicity sweep: exercise the evaluator's strictness lattice.
 
-The manuscript claims the evaluator is *monotonic in danger*: for any fixed
-declared scope, reducing retained oversight (``HOSTED`` → ``CONNECTED`` →
-``AIR_GAPPED``) can never soften the verdict. This module turns that claim
-into an exercised property in the same spirit as
+The singleton sweep observes verdicts while reducing retained oversight
+(``HOSTED`` → ``CONNECTED`` → ``AIR_GAPPED``). Its finite domain is not a
+proof for arbitrary scopes or custom registries. This module exercises that
+local consistency property in the same spirit as
 :mod:`red_line.analysis.outcome_coverage`: every scope keyword of every
 current red line is run through the real
 :func:`~red_line.evaluation.evaluator.evaluate_action` (no stand-ins, no

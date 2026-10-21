@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 
 from ..evaluation import evaluate_action
@@ -170,7 +170,10 @@ def review_engagement(
     # Bind evidence freshness to the date printed on the finding. Without this
     # explicit as_of, a backdated record could silently be evaluated against a
     # different day than the record claims.
-    lines = tuple(sorted(lines, key=lambda line: line.id))
+    lines = tuple(sorted(
+        (replace(line, scope=tuple(sorted(line.scope)), exemptions=tuple(sorted(line.exemptions, key=lambda ex: ex.id)))
+         for line in lines), key=lambda line: line.id,
+    ))
     assessment = evaluate_action(action, lines, as_of=on)
     finding = _render_finding(assessment)
     hints = _undeclared_scope_hints(action, lines)

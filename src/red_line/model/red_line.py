@@ -138,7 +138,7 @@ class Exemption:
         return bool(trigger & action)
 
     def satisfied(self, context: "ActionContext | None", as_of: date | None = None) -> bool:
-        """Deprecated support-only predicate; use ``applicable`` for dated intake readiness.
+        """Deprecated support-only predicate; ``applicable`` adds dated context evidence checks.
 
         An omitted date deliberately retains historical undated support semantics.
         A favorable record alone does not resolve duplicates or prove the exception.
@@ -148,7 +148,7 @@ class Exemption:
         return all(context.has_verified_evidence(kind, as_of) for kind in self.required_evidence)
 
     def applicable(self, action_scope: frozenset[str], context: "ActionContext", as_of: date) -> bool:
-        """Dated lexical applicability with the full intake gate, not factual certification."""
+        """Dated context-evidence predicate; action scope, tier and ambiguity need evaluator validation."""
 
         return context.evidence_gate(as_of).ready and self.matches(action_scope) and self.satisfied(context, as_of)
 
@@ -255,7 +255,7 @@ class RedLine:
     def applicable_exemptions(
         self, action_scope: frozenset[str], context: "ActionContext", as_of: date
     ) -> tuple[Exemption, ...]:
-        """Return dated, intake-gated lexical exemptions without resolving evidence history."""
+        """Context-evidenced triggers only; use an evaluator assessment for action readiness."""
 
         return tuple(ex for ex in self.exemptions if ex.applicable(action_scope, context, as_of))
 

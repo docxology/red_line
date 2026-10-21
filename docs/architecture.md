@@ -19,7 +19,7 @@ does not enforce execution or claim universal moral authority.
 | `contracts/` | release-binding validators, source and figure drift checks, pure `list[str]` error reporting |
 | `release/` | provenance digests and git state, the deterministic input snapshot, the release manifest, and render-determinism comparison |
 | `invariants/` | pure structural checks over ids, scope, severity, types, and typed exemptions |
-| `envelope.py` | the common report envelope: complete canonical `ReviewFinding` serialization (`red-line.report/1.0`), its SHA-256 digest, and the cross-line witness record (`line.report-envelope/1.0`) that points at — never reinterprets — the native finding |
+| `envelope.py` | current bound `ReviewFinding` serialization (`red-line.report/2.0`), preserved historical unbound `red-line.report/1.0` bytes, SHA-256 pointers, and the common `line.report-envelope/1.0` contract; pointer, contract and trusted-prior integrity checks remain separate |
 
 ## Evaluation flow
 

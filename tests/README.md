@@ -6,17 +6,17 @@ This folder holds the cross-cutting test suite for the project. The top level co
 
 ```mermaid
 flowchart TD
-  root["tests/ 916 collected"]
+  root["tests/ 919 collected"]
   top["top-level modules 280"]
   analysis["analysis/ 68"]
   canary["canary/ 43"]
   evaluation["evaluation/ 25"]
   fixtures["fixtures/ 0"]
   hardening["hardening/ 125"]
-  integration["integration/ 204"]
+  integration["integration/ 205"]
   invariants["invariants/ 18"]
-  model["model/ 35"]
-  oversight["oversight/ 20"]
+  model["model/ 36"]
+  oversight["oversight/ 21"]
   registry["registry/ 12"]
   release["release/ 86"]
   root --> top
@@ -57,10 +57,10 @@ flowchart TD
 | evaluation | [tests/evaluation](evaluation/README.md) | 25 | Classification, carve-outs, aliases, and tier monotonicity. |
 | fixtures | [tests/fixtures](fixtures/README.md) | 0 | Committed JSON fixtures consumed by other tests. |
 | hardening | [tests/hardening](hardening/README.md) | 125 | Adversarial constructor, scope, canary, and invariant checks. |
-| integration | [tests/integration](integration/README.md) | 204 | Cross-surface bindings over manuscript, docs, data, and release surfaces. |
+| integration | [tests/integration](integration/README.md) | 205 | Cross-surface bindings over manuscript, docs, data, and release surfaces. |
 | invariants | [tests/invariants](invariants/README.md) | 18 | Structural invariant battery and proof-of-detection. |
-| model | [tests/model](model/README.md) | 35 | Core dataclasses, enums, and normalization helpers. |
-| oversight | [tests/oversight](oversight/README.md) | 20 | Review findings and transparency aggregation. |
+| model | [tests/model](model/README.md) | 36 | Core dataclasses, enums, and normalization helpers. |
+| oversight | [tests/oversight](oversight/README.md) | 21 | Review findings and transparency aggregation. |
 | registry | [tests/registry](registry/README.md) | 12 | Registry shape and provenance anchors. |
 | release | [tests/release](release/README.md) | 86 | Provenance digests, input snapshot, manifest, and render determinism. |
 
@@ -74,7 +74,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `916` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
+The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `919` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
 
 ## Related
 

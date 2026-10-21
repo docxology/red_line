@@ -107,8 +107,11 @@ $$\mathrm{matches}_e(S) \;=\;
 and $e$ is *satisfied* by a context $C$ at review date $a$ when $C$ supports
 every $k \in R_e$. Matching is a declaration; satisfaction is the condition
 that can narrow a line only after the full dated intake gate. The public
-`applicable` helper additionally requires that complete gate; the older
-support-only `satisfied` predicate does not establish review readiness.
+`applicable` helper requires complete dated context evidence, but cannot validate
+an action's scope, tier consistency or ambiguity. Action-aware applicability is
+the evaluator's dated assessment and structured trace; intake stops have no
+trace. The older support-only `satisfied` predicate does not establish review
+readiness.
 :::
 
 ::: {.definition #def:red-line title="Red line"}
@@ -361,10 +364,10 @@ code reddens the derivation inside it.
 | [@prop:outcome-reachability] | all five classifications are reached | `test_outcome_reachability_matches_the_executed_battery` |
 | [@prop:exemption-evidence] | a matching trigger alone never narrows a line | `test_exemption_evidence_floor_is_derived_from_the_registry` |
 | [@prop:trigger-mode] | ALL-mode needs every trigger token | `test_trigger_mode_counts_match_the_executed_probe` |
-| [@prop:tier-monotone] | dropping oversight never softens a verdict | `test_tier_monotonicity_numbers_match_the_executed_sweep` |
+| [@prop:tier-monotone] | no tier inversions in the exercised singleton domain | `test_tier_monotonicity_numbers_match_the_executed_sweep` |
 | [@prop:normalization-closure] | normalization is idempotent and fails closed | `test_normalization_closure_is_executed_not_asserted` |
 | [@prop:reason-codes] | codes are closed, ordered, and duplicate-free | `test_reason_code_vocabulary_is_closed_and_duplicate_free` |
-| [@prop:envelope-pointer] | the envelope agrees with its finding, and any edit is visible | `test_envelope_pointer_agreement_is_executed_not_asserted` |
+| [@prop:envelope-pointer] | checked pointer fields agree; other edits require contract or trusted-prior checks | `test_envelope_pointer_agreement_is_executed_not_asserted` |
 
 The two propositions that are hardest to see from the code alone have their own
 plates. [@fig:evidence-gate-sensitivity] renders the forty-five perturbations

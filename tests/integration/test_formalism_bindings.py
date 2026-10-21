@@ -766,6 +766,24 @@ def test_report_envelope_field_count_is_the_dataclass_arity() -> None:
         assert field.name.replace("_", "\\_") in text, field.name
 
 
+def test_publication_summaries_keep_pointer_and_sweep_claims_bounded():
+    from red_line import REPORT_SCHEMA, UNBOUND_REPORT_SCHEMA
+
+    text = _formalism()
+    assert "checked pointer fields agree; other edits require contract or trusted-prior checks" in text
+    assert "no tier inversions in the exercised singleton domain" in text
+    assert "any edit is visible" not in text
+    tiers = (ROOT / "manuscript" / "05_deployment_tiers.md").read_text()
+    assert "![Singleton sweep:" in tiers
+    brief = (ROOT / "docs" / "visualization-briefs.md").read_text()
+    row = next(line for line in brief.splitlines() if line.startswith("| `fig:tier-monotonicity-lattice`"))
+    assert "finite singleton sweep" in row
+    architecture = (ROOT / "docs" / "architecture.md").read_text()
+    row = next(line for line in architecture.splitlines() if line.startswith("| `envelope.py`"))
+    assert f"current bound `ReviewFinding` serialization (`{REPORT_SCHEMA}`)" in row
+    assert f"historical unbound `{UNBOUND_REPORT_SCHEMA}`" in row
+
+
 def test_envelope_pointer_agreement_is_executed_not_asserted() -> None:
     """[@prop:envelope-pointer] is re-derived through a live export and edits.
 

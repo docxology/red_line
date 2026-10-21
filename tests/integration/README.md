@@ -16,7 +16,7 @@ This folder binds code, docs, data, manuscript sections, fixtures, and release h
 | [test_release_bindings.py](test_release_bindings.py) | Live validator passes and release-manifest bindings on the source tree. | 7 |
 | [test_release_hardening.py](test_release_hardening.py) | Candidate-ledger and source-claim binding regressions plus the figure-digest gate guard. | 3 |
 | [test_trust_model.py](test_trust_model.py) | Evidence, canary, immutability, and fixture-backed trust-boundary attacks. | 21 |
-| [test_formalism_bindings.py](test_formalism_bindings.py) | The formalism section's definitions and propositions re-derived from code, plus the auto-numbering structural gates. | 34 |
+| [test_formalism_bindings.py](test_formalism_bindings.py) | The formalism section's definitions and propositions re-derived from code, plus the auto-numbering structural gates. | 35 |
 
 ## Run
 
@@ -28,7 +28,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `916` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
+The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `919` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
 
 ## Related
 

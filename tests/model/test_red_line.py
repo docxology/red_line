@@ -99,3 +99,21 @@ def test_review_dated_applicability_preserves_duplicates(status, recorded_on):
     assert bool(line.applicable_exemptions(scope, context, date(2026, 10, 20))) == ready
     with pytest.raises(TypeError):
         line.exemptions[0].applicable(scope, context, None)
+
+
+def test_context_predicates_require_action_level_intake_validation():
+    from red_line import Classification, DeploymentTier, evaluate_action
+    from tests.helpers import action
+    from datetime import date
+
+    line = next(line for line in PERSONAL_RED_LINES if line.id == "cogsec-integrity")
+    for scope, tier, ambiguous in (
+        ({"cogsec", "education", "unknown"}, DeploymentTier.HOSTED, False),
+        ({"cogsec", "education", "connected"}, DeploymentTier.HOSTED, False),
+        ({"cogsec", "education"}, DeploymentTier.HOSTED, True),
+    ):
+        candidate = action("synthetic", frozenset(scope), tier=tier, ambiguous=ambiguous)
+        assert line.applicable_exemptions(candidate.scope, candidate.context, date.today())
+        result = evaluate_action(candidate, as_of=date.today())
+        assert result.classification is Classification.INSUFFICIENT_INFORMATION
+        assert not result.decision_trace

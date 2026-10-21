@@ -257,3 +257,16 @@ def test_review_snapshot_parser_and_provenance_validation_fail_closed():
         replace(finding, intake_digest="bad")
     with pytest.raises(TypeError, match="bindings"):
         replace(finding, evaluator_id=None)
+
+
+def test_canonical_registry_permutations_preserve_report_and_replay():
+    from red_line import canonical_intake, canonical_report, registry_hash, replay_finding
+
+    candidate = action("cogsec influence_ops manipulation", frozenset({"cogsec", "education", "detection"}))
+    finding = review_engagement(candidate)
+    permuted = tuple(replace(line, scope=tuple(reversed(line.scope)),
+                             exemptions=tuple(reversed(line.exemptions)))
+                     for line in reversed(PERSONAL_RED_LINES))
+    assert registry_hash(permuted) == finding.registry_digest
+    assert canonical_report(review_engagement(candidate, lines=permuted)) == canonical_report(finding)
+    assert replay_finding(finding, canonical_intake(candidate), permuted) == ()
