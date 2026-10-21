@@ -164,8 +164,11 @@ and binding the final artifact bytes establishes local consistency. Equal PDF
 text alone does not establish identical layout, hermetic build security or
 independent attestation. A candidate remains blocked while a defined gate is red.
 
-**Release state.** This work is released as a standalone repository at <https://github.com/docxology/red_line>.
-It retains the verified DOI identified in the publication metadata, but has no
+**Release state.** This work is publicly available as a standalone repository at <https://github.com/docxology/red_line>.
+That historical availability does not establish publication of the current
+version: a generated manifest records a candidate, while tagging, remote
+publication and deposit require separate evidence. The last verified DOI is
+retained as a historical reference, not a current-version deposit claim. There is no
 external canary witness, no independent review body,
 and no execution admission control. A public release should not claim those
 things until the release evidence bundle in [`docs/claim-register.md`](https://github.com/docxology/red_line/blob/main/docs/claim-register.md)

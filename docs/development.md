@@ -102,6 +102,11 @@ the release-input snapshot. Contract validators, package checks and render
 comparison remain explicit parts of the outer quality gate rather than being
 rediscovered recursively as analysis scripts.
 
+Manifest schema 1.1 records candidate-version state separately from historical
+public repository availability. Passing readiness checks does not attest that
+the version was tagged, pushed or deposited; record those verified actions in
+the dated packet.
+
 When `RED_LINE_TEMPLATE_ROOT` is unset, `red_line.release.provenance.find_template_root` searches the
 ancestors of this project root for a directory named `template` that actually
 carries `scripts/pipeline/stage_03_render.py`, and reports `None` when there is

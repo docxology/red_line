@@ -22,6 +22,8 @@
   source, renderer and final artifact bindings. Reject hash-only release evidence.
 - Cite this version through the repository; retain the verified DOI only in
   historical references pending the author's reserve-first successor identifier.
+- Distinguish candidate-version manifests from the repository's historical
+  public availability; green readiness checks do not attest version publication.
 
 See [the review dispositions](docs/review-20261020.md) and the dated
 [candidate packet](docs/releases/v0.4.0.md) for current verification results.

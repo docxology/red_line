@@ -240,11 +240,24 @@ class TestPreRenderJudgement:
 
 
 class TestBuildManifest:
+    def test_public_repository_does_not_establish_version_publication(self):
+        manifest = build_manifest(ROOT, as_of="2026-10-21")
+        assert manifest["publication_gate"]["status"] == "candidate"
+        assert manifest["publication_gate"]["repository_availability"] == "public"
+        assert "does not verify version publication" in (ROOT / "docs/VERIFY.md").read_text()
+        assert "does not establish publication of the current" in (ROOT / "manuscript/10_limitations.md").read_text()
+
+        for result in manifest["validation_results"].values():
+            result.update(passed=True, errors=[])
+        manifest.update(source_dirty=False, template_dirty=False, template_revision="a" * 40)
+        assert release_ready(manifest, strict=True)
+        assert manifest["publication_gate"]["status"] == "candidate"
+
     def test_pinned_render_timestamp_is_carried_verbatim(self):
         manifest = build_manifest(ROOT, as_of="2026-07-17", render_timestamp="2026-07-17T00:00:00Z")
         assert manifest["render_timestamp"] == "2026-07-17T00:00:00Z"
         assert manifest["freshness_as_of"] == "2026-07-17"
-        assert manifest["manifest_schema_version"] == "1.0"
+        assert manifest["manifest_schema_version"] == "1.1"
 
     def test_omitted_render_timestamp_is_generated_in_utc(self):
         manifest = build_manifest(ROOT, as_of="2026-07-17")

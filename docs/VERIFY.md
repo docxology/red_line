@@ -110,8 +110,13 @@ figures through `../figures/`:
 python3 -m http.server 8765 --directory output
 ```
 
-The current release manifest records the publication gate as
-`released`. An external witness and independent reviewer have not yet been
+Manifest schema 1.1 records the version's publication gate as `candidate` and
+the repository's historical availability separately as `public`. The builder
+does not verify version publication: even passing strict readiness checks does
+not establish that a version was tagged, pushed or deposited. The dated release
+packet records those separately verified actions. Historical schema 1.0's
+`released` literal did not establish version publication.
+An external witness and independent reviewer have not yet been
 obtained (`external_witness.status: not_published`, `independent_reviewer.status: not_obtained`).
 Those fields should be filled in with an exact witness locator and preserved
-review record as post-release follow-through.
+review record when independently obtained.

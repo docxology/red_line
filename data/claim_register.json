@@ -119,7 +119,7 @@
       ],
       "status": "requires_each_render_run_and_render_gate",
       "verification_mode": "render_validated",
-      "stopping_point": "Per-run source and final artifact bindings do not establish PDF layout equality, hermetic build security or independent attestation; a red render gate blocks the candidate release"
+      "stopping_point": "Per-run source and final artifact bindings do not establish PDF layout equality, hermetic build security, independent attestation or version publication; a red render gate blocks the candidate release"
     },
     {
       "claim_id": "CLM-009",

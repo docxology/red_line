@@ -51,6 +51,11 @@ external receipt and propagates the failure. The strict manifest rechecks both
 bindings; a later PDF byte edit fails even when its extracted text is unchanged.
 Text equality does not establish identical PDF layout or independent attestation.
 
+Manifest schema 1.1 identifies a generated version record as `candidate` and
+records the repository's public availability separately. `release_ready`
+checks validation and checkout state; it does not verify tagging, remote
+publication or deposit. Those actions need their own release-packet evidence.
+
 ## Related
 
 - [../README.md](../README.md)

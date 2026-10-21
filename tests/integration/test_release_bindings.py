@@ -81,7 +81,7 @@ def test_release_manifest_carries_source_canary_and_artifact_hashes():
         as_of="2026-07-17",
         render_timestamp="2026-07-17T00:00:00Z",
     )
-    assert manifest["manifest_schema_version"] == "1.0"
+    assert manifest["manifest_schema_version"] == "1.1"
     assert manifest["package_version"]
     assert len(manifest["registry_hash"]) == 64
     assert manifest["canary_statement"]["registry_digest"] == manifest["registry_hash"]
@@ -91,7 +91,8 @@ def test_release_manifest_carries_source_canary_and_artifact_hashes():
     assert "output/reports/release_manifest.json" not in manifest["artifact_hashes"]
     assert manifest["validation_results"]["source_claims"]["passed"]
     assert manifest["validation_results"]["canary"]["passed"]
-    assert manifest["publication_gate"]["status"] == "released"
+    assert manifest["publication_gate"]["status"] == "candidate"
+    assert manifest["publication_gate"]["repository_availability"] == "public"
     assert manifest["publication_gate"]["external_witness"]["status"] == "not_published"
     assert manifest["publication_gate"]["external_witness"]["locator"] is None
     assert manifest["publication_gate"]["independent_reviewer"]["status"] == "not_obtained"

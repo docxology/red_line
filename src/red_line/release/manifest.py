@@ -19,7 +19,7 @@ from red_line.contracts import (
 from .provenance import digest_tree, find_template_root, git_dirty, git_revision, sha256_file
 from .receipt import render_binding_issues
 
-MANIFEST_SCHEMA_VERSION = "1.0"
+MANIFEST_SCHEMA_VERSION = "1.1"
 MANIFEST_FILENAME = "release_manifest.json"
 CANDIDATE_LEDGER = "data/proposed_red_lines.json"
 
@@ -225,7 +225,8 @@ def build_manifest(
         },
         "validation_results": validation,
         "publication_gate": {
-            "status": "released",
+            "status": "candidate",
+            "repository_availability": "public",
             "external_witness": {
                 "status": "not_published",
                 "locator": None,

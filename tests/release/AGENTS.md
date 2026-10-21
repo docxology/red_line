@@ -8,7 +8,7 @@ This folder covers the `red_line.release` package: provenance digests, the relea
 | --- | --- | --- |
 | [test_provenance.py](test_provenance.py) | Chunked file digests, real-repository revision and dirtiness, honest render-toolchain location, and directory digest filtering. | 17 |
 | [test_snapshot.py](test_snapshot.py) | Live analysis metrics, figure-registry binding and fallbacks, and snapshot writing. | 8 |
-| [test_manifest.py](test_manifest.py) | Candidate-ledger binding, fail-closed report interpretation, publication-gate readiness, pre-render deferral versus decidable failure, manifest assembly, and the recorded renderer when one is and is not present. | 31 |
+| [test_manifest.py](test_manifest.py) | Candidate-ledger binding, fail-closed report interpretation, publication-gate readiness, pre-render deferral versus decidable failure, manifest assembly, and the recorded renderer when one is and is not present. | 32 |
 | [test_determinism.py](test_determinism.py) | Artifact hashing scope, aggregate tree digesting, the wheel smoke guard, PDF text comparison, drift classification, render and full-pipeline CLI invocation, and two-pass comparison outcomes. | 62 |
 
 ## Helpers
