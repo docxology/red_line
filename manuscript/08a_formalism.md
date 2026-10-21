@@ -106,7 +106,9 @@ $$\mathrm{matches}_e(S) \;=\;
 
 and $e$ is *satisfied* by a context $C$ at review date $a$ when $C$ supports
 every $k \in R_e$. Matching is a declaration; satisfaction is the condition
-that can narrow a line.
+that can narrow a line only after the full dated intake gate. The public
+`applicable` helper additionally requires that complete gate; the older
+support-only `satisfied` predicate does not establish review readiness.
 :::
 
 ::: {.definition #def:red-line title="Red line"}
@@ -125,6 +127,9 @@ free text, a declared scope, a context, a tier $t \in T$ as ranked in [@def:tier
 Coverage and exemption matching both run against the *effective* scope
 $E = \mathcal{N}(S) \cup \{t\}$: the tier value is itself a token, so a line or
 exemption may name a tier in its scope. The description is never part of $E$.
+This expression applies only after intake rejects every reserved tier token
+other than $t$. The implementation removes all declared tier tokens before
+adding the typed tier; a correct redundant declaration is equivalent to omission.
 :::
 
 ::: {.definition #def:classification title="Classification"}
@@ -147,7 +152,9 @@ the sense of [@def:context]; some dimension holds a record that is unresolved
 (self-asserted, unverified, or contradicted in the sense of [@def:evidence-status], with no verified record standing
 in its place) or stale; the context declares an unknown; the normalized scope
 is empty or contains one of the markers `unknown`, `unspecified`, `tbd`,
-`unclear`; or the ambiguity flag is set.
+`unclear`; a reserved deployment-tier token conflicts with $t$; or the ambiguity
+flag is set. A contradicted duplicate remains unresolved even when another
+verified record supports the same dimension.
 :::
 
 ::: {.definition #def:tier-floor title="Tier floor"}
