@@ -23,8 +23,9 @@
 - Cite this version through the repository; retain the verified DOI only in
   historical references pending the author's reserve-first successor identifier.
 
-See [the review dispositions](docs/review-20261020.md) and the dated release
-packet for current verification results. The existing DOI remains a historical identifier;
+See [the review dispositions](docs/review-20261020.md) and the dated
+[candidate packet](docs/releases/v0.4.0.md) for current verification results.
+The existing DOI remains a historical identifier;
 the new Zenodo version follows the author's reserve-first procedure.
 
 ## 0.3.0 — 2026-07-29
