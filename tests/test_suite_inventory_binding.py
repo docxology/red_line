@@ -36,7 +36,7 @@ _AREA_ROW_RE = re.compile(r"^\| [a-z-]+ \| \[tests(?:/([a-z]+))?\]\([^)]*\) \| (
 _MERMAID_ROOT_RE = re.compile(r'root\["tests/ (\d+) collected"\]')
 _MERMAID_TOP_RE = re.compile(r'top\["top-level modules (\d+)"\]')
 _MERMAID_DIR_RE = re.compile(r'^  [a-z]+\["([a-z]+)/ (\d+)"\]$', re.M)
-_SUITE_SIZE_RE = re.compile(r"with `(\d+)` passed tests on")
+_SUITE_SIZE_RE = re.compile(r"with `(\d+)` collected tests on")
 
 
 @pytest.fixture(scope="module")
@@ -175,7 +175,7 @@ def test_the_development_guide_lists_every_root_level_test_module() -> None:
 
 
 def test_every_stated_full_suite_size_matches_collection(collected: Counter) -> None:
-    """The "N passed tests" sentence repeated across the folder READMEs."""
+    """The collected suite size repeated across the folder READMEs comes from real collection."""
 
     total = sum(collected.values())
     seen = 0

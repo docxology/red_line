@@ -16,6 +16,10 @@ from ..model import (
     normalize_token,
 )
 from ..registry import PERSONAL_RED_LINES
+from ..canary import registry_hash
+from ..version import PROJECT_VERSION
+from .intake import EVALUATOR_ID, canonical_intake, intake_digest, action_from_snapshot
+from ..model.action import LineDecision
 
 
 @dataclass(frozen=True)
@@ -59,6 +63,11 @@ class ReviewFinding:
     unresolved_evidence: tuple[str, ...] = ()
     stale_evidence: tuple[str, ...] = ()
     normalized_scope: tuple[str, ...] = ()
+    registry_digest: str = ""
+    evaluator_version: str = ""
+    evaluator_id: str = ""
+    intake_digest: str = ""
+    decision_trace: tuple[LineDecision, ...] = ()
 
     def __post_init__(self) -> None:
         if not isinstance(self.engagement, str) or not isinstance(self.finding, str):
@@ -114,12 +123,26 @@ class ReviewFinding:
         object.__setattr__(self, "implicated_ids", tuple(self.implicated_ids))
         object.__setattr__(
             self, "declared_scope", tuple(sorted(normalize_scope(frozenset(self.declared_scope))))
+            if self.registry_digest else tuple(self.declared_scope)
         )
         object.__setattr__(self, "reason_codes", tuple(self.reason_codes))
         object.__setattr__(self, "missing_evidence", tuple(self.missing_evidence))
         object.__setattr__(self, "unresolved_evidence", tuple(self.unresolved_evidence))
         object.__setattr__(self, "stale_evidence", tuple(self.stale_evidence))
         object.__setattr__(self, "normalized_scope", tuple(self.normalized_scope))
+        bindings = (self.registry_digest, self.evaluator_version, self.evaluator_id, self.intake_digest)
+        if any(not isinstance(value, str) for value in bindings):
+            raise TypeError("review provenance bindings must be strings")
+        if any(bindings) and not all(bindings):
+            raise ValueError("review provenance bindings must be all present or all absent (unbound)")
+        for digest in (self.registry_digest, self.intake_digest):
+            if digest and (len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest)):
+                raise ValueError("review provenance requires SHA-256 digests")
+        if not isinstance(self.decision_trace, (tuple, list)) or any(
+            not isinstance(entry, LineDecision) for entry in self.decision_trace
+        ):
+            raise TypeError("finding decision_trace requires LineDecision values")
+        object.__setattr__(self, "decision_trace", tuple(self.decision_trace))
 
     @property
     def blocks(self) -> bool:
@@ -147,6 +170,7 @@ def review_engagement(
     # Bind evidence freshness to the date printed on the finding. Without this
     # explicit as_of, a backdated record could silently be evaluated against a
     # different day than the record claims.
+    lines = tuple(sorted(lines, key=lambda line: line.id))
     assessment = evaluate_action(action, lines, as_of=on)
     finding = _render_finding(assessment)
     hints = _undeclared_scope_hints(action, lines)
@@ -167,7 +191,35 @@ def review_engagement(
         unresolved_evidence=tuple(kind.value for kind in assessment.unresolved_evidence),
         stale_evidence=tuple(kind.value for kind in assessment.stale_evidence),
         normalized_scope=assessment.normalized_scope,
+        registry_digest=registry_hash(lines),
+        evaluator_version=PROJECT_VERSION,
+        evaluator_id=EVALUATOR_ID,
+        intake_digest=intake_digest(canonical_intake(action)),
+        decision_trace=assessment.decision_trace,
     )
+
+
+def replay_finding(
+    finding: ReviewFinding, snapshot: str | None, lines: tuple[RedLine, ...] = PERSONAL_RED_LINES,
+) -> tuple[str, ...]:
+    """Report unavailable provenance or replay disagreement; local replay does not verify facts."""
+
+    issues = []
+    if not finding.registry_digest:
+        issues.append("unbound report has unbound provenance")
+    if snapshot is None:
+        issues.append("intake snapshot unavailable")
+    elif intake_digest(snapshot) != finding.intake_digest:
+        issues.append("intake digest disagreement")
+    if registry_hash(lines) != finding.registry_digest:
+        issues.append("registry digest disagreement")
+    if (finding.evaluator_version, finding.evaluator_id) != (PROJECT_VERSION, EVALUATOR_ID):
+        issues.append("evaluator identity unavailable in this runtime")
+    if issues:
+        return tuple(issues)
+    candidate = action_from_snapshot(snapshot)
+    replayed = review_engagement(candidate, finding.reviewed_on, lines, finding.authorization)
+    return () if replayed == finding else ("replayed finding disagreement",)
 
 
 def _stem(word: str) -> str:

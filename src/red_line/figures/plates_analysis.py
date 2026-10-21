@@ -304,7 +304,7 @@ def tier_monotonicity_lattice() -> str:
     body = [
         figure_header(
             FIGURE_TEXT["fig:tier-monotonicity-lattice"]["title"],
-            f"Each chip is one executed evaluate_action run at review date {report.as_of}; strictness may only grow as retained oversight drops.",
+            f"Singleton scope tokens at review date {report.as_of}; these observed rows do not soften as retained oversight drops.",
         )
     ]
     x0, y0 = 55, 150

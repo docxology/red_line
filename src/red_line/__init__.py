@@ -23,6 +23,12 @@ from .canary import (
     verify_canary,
 )
 from .envelope import (
+    UNBOUND_REPORT_SCHEMA,
+    report_pointer_matches_finding,
+    envelope_contract_issues,
+    envelope_finding_issues,
+    envelope_digest,
+    archive_envelope_issues,
     ENVELOPE_SCHEMA,
     RED_LINE_ID,
     REPORT_SCHEMA,
@@ -38,6 +44,8 @@ from .evaluation import evaluate_action
 from .invariants import InvariantResult, all_invariants, invariants_pass
 from .model import (
     ActionAssessment,
+    LineDecision,
+    EvidenceGate,
     ActionContext,
     AssessmentReasonCode,
     Classification,
@@ -66,10 +74,15 @@ from .registry import (
     SOURCE_URL,
 )
 from .version import PROJECT_VERSION
+from .oversight.findings import replay_finding
+from .oversight.intake import canonical_intake, intake_digest, action_from_snapshot, INTAKE_SCHEMA, EVALUATOR_ID
 
 __version__ = PROJECT_VERSION
 
 __all__ = [
+    "UNBOUND_REPORT_SCHEMA", "report_pointer_matches_finding", "envelope_contract_issues",
+    "envelope_finding_issues", "envelope_digest", "archive_envelope_issues", "replay_finding",
+    "canonical_intake", "intake_digest", "action_from_snapshot", "INTAKE_SCHEMA", "EVALUATOR_ID",
     "__version__",
     "SOURCE_FRAMEWORK",
     "SOURCE_URL",
@@ -86,6 +99,8 @@ __all__ = [
     "EvidenceRecord",
     "ProposedAction",
     "ActionAssessment",
+    "LineDecision",
+    "EvidenceGate",
     "DEFAULT_EVIDENCE_MAX_AGE_DAYS",
     "PERSONAL_RED_LINES",
     "REGISTRY_IS_EXHAUSTIVE",

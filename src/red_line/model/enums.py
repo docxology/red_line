@@ -98,6 +98,7 @@ class AssessmentReasonCode(Enum):
     UNRESOLVED_EVIDENCE = "unresolved_evidence"
     STALE_EVIDENCE = "stale_evidence"
     INVALID_SCOPE = "invalid_scope"
+    TIER_SCOPE_CONFLICT = "tier_scope_conflict"
     UNDECLARED_UNKNOWN = "undeclared_unknown"
     UNKNOWN_SCOPE = "unknown_scope"
     EMPTY_SCOPE = "empty_scope"

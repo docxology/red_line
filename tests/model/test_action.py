@@ -100,3 +100,31 @@ def test_proposed_action_rejects_all_untyped_constructor_fields():
         ProposedAction("write docs", frozenset({"documentation"}), context, tier="hosted")
     with pytest.raises(TypeError, match="ambiguous"):
         ProposedAction("write docs", frozenset({"documentation"}), context, ambiguous="no")
+def test_review_stale_duplicate_blocks_completeness():
+    from dataclasses import replace
+    from datetime import date
+    from red_line.analysis.outcome_coverage import _verified_context
+
+    context = _verified_context("2026-10-20")
+    for old_date in ("2020-01-01", "2027-01-01"):
+        duplicate = replace(context.evidence[0], recorded_on=old_date)
+        assert not replace(context, evidence=context.evidence + (duplicate,)).complete(date(2026, 10, 20))
+
+
+def test_decision_trace_is_typed_and_immutable():
+    from red_line.model.action import LineDecision
+
+    entry = LineDecision("line", ["scope"], [], [], False)
+    assert entry.coverage_hits == ("scope",)
+    for changes, error in (({"line_id": ""}, ValueError), ({"below_tier_floor": "yes"}, TypeError),
+                           ({"coverage_hits": "scope"}, TypeError), ({"coverage_hits": ("",)}, ValueError),
+                           ({"coverage_hits": ("a", "a")}, ValueError)):
+        with pytest.raises(error):
+            replace(entry, **changes)
+    from red_line import ActionAssessment, review_engagement
+
+    candidate = make_action("synthetic", frozenset({"targeting"}))
+    with pytest.raises(TypeError, match="LineDecision"):
+        ActionAssessment(candidate, Classification.NON_COMPLIANT, (), decision_trace=("bad",))
+    with pytest.raises(TypeError, match="LineDecision"):
+        replace(review_engagement(candidate), decision_trace=("bad",))

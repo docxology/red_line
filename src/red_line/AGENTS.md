@@ -6,12 +6,12 @@ This folder is the package root for `red_line`. It re-exports the public API fro
 
 | Name | Signature | Behavior | Source |
 | --- | --- | --- | --- |
-| `canonical_report` | `def canonical_report(finding: ReviewFinding) -> str` | Complete deterministic JSON of one review finding (`red-line.report/1.0`); the absent-authorization arm serializes as an explicit `null`. | [envelope.py](envelope.py) |
+| `canonical_report` | `def canonical_report(finding: ReviewFinding) -> str` | Schema 2 binds registry, evaluator and restricted intake identity; unbound schema 1 keeps its original bytes. | [envelope.py](envelope.py) |
 | `report_digest` | `def report_digest(finding: ReviewFinding) -> str` | SHA-256 hex over `canonical_report`; the pointer an envelope carries. | [envelope.py](envelope.py) |
 | `ReportEnvelope` | frozen dataclass, ten fields | The common `line.report-envelope/1.0` witness record; fail-closed `__post_init__`. | [envelope.py](envelope.py) |
-| `finding_envelope` | `def finding_envelope(finding, subject_id="", source_snapshot_refs=(), lines=PERSONAL_RED_LINES) -> ReportEnvelope` | Wraps a finding in the envelope, pointing at — never reinterpreting — its canonical form; validates inputs fail-closed. | [envelope.py](envelope.py) |
+| `finding_envelope` | `def finding_envelope(finding, subject_id="", source_snapshot_refs=(), lines=None) -> ReportEnvelope` | Copies bound review-time identity; rejects a mismatched explicit registry or an unbound finding. | [envelope.py](envelope.py) |
 | `canonical_envelope` | `def canonical_envelope(envelope: ReportEnvelope) -> str` | Stable JSON of an envelope for archiving beside its report. | [envelope.py](envelope.py) |
-| `envelope_matches_finding` | `def envelope_matches_finding(envelope, finding, lines=PERSONAL_RED_LINES) -> bool` | Archived-pair read-back check over digest, review date, status word, and registry digest. | [envelope.py](envelope.py) |
+| `envelope_matches_finding` / `report_pointer_matches_finding` | `(envelope, finding, lines=None) -> bool` | Narrow pointer agreement only. Contract, bound-finding diagnostics and trusted-prior digest validation are separate APIs described in [the operator protocol](../../docs/decision-protocol.md). | [envelope.py](envelope.py) |
 | `REPORT_SCHEMA` / `ENVELOPE_SCHEMA` / `RED_LINE_ID` / `SCOPE_AND_NONCLAIMS` | constants | Schema strings, the instrument identity, and the transportable non-claims; siblings align by publishing the same envelope schema string, never by import. | [envelope.py](envelope.py) |
 
 ## Subpackages

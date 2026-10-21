@@ -6,8 +6,8 @@ moment, said this — and here is the pointer to its complete native report."
 The envelope is that data contract and nothing more. It points to the full
 canonical review finding by digest instead of copying or reinterpreting its
 fields, so this instrument remains authoritative about its own vocabulary,
-and it carries the instrument's non-claims with it, so a stored envelope
-cannot quietly outgrow what the instrument was allowed to say.
+and carries the instrument's non-claims. Validate those non-claims explicitly
+before consuming an envelope; pointer agreement does not validate them.
 
 The shared shape is declared per instrument under the schema string
 ``line.report-envelope/1.0``; sibling instruments that export the same shape
@@ -17,7 +17,7 @@ Red Line, the single :class:`~red_line.model.enums.Classification` value the
 evaluator emitted. Selecting the most severe applicable outcome (intake stop
 first, hard block over narrowing, narrowing over silence) is the native
 evaluator contract, already part of what :func:`review_engagement` records;
-the envelope does not flatten anything further. The complete derivation —
+the envelope does not flatten anything further. The recorded derivation —
 the rendered finding prose, the stable reason codes, the evidence-stop
 dimensions, the normalized scope, and any named authorization — stays behind
 ``report_ref`` in full. Envelopes from different lines must not be compared,
@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 from collections.abc import Iterable
 
@@ -37,11 +37,11 @@ from .canary import registry_hash
 from .model import RedLine
 from .oversight import ReviewFinding
 from .registry import PERSONAL_RED_LINES
-from .version import PROJECT_VERSION
 
 #: Schema string for the complete canonical serialization of one native
 #: review finding — the document ``report_ref`` digests.
-REPORT_SCHEMA = "red-line.report/1.0"
+REPORT_SCHEMA = "red-line.report/2.0"
+UNBOUND_REPORT_SCHEMA = "red-line.report/1.0"
 
 #: The cross-instrument envelope shape this module exports.
 ENVELOPE_SCHEMA = "line.report-envelope/1.0"
@@ -71,16 +71,10 @@ SCOPE_AND_NONCLAIMS: tuple[str, ...] = (
 
 
 def canonical_report(finding: ReviewFinding) -> str:
-    """Serialize a review finding into stable JSON so it can be archived.
+    """Serialize the recorded finding; schema 2 binds a separately archived restricted intake.
 
-    This is the complete derivation, not a summary: the full rendered
-    finding prose (verdict, reason bullets, and any advisory hints), the
-    stable reason codes, every evidence-stop dimension, the declared and
-    normalized scope, the tier, the ambiguity flag, and the authorization
-    record — serialized in full when present and as an explicit ``null``
-    when absent, so the set-aside arm is part of the canonical document
-    rather than an omission. Two identical reviews produce byte-identical
-    output, which lets a finding be diffed, digested, and cited.
+    Unbound schema 1 retains its original field set and bytes. Neither schema
+    verifies source facts or constitutes an independent attestation.
     """
 
     if not isinstance(finding, ReviewFinding):
@@ -96,7 +90,7 @@ def canonical_report(finding: ReviewFinding) -> str:
         }
     )
     payload = {
-        "schema_version": REPORT_SCHEMA,
+        "schema_version": REPORT_SCHEMA if finding.registry_digest else UNBOUND_REPORT_SCHEMA,
         "engagement": finding.engagement,
         "classification": finding.classification.value,
         "implicated_ids": list(finding.implicated_ids),
@@ -112,6 +106,14 @@ def canonical_report(finding: ReviewFinding) -> str:
         "stale_evidence": list(finding.stale_evidence),
         "normalized_scope": list(finding.normalized_scope),
     }
+    if finding.registry_digest:
+        payload.update(
+            registry_digest=finding.registry_digest,
+            evaluator_version=finding.evaluator_version,
+            evaluator_id=finding.evaluator_id,
+            intake_digest=finding.intake_digest,
+            decision_trace=[asdict(entry) for entry in finding.decision_trace],
+        )
     return json.dumps(payload, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
 
 
@@ -123,17 +125,10 @@ def report_digest(finding: ReviewFinding) -> str:
 
 @dataclass(frozen=True)
 class ReportEnvelope:
-    """One instrument's complete review finding, referenced without reinterpretation.
+    """Public pointer to a native report; caller provenance is recorded, not authenticated.
 
-    ``report_ref`` is the SHA-256 of the canonical native finding, which
-    contains the full derivation. ``native_status`` is this line's own
-    classification word; it is a projection, and the state it projects from
-    is behind the reference, not restated here. ``registry_version`` is the
-    package version that shipped the registry — the registry has no separate
-    version marker, and its content is pinned by ``registry_digest``, the
-    same deterministic hash the canary attests. ``source_snapshot_refs`` is
-    caller-supplied provenance for the material the review was made about;
-    the envelope stores, and does not verify, those references.
+    Registry content and package identity are copied from a bound finding.
+    Contract validation and trusted-prior digest comparison are separate APIs.
     """
 
     schema_version: str
@@ -175,22 +170,16 @@ def finding_envelope(
     finding: ReviewFinding,
     subject_id: str = "",
     source_snapshot_refs: Iterable[str] = (),
-    lines: tuple[RedLine, ...] = PERSONAL_RED_LINES,
+    lines: tuple[RedLine, ...] | None = None,
 ) -> ReportEnvelope:
-    """Wrap a review finding in the common envelope, pointing at — never
-    re-reading — its complete canonical form.
-
-    ``subject_id`` names what was reviewed, in the caller's own reference
-    scheme; the instrument does not verify it. ``lines`` must be the same
-    registry the review was evaluated against (the default is the live
-    personal registry that :func:`review_engagement` also defaults to); its
-    content is pinned into ``registry_digest``. The envelope's ``report_ref``
-    is computed from the exact finding supplied, so an envelope can only
-    ever point at the derivation that produced its classification.
-    """
+    """Copy review-time provenance into an envelope; reject a mismatched supplied registry."""
 
     if not isinstance(finding, ReviewFinding):
         raise TypeError("finding_envelope requires a ReviewFinding")
+    if not finding.registry_digest:
+        raise ValueError("unbound finding has unbound registry provenance; preserve its original envelope")
+    if lines is not None and registry_hash(lines) != finding.registry_digest:
+        raise ValueError("registry does not match the finding's review-time binding")
     if not isinstance(subject_id, str):
         raise TypeError("subject_id must be a string")
     if isinstance(source_snapshot_refs, (str, bytes)):
@@ -203,8 +192,8 @@ def finding_envelope(
         line_id=RED_LINE_ID,
         subject_id=subject_id,
         review_date=finding.reviewed_on,
-        registry_version=PROJECT_VERSION,
-        registry_digest=registry_hash(lines),
+        registry_version=finding.evaluator_version,
+        registry_digest=finding.registry_digest,
         native_status=finding.classification.value,
         report_ref=report_digest(finding),
         source_snapshot_refs=refs,
@@ -213,12 +202,7 @@ def finding_envelope(
 
 
 def canonical_envelope(envelope: ReportEnvelope) -> str:
-    """Serialize an envelope to stable JSON for archiving beside its report.
-
-    Store this string next to the :func:`canonical_report` output it points
-    at; the pair is the smallest archive from which a later review can verify
-    that the envelope and the derivation still agree.
-    """
+    """Stable envelope bytes; pointer agreement alone does not establish archive integrity."""
 
     payload = {
         "schema_version": envelope.schema_version,
@@ -235,25 +219,77 @@ def canonical_envelope(envelope: ReportEnvelope) -> str:
     return json.dumps(payload, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
 
 
-def envelope_matches_finding(
+def report_pointer_matches_finding(
     envelope: ReportEnvelope,
     finding: ReviewFinding,
-    lines: tuple[RedLine, ...] = PERSONAL_RED_LINES,
+    lines: tuple[RedLine, ...] | None = None,
 ) -> bool:
-    """Return whether an envelope still points at exactly this finding.
+    """Narrow four-field agreement; does not validate the envelope contract or archive integrity."""
 
-    This is the read-back check for an archived pair: the digest, the review
-    date, the classification word, and the registry digest must all agree.
-    A mismatch means one of the two was edited after export; the check cannot
-    say which, and it says nothing about the truth of either.
-    """
-
+    expected = finding.registry_digest or registry_hash(PERSONAL_RED_LINES if lines is None else lines)
     return (
         envelope.report_ref == report_digest(finding)
         and envelope.review_date == finding.reviewed_on
         and envelope.native_status == finding.classification.value
-        and envelope.registry_digest == registry_hash(lines)
+        and envelope.registry_digest == expected
+        and (lines is None or expected == registry_hash(lines))
     )
+
+
+envelope_matches_finding = report_pointer_matches_finding
+
+
+def envelope_contract_issues(envelope: ReportEnvelope) -> tuple[str, ...]:
+    """Validate Red Line's envelope identity and mandatory nonclaims separately from report agreement."""
+
+    issues = []
+    if envelope.schema_version != ENVELOPE_SCHEMA:
+        issues.append("unsupported envelope schema")
+    if envelope.line_id != RED_LINE_ID:
+        issues.append("instrument identity disagreement")
+    if not set(SCOPE_AND_NONCLAIMS) <= set(envelope.scope_and_nonclaims):
+        issues.append("mandatory nonclaims missing")
+    for name, value in (("registry_digest", envelope.registry_digest), ("report_ref", envelope.report_ref)):
+        if len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+            issues.append(f"{name} is not a SHA-256 digest")
+    from datetime import date
+
+    try:
+        date.fromisoformat(envelope.review_date)
+    except ValueError:
+        issues.append("review_date is not an ISO date")
+    from .model import Classification
+
+    if envelope.native_status not in {value.value for value in Classification}:
+        issues.append("unknown native status")
+    if not envelope.registry_version.strip():
+        issues.append("registry version unavailable")
+    return tuple(issues)
+
+
+def envelope_finding_issues(envelope: ReportEnvelope, finding: ReviewFinding) -> tuple[str, ...]:
+    """Precise local agreement diagnostics; disagreement does not identify an edited side."""
+
+    expected = {
+        "report_ref": report_digest(finding), "review_date": finding.reviewed_on,
+        "native_status": finding.classification.value, "registry_digest": finding.registry_digest,
+        "registry_version": finding.evaluator_version,
+    }
+    if not finding.registry_digest:
+        return ("unbound finding has unbound provenance",)
+    return tuple(f"{name} disagreement" for name, value in expected.items() if getattr(envelope, name) != value)
+
+
+def envelope_digest(envelope: ReportEnvelope) -> str:
+    return hashlib.sha256(canonical_envelope(envelope).encode("utf-8")).hexdigest()
+
+
+def archive_envelope_issues(envelope: ReportEnvelope, trusted_digest: str) -> tuple[str, ...]:
+    """Compare all envelope bytes with an independently retained prior digest; no signature is implied."""
+
+    if len(trusted_digest) != 64 or any(c not in "0123456789abcdef" for c in trusted_digest):
+        raise ValueError("trusted digest must be a SHA-256 hex digest")
+    return () if envelope_digest(envelope) == trusted_digest else ("trusted envelope digest disagreement",)
 
 
 __all__ = [
@@ -267,4 +303,10 @@ __all__ = [
     "envelope_matches_finding",
     "finding_envelope",
     "report_digest",
+    "UNBOUND_REPORT_SCHEMA",
+    "report_pointer_matches_finding",
+    "envelope_contract_issues",
+    "envelope_finding_issues",
+    "envelope_digest",
+    "archive_envelope_issues",
 ]

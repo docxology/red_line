@@ -64,7 +64,7 @@
       ],
       "status": "executably_tested_as_a_local_rule",
       "verification_mode": "executable",
-      "stopping_point": "Oversight retention is not safety, legality, or enforcement"
+      "stopping_point": "Finite singleton and compound regression domains; no arbitrary-scope or custom-registry proof, safety, legality, or enforcement"
     },
     {
       "claim_id": "CLM-005",
@@ -132,7 +132,7 @@
       ],
       "status": "executably_tested",
       "verification_mode": "executable",
-      "stopping_point": "Codes preserve the local decision trace; they do not establish semantic truth or honest input"
+      "stopping_point": "Review-time registry, evaluator and intake digests bind recorded computation; replay needs the restricted snapshot. Pointer agreement, envelope contract and trusted-prior integrity are separate; none establishes truth, honest input or independent attestation"
     },
     {
       "claim_id": "CLM-010",

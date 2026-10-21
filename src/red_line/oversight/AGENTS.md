@@ -14,7 +14,10 @@ This folder holds the self-review layer above the evaluator: frozen findings, no
 
 ## Import direction
 
-May import `evaluation`, `model`, `registry`, and sibling oversight modules. `evaluation/` must not import `oversight/` back.
+May import `evaluation`, `model`, `registry`, `canary` for canonical registry identity,
+`version` for package identity, and sibling oversight modules. `evaluation/` must
+not import `oversight/` back. Restricted snapshots live in `intake.py`; envelopes
+carry their digests, never their private contents.
 
 ## Invariants
 

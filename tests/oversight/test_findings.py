@@ -7,7 +7,7 @@ from datetime import date, timedelta
 
 import pytest
 
-from red_line import Classification, DeploymentTier, EvidenceKind, EvidenceRecord, EvidenceStatus
+from red_line import Classification, DeploymentTier, EvidenceKind, EvidenceRecord, EvidenceStatus, PERSONAL_RED_LINES
 from red_line.oversight import ReviewAuthorization, ReviewFinding, review_engagement, transparency_report
 from red_line.oversight.findings import _render_finding
 from red_line import ActionAssessment
@@ -203,3 +203,57 @@ def test_undeclared_scope_hint_absent_for_honest_declaration():
 def test_undeclared_scope_hint_absent_when_description_is_benign():
     finding = review_engagement(_outside_action(), reviewed_on=date.today().isoformat())
     assert "undeclared-scope hint" not in finding.finding
+def test_review_snapshot_binds_every_context_and_evidence_field_and_replays():
+    from dataclasses import replace
+    from red_line import canonical_intake, intake_digest, replay_finding, report_digest
+    from red_line.analysis.outcome_coverage import _verified_context
+    from red_line import ProposedAction, DeploymentTier, EvidenceStatus, review_engagement
+
+    candidate = ProposedAction("synthetic", frozenset({"cogsec", "education"}), _verified_context("2026-10-20"))
+    finding = review_engagement(candidate, "2026-10-20")
+    snapshot = canonical_intake(candidate)
+    assert not replay_finding(finding, snapshot)
+    assert finding.decision_trace[0].coverage_hits == ("cogsec",)
+    assert finding.decision_trace[0].matched_exemption_ids
+    assert finding.decision_trace[0].matched_exemption_ids == finding.decision_trace[0].supported_exemption_ids
+    assert "intake snapshot unavailable" in replay_finding(finding, None)
+    for field in candidate.context.values():
+        changed = replace(candidate, context=replace(candidate.context, **{field.value: "different"}))
+        assert intake_digest(canonical_intake(changed)) != finding.intake_digest
+    for changes in ({"reference": "restricted://different"}, {"summary": "different"},
+                    {"status": EvidenceStatus.CONTRADICTED}, {"recorded_on": "2026-10-19"}):
+        evidence = (replace(candidate.context.evidence[0], **changes),) + candidate.context.evidence[1:]
+        changed = replace(candidate, context=replace(candidate.context, evidence=evidence))
+        assert intake_digest(canonical_intake(changed)) != finding.intake_digest
+        assert report_digest(review_engagement(changed, "2026-10-20")) != report_digest(finding)
+    for changed in (replace(candidate, description="other"), replace(candidate, scope={"targeting"}),
+                    replace(candidate, tier=DeploymentTier.AIR_GAPPED), replace(candidate, ambiguous=True),
+                    replace(candidate, context=replace(candidate.context, unknowns=("unresolved",)))):
+        assert intake_digest(canonical_intake(changed)) != finding.intake_digest
+    assert replay_finding(finding, canonical_intake(replace(candidate, description="different")))
+    assert replay_finding(finding, snapshot, ()) == ("registry digest disagreement",)
+    assert replay_finding(replace(finding, evaluator_version="old"), snapshot)
+    assert replay_finding(replace(finding, finding="modified"), snapshot) == ("replayed finding disagreement",)
+    assert not replay_finding(finding, snapshot, tuple(reversed(PERSONAL_RED_LINES)))
+
+
+def test_review_snapshot_parser_and_provenance_validation_fail_closed():
+    from dataclasses import replace
+    import json
+    from red_line import action_from_snapshot, canonical_intake, review_engagement
+    from tests.helpers import action
+
+    candidate = action("synthetic", frozenset({"targeting"}))
+    snapshot = canonical_intake(candidate)
+    assert action_from_snapshot(snapshot) == candidate
+    with pytest.raises(ValueError, match="schema"):
+        action_from_snapshot(snapshot.replace("red-line.intake/1.0", "unsupported"))
+    with pytest.raises(ValueError, match="canonical"):
+        action_from_snapshot(json.dumps(json.loads(snapshot), indent=2))
+    finding = review_engagement(candidate)
+    with pytest.raises(ValueError, match="all present"):
+        replace(finding, registry_digest="")
+    with pytest.raises(ValueError, match="SHA-256"):
+        replace(finding, intake_digest="bad")
+    with pytest.raises(TypeError, match="bindings"):
+        replace(finding, evaluator_id=None)

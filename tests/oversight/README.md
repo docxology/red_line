@@ -6,7 +6,7 @@ This folder exercises review findings and transparency reports over real actions
 
 | Module | What it exercises | Collected tests |
 | --- | --- | --- |
-| [test_findings.py](test_findings.py) | Review findings, rendered text, authorizations, provenance fields, and stale-review behavior. | 16 |
+| [test_findings.py](test_findings.py) | Review findings, rendered text, authorizations, provenance fields, and stale-review behavior. | 18 |
 | [test_transparency.py](test_transparency.py) | Classification, authorization, and blocked-count aggregation. | 2 |
 
 ## Run
@@ -19,7 +19,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The current full-suite measurement is `100.00%` with `882` passed tests on `2026-09-06`.
+The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `916` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
 
 ## Related
 

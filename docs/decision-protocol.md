@@ -40,6 +40,14 @@ means “verified for this review record,” not “independently true,” “la
    uncertainty; never fill a gap with a convenient assumption.
 5. Run `evaluate_action(action, as_of=...)` with a stated review date.
 
+Compare the structured declarations against the underlying records before using
+the result. Dangerous prose with misleading benign scope can remain
+`OUTSIDE_SCOPE`. Check every matched exemption's substantive conditions: generic
+intake completeness does not establish aggregate-only output or ablation. Preserve
+contradictions as `CONTRADICTED` capability evidence; do not relabel them to gain
+a narrowing. Resolve tier-token conflicts by correcting the declaration and
+re-running the whole review; an unrelated refusal still controls.
+
 The operational invariant is: no evidence gate, exemption, or prose shortcut
 may move an action from an information stop to a narrowing result without a
 current `VERIFIED` record for every required dimension. The evaluator is
@@ -76,6 +84,23 @@ normalized scope, and evidence-stop dimensions in addition to display prose.
 A `ReviewAuthorization` may name an escalation, authority, rationale, and date.
 It cannot change a blocking classification or turn self-review into third-party
 authorization.
+
+New findings use `red-line.report/2.0`: they bind registry content, evaluator
+identity and package version, an intake digest, and structured per-line coverage
+hits and matched/supported exemption IDs. Archive `canonical_intake(action)` in a
+restricted evidence store with access controls and an opaque locator; its digest
+is in the public report, its private fields are not. Retain the bound registry
+and package/source revision as well. `replay_finding(finding, snapshot, lines)`
+reports missing provenance or disagreement and checks the complete computation
+in the matching runtime. It does not verify source facts.
+
+For shared records, check `envelope_contract_issues` and
+`envelope_finding_issues`. `report_pointer_matches_finding` (also available as
+`envelope_matches_finding`) is only narrow pointer agreement. Archive integrity
+requires `archive_envelope_issues(envelope, trusted_digest)` against a previously
+retained digest outside the current writer's control. A regenerated consistent
+pair proves no independence. Schema 1.0 reports retain their original bytes and
+are explicitly unbound; they cannot acquire today's provenance by rewrapping.
 
 ## Maintain and publish
 

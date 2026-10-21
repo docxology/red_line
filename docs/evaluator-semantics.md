@@ -32,8 +32,11 @@ does not mean that this package independently validates the source.
 
 The evaluator runs the following sequence:
 
-1. Normalize scope tokens with explicit aliases and reject empty, ambiguous, or
-   unknown-marker scope.
+1. Normalize scope tokens with explicit aliases and reject empty, ambiguous,
+   unknown-marker, or conflicting deployment-tier scope. `hosted`, `connected`,
+   and `air_gapped` are reserved: only the typed tier supplies oversight. A
+   redundant correct token is accepted; a conflicting token is retained in the
+   finding with `tier_scope_conflict` and `intake_blocked`.
 2. Check all required context values and evidence statuses.
 3. Match normalized scope against each line's prohibited coverage dimensions.
 4. Match any explicitly declared typed exemption.
@@ -80,6 +83,24 @@ but executable policy uses typed `Exemption` records. Each exemption has an id,
 description, trigger tokens, and required evidence kinds. Trigger tokens are
 not proof of the exemption.
 
+All intake kinds are required before policy matching. Therefore an exemption's
+`required_evidence` records dependencies, not an additional proof obligation
+after intake. A generic verified capability record does not prove that research
+is aggregate-only or that dangerous capability was ablated. The present ANY/ALL
+triggers remain author policy; no exemption-specific attestation is inferred.
+An operator must check the actual exemption description against the evidence
+and stop or mark contradictory capability evidence `CONTRADICTED` when it fails.
+
+`ActionContext.evidence_gate(date)` centralizes missing, unresolved, stale and
+unknown evidence. `complete()` uses today when its date is omitted, matching
+`evaluate_action`. Every stale or contradicted duplicate blocks; there is no
+automatic supersession. `Exemption.applicable(scope, context, date)` and
+`RedLine.applicable_exemptions` require an explicit date and the full context
+gate. They establish lexical eligibility, not substantive truth. The older
+`satisfied`, `satisfied_exemptions` and `carved_out` helpers retain support-only
+semantics for compatibility and are deprecated for readiness decisions.
+`has_verified_evidence(kind)` without a date intentionally skips freshness.
+
 Scope matching uses NFKC normalization, a strict ASCII boundary, and an
 explicit alias table. The ASCII boundary rejects confusable Unicode spellings
 instead of allowing them to become unrelated tokens. The evaluator does not
@@ -99,7 +120,7 @@ blocking findings without pretending that a decision was safe.
 
 The test suite must fail when:
 
-- a dangerous description is paired with a benign or empty scope;
+- empty scope or missing capability evidence reaches policy matching;
 - “consented surveillance” lacks verified legal-basis and provenance evidence;
 - a self-asserted or contradicted record is treated as verified;
 - a stale duplicate record is ignored because a newer duplicate exists;
@@ -116,3 +137,17 @@ The test suite must fail when:
 These controls improve the oracle but do not turn a lexical evaluator into a
 semantic classifier. Independent review remains a release requirement for any
 claim stronger than local auditability.
+
+A dangerous description with a complete but misleading benign declaration can
+remain `OUTSIDE_SCOPE`; the description is never substituted for declared scope.
+Before acting on any result, the operator must compare capability, end use,
+transfer and deployment declarations with the underlying records. Advisory text
+hints can prompt that check but cannot certify an honest declaration.
+
+The tier figure and original sweep cover singleton line/keyword slots only.
+`run_combination_sweep` separately exercises same-line coverage pairs, shared
+tokens paired with coverage tokens, each live exemption trigger and full trigger
+set, tier-token conflicts, and all authored aliases. These are finite regression
+domains, not a proof for arbitrary scopes or custom registries. A custom registry
+is measured anew and may report inversions. Synthetic evidence is dated at the
+requested sweep date; historical evidence-aging analysis remains separate.

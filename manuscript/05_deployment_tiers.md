@@ -16,7 +16,7 @@ typed exemption may operate. A tier floor is never a permission by itself: scope
 context, and exemption evidence still govern. [@def:tier] and [@def:tier-floor]
 state the rank and the floor test exactly as the code applies them.
 
-The evaluator is monotonic in danger. An unexempted implicated line is
+The exercised singleton domain is monotonic in danger. An unexempted implicated line is
 `NON_COMPLIANT` at every tier; reducing retained oversight adds an aggravating
 reason but cannot turn a hard block into a softer outcome. A verified exemption
 below its line's floor becomes `REQUIRES_MODIFICATION`. [@prop:tier-monotone]
@@ -40,5 +40,16 @@ evaluations with a fully evidenced fixture intake — and records the verdict
 lattice the evaluator actually returned, with zero inversions. The slot count
 exceeds the vocabulary because `handoff` and `provenance` are each declared by
 two lines and are therefore swept once per line.
+
+These are singleton observations, not a proof for arbitrary scopes, exemptions,
+or custom registries. The separate compound battery exercises live triggers,
+same-line multiple hits, shared-token combinations, aliases and tier conflicts.
+Reserved tier tokens that disagree with the typed tier stop intake; a correct
+redundant declaration has the same policy result as omission.
+
+The separate combination battery executes 1345 evaluations, including
+421 compound scope rows across the tier lattice plus conflict and alias
+comparisons. These counts describe synthetic executed cases, not empirical
+performance or exhaustive scope coverage.
 
 ![Dropping retained oversight never softens a verdict. Executed verdict-strictness lattice computed by `red_line.analysis.monotonicity.run_monotonicity_sweep`: all 36 line/keyword slots (34 distinct tokens) across the seven current lines run through the real `evaluate_action` with a fully evidenced fixture intake at each of the three deployment tiers — 108 executed evaluations — and every chip is the classification actually returned. Read left to right, a row moves from most to least retained oversight and strictness never decreases; the sweep records zero inversions, and its regression test carries a positive control that detects the replicated pre-fix defect. Monotonicity is a consistency property of the local decision procedure exercised with fixture evidence, not a safety measurement or a review of any real engagement.](../output/figures/tier_monotonicity_lattice.png){#fig:tier-monotonicity-lattice width=95%}

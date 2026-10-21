@@ -33,6 +33,18 @@ stemming, but the evaluator still matches declared tokens. A complete-looking
 action can be mislabeled. Description mismatch hints expose one symptom; they
 do not solve semantic interpretation.
 
+A dangerous description with complete but misleading benign scope can remain
+`OUTSIDE_SCOPE`. The operator must compare declared capability and end use with
+the records before acting. Exemption evidence kinds are dependencies already
+required by generic intake, not a second review certifying aggregate-only
+research or ablation. Favorable labels do not resolve a contradicted duplicate.
+
+**Reproducibility requires inputs.** A schema 2 report binds its registry,
+evaluator/package identity and restricted intake digest, but a missing snapshot
+prevents replay. Public envelopes omit evidence contents. Pointer agreement,
+contract validity and comparison to a trusted prior digest are separate checks;
+even all three do not verify facts or authenticate a self-reported reviewer.
+
 **False positives and false negatives.** The fail-closed intake is intentionally
 biased toward stopping when required information is absent or unresolved. That
 can produce a false positive for caution: a legitimate exemption may wait
@@ -148,8 +160,9 @@ inspection reduce source-to-artifact risk, but they do not prove that a polished
 figure is rhetorically fair. PDF and HTML review remain required.
 
 **Release state.** This work is released as a standalone repository at <https://github.com/docxology/red_line>.
-It has no external canary witness, no minted DOI, no independent review body,
+It retains the verified DOI identified in the publication metadata, but has no
+external canary witness, no independent review body,
 and no execution admission control. A public release should not claim those
-things until the release evidence bundle in [`docs/claim-register.md`](../docs/claim-register.md)
+things until the release evidence bundle in [`docs/claim-register.md`](https://github.com/docxology/red_line/blob/main/docs/claim-register.md)
 exists and an independent reader has checked the source, outputs, and prior
 statement.

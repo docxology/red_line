@@ -6,6 +6,12 @@ release-preflight pass. The current private release gate is recorded in
 
 ## P1 — author-controlled candidate lifecycle
 
+- [ ] Decide whether to adopt exemption-specific reviewed applicability claims
+  or more precise triggers for aggregate-only research and ablation. The
+  2026-10-20 review's minimal clarification is implemented; stronger predicate
+  semantics require a dated author amendment, false-positive controls and the
+  canary/version workflow if registry content changes.
+
 The six candidates remain explicitly non-adopted in
 `docs/PROPOSED_RED_LINES.md`; no candidate may be added to
 `PERSONAL_RED_LINES` automatically.

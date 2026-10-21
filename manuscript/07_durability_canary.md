@@ -16,8 +16,10 @@ each fixed payload including narrative carve-outs and typed exemption ids,
 trigger scopes, and required evidence kinds, and dumps the whole as JSON with
 stable separators. No timestamps or environment inputs enter the payload, so the
 hash is a pure function of registry *content*: the current seven lines yield the
-pinned digest `72835fd8…f5aad7`, and any change to a line's policy semantics
-changes it. `line_digest` applies the same atom to a single line. This is a
+pinned digest `72835fd8…f5aad7`, and any change to the serialized registry
+content changes it. Normalization and evaluator code are outside that hash;
+behavior can change while the canary digest stays stable. Review records bind
+package and evaluator identity separately. `line_digest` applies the same atom to a single line. This is a
 cryptographic checksum, not a digital signature: it does not authenticate who
 issued a statement or make a rewrite impossible.
 
@@ -53,7 +55,7 @@ commitment. The statement is forgeable by anyone with write access to the
 registry, and the author is also its only enforcer. Its evidential force rests
 entirely on an external prior copy — a git-committed or otherwise independently
 held statement, checked by someone other than the author. The registry is
-pre-publication and there is no external verifier. The instrument makes
+public, but no independent canary witness is recorded. The instrument makes
 weakening the standard tamper-evident under that condition; it does not prevent
 it, and that limitation is disclosed rather than papered over.
 
@@ -61,7 +63,7 @@ An external verifier should: obtain a prior statement from outside the author's
 write boundary; recompute the current registry hash and per-line metadata; run
 the freshness and drift check; inspect any successor rationale; and report the
 result without treating a regenerated current statement as independent evidence.
-The full command-level procedure is in [`docs/VERIFY.md`](../docs/VERIFY.md).
+The full command-level procedure is in [`docs/VERIFY.md`](https://github.com/docxology/red_line/blob/main/docs/VERIFY.md).
 
 The trust boundary is therefore more important than the hash itself;
 [@fig:canary-trust-boundary]
@@ -77,7 +79,7 @@ rendered outputs. A patient adversary could alter a privileged checkout, poison
 a dependency or renderer, rewrite a same-author canary fixture, or make a
 source appear more authoritative than it is. The threat model records these
 paths and their residual limits in
-[`docs/security-threat-model.md`](../docs/security-threat-model.md).
+[`docs/security-threat-model.md`](https://github.com/docxology/red_line/blob/main/docs/security-threat-model.md).
 
 NIST's Secure Software Development Framework, MITRE ATT&CK, and SLSA provide
 useful vocabularies for provenance, adversary behavior, and future artifact

@@ -6,7 +6,7 @@ This folder exercises the read-only analysis package through the live registry a
 
 | Module | What it exercises | Collected tests |
 | --- | --- | --- |
-| [test_monotonicity_sweep.py](test_monotonicity_sweep.py) | Exhaustive tier-lattice sweep over every live scope keyword. | 7 |
+| [test_monotonicity_sweep.py](test_monotonicity_sweep.py) | Exhaustive tier-lattice sweep over every live scope keyword. | 10 |
 | [test_outcome_coverage.py](test_outcome_coverage.py) | Five-outcome reachability battery plus negative controls. | 16 |
 | [test_registry_metrics.py](test_registry_metrics.py) | Registry composition metrics and proof-of-detection for planted defects. | 24 |
 | [test_decision_surface.py](test_decision_surface.py) | Single-dimension evidence perturbation sweep and ANY/ALL trigger probe, with positive controls. | 18 |
@@ -21,7 +21,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The current full-suite measurement is `100.00%` with `882` passed tests on `2026-09-06`.
+The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `916` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
 
 ## Related
 

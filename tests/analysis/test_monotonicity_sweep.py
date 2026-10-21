@@ -104,3 +104,39 @@ def test_report_agrees_with_the_regression_suite_property():
     air_index = report.tiers.index(DeploymentTier.AIR_GAPPED)
     for row in report.rows:
         assert STRICTNESS_ORDER[row.verdicts[air_index]] >= STRICTNESS_ORDER[row.verdicts[hosted_index]]
+def test_review_synthetic_sweep_threads_review_date():
+    from red_line.analysis import run_monotonicity_sweep
+
+    baseline = run_monotonicity_sweep()
+    for review_date in ("2000-01-01", "2035-12-31"):
+        current = run_monotonicity_sweep(as_of=review_date)
+        assert current.rows == baseline.rows
+
+
+def test_review_combination_sweep_covers_triggers_conflicts_and_aliases():
+    from red_line.analysis.monotonicity import run_combination_sweep
+
+    report = run_combination_sweep()
+    assert report.monotone
+    assert report.conflicts_blocked
+    assert report.aliases_agree
+    assert report.evaluation_count > run_monotonicity_sweep().evaluation_count
+    assert report == run_combination_sweep()
+    assert report.rows == run_combination_sweep(as_of="2035-12-31").rows
+    from pathlib import Path
+
+    prose = (Path(__file__).resolve().parents[2] / "manuscript" / "05_deployment_tiers.md").read_text()
+    assert f"executes {report.evaluation_count} evaluations" in prose
+    assert f"{len(report.rows)} compound scope rows" in prose
+
+
+def test_review_custom_registry_does_not_inherit_monotonicity():
+    from dataclasses import replace
+    from red_line import ExemptionMatchMode
+    from red_line.analysis.monotonicity import run_combination_sweep
+
+    line = PERSONAL_RED_LINES[0]
+    exemption = replace(line.exemptions[0], trigger_scope=frozenset({"air_gapped"}),
+                        match_mode=ExemptionMatchMode.ANY)
+    planted = replace(line, exemptions=(exemption,), max_tier=DeploymentTier.AIR_GAPPED)
+    assert not run_combination_sweep((planted,)).monotone

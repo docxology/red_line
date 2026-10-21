@@ -218,6 +218,12 @@ declaration alone can clear a line. The detector that would report a
 zero-evidence exemption returns nothing on the live registry and fires on a
 planted one, which is what makes the empty result informative rather than
 merely absent.
+
+This is an intake dependency statement, not an additional post-intake proof:
+all evidence kinds have already been required by the intake gate. A verified
+capability record can still describe individualized output or retained dangerous
+capability. The machine does not read that proposition; an operator must check
+the exception's substance and preserve a conflict as contradicted evidence.
 :::
 
 ::: {.proposition #prop:trigger-mode title="ALL-mode triggers cannot be reached by one token"}
@@ -233,13 +239,21 @@ requires.
 :::
 
 ::: {.proposition #prop:tier-monotone title="Reducing oversight never softens a verdict"}
-Fix a declared scope and a fully evidenced context, and vary only the tier along
+Within the exercised singleton domain, fix a declared scope and a fully evidenced
+context, and vary only the tier along
 $\mathtt{hosted} \to \mathtt{connected} \to \mathtt{air\_gapped}$. Strictness in
-the sense of [@def:strictness] never decreases. Every scope keyword of every
+the sense of [@def:strictness] does not decrease in the observed rows. Every scope keyword of every
 current line at all three tiers is one hundred and eight executed evaluations
 with zero inversions. An unexempted covering line is `NON_COMPLIANT` at every
 tier; a satisfied exemption below its floor is `REQUIRES_MODIFICATION` rather
 than `COMPLIANT`.
+
+The singleton sweep does not prove the property for arbitrary compound scopes
+or custom registries. A separate finite combination battery covers live trigger
+sets, shared-token combinations, same-line multiple hits, authored aliases and
+tier-token conflicts. Conflicts are intake stops, not ranked policy verdicts;
+the typed tier alone supplies effective oversight tokens. Every custom registry
+requires its own measured result.
 :::
 
 ::: {.proposition #prop:normalization-closure title="Normalization is closed, and failure stops at two layers"}
@@ -285,11 +299,19 @@ exactly those ten fields, in order, exported under the schema string
 classification word from [@def:classification]; it is one instrument's word
 in that instrument's vocabulary, never to be compared, ranked, averaged, or
 merged across lines. $\mathrm{report\_ref}$ is the SHA-256 of the canonical
-native finding (`red-line.report/1.0`), which serializes the complete
+native finding (`red-line.report/2.0`), which serializes the recorded
 derivation — including the authorization arm as an explicit `null` when it
 is absent, so an unreviewed arm is distinguishable from an empty one.
 Sibling instruments export the same shape by publishing the same schema
 string, never by importing one another.
+
+The native finding binds the review-time registry digest, evaluator identity and
+package version, restricted intake snapshot digest, and structured per-line
+coverage hits and all matched and supported exemption IDs. Reproduction also
+requires the matching package, registry and separately archived intake snapshot.
+Its absence is unavailable provenance. Public envelopes contain no raw evidence
+references or summaries. Schema 1.0 reports retain their original serialization
+as unbound historical reports, without retroactive provenance enrichment.
 :::
 
 ::: {.proposition #prop:envelope-pointer title="The envelope points, never reinterprets"}
@@ -299,9 +321,14 @@ date, the registry digest, and the classification word all agree with the
 finding they were exported from, and editing any checked field afterwards
 makes the check return false. The envelope adds nothing the finding does not
 determine except the caller-supplied subject and snapshot references, which
-are stored, not verified. A matching envelope attests that an archived pair
-is unedited; it does not certify the finding true, the action safe, or the
-review well aimed.
+are stored, not verified. This is narrow report-pointer agreement, also named
+`report_pointer_matches_finding`; it does not certify the finding true, the
+action safe, or the review well aimed. `envelope_contract_issues` independently
+checks instrument identity, schema and mandatory nonclaims;
+`envelope_finding_issues` checks bound report identities with precise diagnostics.
+Only comparison with a trusted prior envelope digest can detect changes to all
+envelope fields, including caller provenance. A writer can regenerate a locally
+consistent pair, so consistency alone never proves an archive unedited.
 :::
 
 ## What binds each proposition

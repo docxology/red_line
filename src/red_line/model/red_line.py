@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from .action import ActionContext
 
 
-SCOPE_ALIASES: dict[str, str] = {
+_AUTHORED_ALIASES: dict[str, str] = {
     "weapon": "weapons",
     "weapon_system": "weapons",
     "weapon_systems": "weapons",
@@ -40,8 +40,8 @@ UNKNOWN_SCOPE_MARKERS = frozenset({"unknown", "unspecified", "tbd", "unclear"})
 _IDENTIFIER = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
-def normalize_token(token: str) -> str:
-    """Canonicalize one declared scope token without heuristic stemming."""
+def _clean_token(token: str) -> str:
+    """Normalize spelling before explicit alias lookup."""
 
     if not isinstance(token, str):
         raise TypeError("scope tokens must be strings")
@@ -54,7 +54,34 @@ def normalize_token(token: str) -> str:
     cleaned = "".join(c if c.isalnum() else "_" for c in canonical).strip("_")
     while "__" in cleaned:
         cleaned = cleaned.replace("__", "_")
-    return SCOPE_ALIASES.get(cleaned, cleaned)
+    return cleaned
+
+
+def validated_aliases(aliases: dict[str, str]) -> dict[str, str]:
+    """Reject ambiguous normalized keys, chains and cycles instead of choosing an order."""
+
+    result: dict[str, str] = {}
+    for alias, target in aliases.items():
+        key, value = _clean_token(alias), _clean_token(target)
+        if not key or not value:
+            raise ValueError("alias keys and targets must be non-empty")
+        if key in result and result[key] != value:
+            raise ValueError("conflicting normalized alias keys")
+        result[key] = value
+    if any(value in result and result[value] != value for value in result.values()):
+        raise ValueError("alias chains and cycles are not permitted")
+    return result
+
+
+SCOPE_ALIASES = _AUTHORED_ALIASES
+_NORMALIZED_ALIASES = validated_aliases(SCOPE_ALIASES)
+
+
+def normalize_token(token: str) -> str:
+    """Canonicalize one declared scope token without heuristic stemming."""
+
+    cleaned = _clean_token(token)
+    return _NORMALIZED_ALIASES.get(cleaned, cleaned)
 
 
 def normalize_scope(scope: frozenset[str] | set[str] | tuple[str, ...]) -> frozenset[str]:
@@ -111,9 +138,19 @@ class Exemption:
         return bool(trigger & action)
 
     def satisfied(self, context: "ActionContext | None", as_of: date | None = None) -> bool:
+        """Deprecated support-only predicate; use ``applicable`` for dated intake readiness.
+
+        An omitted date deliberately retains historical undated support semantics.
+        A favorable record alone does not resolve duplicates or prove the exception.
+        """
         if context is None:
             return False
         return all(context.has_verified_evidence(kind, as_of) for kind in self.required_evidence)
+
+    def applicable(self, action_scope: frozenset[str], context: "ActionContext", as_of: date) -> bool:
+        """Dated lexical applicability with the full intake gate, not factual certification."""
+
+        return context.evidence_gate(as_of).ready and self.matches(action_scope) and self.satisfied(context, as_of)
 
 
 @dataclass(frozen=True)
@@ -211,9 +248,16 @@ class RedLine:
         action_scope: frozenset[str],
         context: "ActionContext | None" = None,
     ) -> bool:
-        """Compatibility helper: true only for an evidence-satisfied exemption."""
+        """Deprecated undated support helper; not review readiness or factual applicability."""
 
         return bool(self.satisfied_exemptions(action_scope, context))
+
+    def applicable_exemptions(
+        self, action_scope: frozenset[str], context: "ActionContext", as_of: date
+    ) -> tuple[Exemption, ...]:
+        """Return dated, intake-gated lexical exemptions without resolving evidence history."""
+
+        return tuple(ex for ex in self.exemptions if ex.applicable(action_scope, context, as_of))
 
 
 # Function words that appear in carve-out *boilerplate* — every carve-out clause

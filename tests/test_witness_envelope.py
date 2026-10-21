@@ -332,3 +332,98 @@ def test_the_authorization_arm_travels_behind_the_ref_not_in_the_envelope() -> N
     payload = json.loads(canonical_envelope(finding_envelope(authorized)))
     assert "authorization" not in payload
     assert finding_envelope(authorized).native_status == plain.classification.value
+def test_review_registry_cannot_be_substituted_after_review():
+    candidate = action("target", frozenset({"targeting"}))
+    finding = review_engagement(candidate, lines=())
+    envelope = finding_envelope(finding)
+    assert envelope.registry_digest == registry_hash(())
+    assert envelope_matches_finding(envelope, finding)
+    assert not envelope_matches_finding(envelope, finding, lines=PERSONAL_RED_LINES)
+    with pytest.raises(ValueError, match="registry"):
+        finding_envelope(finding, lines=PERSONAL_RED_LINES)
+
+
+def test_review_intake_changes_cannot_share_a_report_digest():
+    candidate = action("education", frozenset({"cogsec", "education"}))
+    before = review_engagement(candidate)
+    record = dataclasses.replace(candidate.context.evidence[0], reference="restricted://different", summary="different")
+    after = review_engagement(dataclasses.replace(candidate, context=dataclasses.replace(
+        candidate.context, evidence=(record,) + candidate.context.evidence[1:]
+    )))
+    assert report_digest(before) != report_digest(after)
+    assert before.intake_digest != after.intake_digest
+
+
+def test_review_envelope_contract_and_archive_have_separate_checks():
+    from red_line import envelope_contract_issues, envelope_digest, archive_envelope_issues
+
+    envelope = finding_envelope(_blocking_finding())
+    assert not envelope_contract_issues(envelope)
+    trusted = envelope_digest(envelope)
+    for changes in ({"schema_version": "unsupported"}, {"line_id": "other"}, {"scope_and_nonclaims": ()}):
+        changed = dataclasses.replace(envelope, **changes)
+        assert envelope_contract_issues(changed)
+        assert archive_envelope_issues(changed, trusted)
+
+
+def test_review_all_envelope_fields_have_explicit_validation_outcomes():
+    from red_line import envelope_contract_issues, envelope_finding_issues, envelope_digest, archive_envelope_issues
+
+    finding = _blocking_finding()
+    envelope = finding_envelope(finding)
+    mutations = {
+        "schema_version": ("other", True, False), "line_id": ("other", True, False),
+        "subject_id": ("other", False, False), "review_date": ("2020-01-01", False, True),
+        "registry_version": ("0.0.1", False, True), "registry_digest": ("0" * 64, False, True),
+        "native_status": ("compliant", False, True), "report_ref": ("0" * 64, False, True),
+        "source_snapshot_refs": (("other",), False, False), "scope_and_nonclaims": ((), True, False),
+    }
+    for name, (value, contract_fails, agreement_fails) in mutations.items():
+        changed = dataclasses.replace(envelope, **{name: value})
+        assert bool(envelope_contract_issues(changed)) == contract_fails, name
+        assert bool(envelope_finding_issues(changed, finding)) == agreement_fails, name
+        assert archive_envelope_issues(changed, envelope_digest(envelope)), name
+    assert not envelope_finding_issues(envelope, finding)
+    assert not archive_envelope_issues(envelope, envelope_digest(envelope))
+    with pytest.raises(ValueError, match="trusted digest"):
+        archive_envelope_issues(envelope, "untrusted")
+    for name, value in (("review_date", "bad"), ("native_status", "safe"),
+                        ("registry_digest", "bad"), ("report_ref", "bad"), ("registry_version", "")):
+        assert envelope_contract_issues(dataclasses.replace(envelope, **{name: value}))
+
+
+def test_review_unbound_native_report_preserves_original_field_set_and_bytes():
+    from red_line import UNBOUND_REPORT_SCHEMA, envelope_finding_issues, replay_finding
+
+    finding = dataclasses.replace(_blocking_finding(), registry_digest="", intake_digest="",
+                                  evaluator_version="", evaluator_id="", decision_trace=())
+    payload = json.loads(canonical_report(finding))
+    assert payload["schema_version"] == UNBOUND_REPORT_SCHEMA
+    assert not {"registry_digest", "intake_digest", "evaluator_version", "evaluator_id", "decision_trace"} & set(payload)
+    with pytest.raises(ValueError, match="unbound"):
+        finding_envelope(finding)
+    assert "unbound" in envelope_finding_issues(finding_envelope(_blocking_finding()), finding)[0]
+    assert "unbound report has unbound provenance" in replay_finding(finding, None)
+
+
+def test_original_v1_report_bytes_remain_verifiable():
+    from pathlib import Path
+    from red_line.analysis.outcome_coverage import canonical_battery
+
+    finding = review_engagement(canonical_battery()[-1].action, BATTERY_AS_OF)
+    unbound = dataclasses.replace(finding, registry_digest="", intake_digest="",
+                                  evaluator_version="", evaluator_id="", decision_trace=())
+    prior = (Path(__file__).parent / "fixtures" / "report_v1.json").read_text().strip()
+    assert canonical_report(unbound) == prior
+    historical = dataclasses.replace(unbound, declared_scope=("hand_offs",), normalized_scope=("hand_offs",))
+    assert json.loads(canonical_report(historical))["declared_scope"] == ["hand_offs"]
+
+
+def test_public_report_omits_restricted_evidence_contents():
+    from red_line import canonical_intake
+
+    candidate = action("synthetic", frozenset({"targeting"}))
+    serialized = canonical_report(review_engagement(candidate))
+    assert candidate.context.evidence[0].reference not in serialized
+    assert candidate.context.evidence[0].summary not in serialized
+    assert candidate.context.evidence[0].reference in canonical_intake(candidate)

@@ -26,10 +26,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+from itertools import combinations
 
 from ..evaluation import evaluate_action
 from ..model import Classification, DeploymentTier, ProposedAction, RedLine
 from ..registry import PERSONAL_RED_LINES
+from ..model.red_line import normalize_scope, SCOPE_ALIASES
 from .outcome_coverage import BATTERY_AS_OF, _verified_context
 
 #: Deployment tiers ordered by descending retained oversight. The sweep runs
@@ -129,14 +131,7 @@ def run_monotonicity_sweep(
     ``inversion_count`` and ``monotone`` False, never as a silent pass.
     """
 
-    if not isinstance(as_of, str):
-        raise TypeError("as_of must be an ISO date string")
-    date.fromisoformat(as_of)  # fail closed on malformed review dates
-    if not isinstance(lines, (tuple, list)):
-        raise TypeError("lines must be a tuple or list of RedLine values")
-    for line in lines:
-        if not isinstance(line, RedLine):
-            raise TypeError("lines must contain only RedLine values")
+    _validate_sweep(lines, as_of)
 
     rows: list[KeywordStrictnessRow] = []
     evaluation_count = 0
@@ -147,7 +142,7 @@ def run_monotonicity_sweep(
                 action = ProposedAction(
                     description=f"monotonicity sweep fixture for {keyword}",
                     scope=frozenset({keyword}),
-                    context=_verified_context(),
+                    context=_verified_context(as_of),
                     tier=tier,
                 )
                 verdicts.append(evaluate_action(action, tuple(lines), as_of=as_of).classification)
@@ -172,4 +167,77 @@ def run_monotonicity_sweep(
         evaluation_count=evaluation_count,
         inversion_count=inversion_count,
         monotone=bool(rows) and inversion_count == 0,
+    )
+
+
+@dataclass(frozen=True, slots=True)
+class CombinationReport:
+    """Finite compound-scope observations; custom registries receive their own measured result."""
+
+    rows: tuple[tuple[tuple[str, ...], tuple[Classification, ...]], ...]
+    evaluation_count: int
+    monotone: bool
+    conflicts_blocked: bool
+    aliases_agree: bool
+
+
+def _validate_sweep(lines: tuple[RedLine, ...], as_of: str) -> None:
+    if not isinstance(as_of, str):
+        raise TypeError("as_of must be an ISO date string")
+    date.fromisoformat(as_of)
+    if not isinstance(lines, (tuple, list)):
+        raise TypeError("lines must be a tuple or list of RedLine values")
+    if any(not isinstance(line, RedLine) for line in lines):
+        raise TypeError("lines must contain only RedLine values")
+
+
+def run_combination_sweep(
+    lines: tuple[RedLine, ...] = PERSONAL_RED_LINES, as_of: str = BATTERY_AS_OF,
+) -> CombinationReport:
+    """Exercise same-line pairs, shared-token pairs, live triggers, tier conflicts and authored aliases."""
+
+    _validate_sweep(lines, as_of)
+    tiers = {tier.value for tier in DeploymentTier}
+    scopes: set[frozenset[str]] = set()
+    owners: dict[str, int] = {}
+    for line in lines:
+        for token in normalize_scope(line.scope):
+            owners[token] = owners.get(token, 0) + 1
+        coverage = sorted(normalize_scope(line.scope) - tiers)
+        scopes.update(frozenset(pair) for pair in combinations(coverage, 2))
+        for anchor in coverage:
+            for exemption in line.exemptions:
+                trigger = normalize_scope(exemption.trigger_scope) - tiers
+                scopes.add(frozenset({anchor}) | trigger)
+                scopes.update(frozenset({anchor, token}) for token in trigger)
+    for shared in sorted(token for token, count in owners.items() if count > 1):
+        scopes.update(frozenset({shared, token}) for token in owners if token not in tiers)
+    context = _verified_context(as_of)
+    rows = []
+    count = 0
+    for scope in sorted(scopes, key=lambda values: tuple(sorted(values))):
+        verdicts = tuple(evaluate_action(ProposedAction("compound fixture", scope, context, tier),
+                                         tuple(lines), as_of).classification
+                         for tier in TIERS_BY_DESCENDING_OVERSIGHT)
+        rows.append((tuple(sorted(scope)), verdicts))
+        count += len(verdicts)
+    conflicts = []
+    for tier in DeploymentTier:
+        for declared in tiers - {tier.value}:
+            result = evaluate_action(ProposedAction("tier conflict fixture", frozenset({"model_release", declared}),
+                                                     context, tier), tuple(lines), as_of)
+            conflicts.append(result.classification is Classification.INSUFFICIENT_INFORMATION
+                             and any(code.value == "tier_scope_conflict" for code in result.reason_codes))
+            count += 1
+    aliases = []
+    for alias, target in SCOPE_ALIASES.items():
+        for anchor in (frozenset(), frozenset({"targeting"})):
+            first = evaluate_action(ProposedAction("alias fixture", anchor | {alias}, context), tuple(lines), as_of)
+            second = evaluate_action(ProposedAction("alias fixture", anchor | {target}, context), tuple(lines), as_of)
+            aliases.append((first.classification, first.implicated) == (second.classification, second.implicated))
+            count += 2
+    return CombinationReport(
+        rows=tuple(rows), evaluation_count=count,
+        monotone=bool(rows) and all(strictness_is_monotone(verdicts) for _, verdicts in rows),
+        conflicts_blocked=all(conflicts), aliases_agree=all(aliases),
     )

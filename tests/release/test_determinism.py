@@ -46,6 +46,13 @@ def _populated_tree(root: Path) -> None:
 
 
 class TestArtifactHashes:
+    def test_explicit_template_environment_is_separate(self, monkeypatch):
+        from red_line.release.determinism import _template_environment
+
+        monkeypatch.setenv("UV_PROJECT_ENVIRONMENT", "project-env")
+        monkeypatch.setenv("RED_LINE_TEMPLATE_ENVIRONMENT", "renderer-env")
+        assert _template_environment()["UV_PROJECT_ENVIRONMENT"] == "renderer-env"
+
     def test_empty_tree_yields_no_hashes(self, tmp_path):
         assert artifact_hashes(tmp_path) == {}
 
@@ -192,7 +199,8 @@ class TestTemplateRenderPasses:
         bin_directory.mkdir()
         recording_uv = bin_directory / "uv"
         recording_uv.write_text(
-            '#!/bin/sh\nprintf "%s|%s\\n" "$PWD" "$*" >> "$UV_INVOCATION_LOG"\n', encoding="utf-8"
+            '#!/bin/sh\nprintf "%s|%s\\n" "$PWD" "$*" >> "$UV_INVOCATION_LOG"\n'
+            'printf "%s" "${UV_PROJECT_ENVIRONMENT-unset}" > "$UV_RENDER_ENV_LOG"\n', encoding="utf-8"
         )
         recording_uv.chmod(0o755)
 
@@ -200,8 +208,12 @@ class TestTemplateRenderPasses:
         monkeypatch.setenv("UV_INVOCATION_LOG", str(log))
         monkeypatch.setenv("RED_LINE_TEMPLATE_ROOT", str(template_root))
         monkeypatch.setenv("VIRTUAL_ENV", str(tmp_path / "should-not-leak"))
+        monkeypatch.setenv("UV_PROJECT_ENVIRONMENT", str(tmp_path / "red-line-environment"))
+        monkeypatch.setenv("UV_RENDER_ENV_LOG", str(tmp_path / "render-env.txt"))
+        monkeypatch.delenv("RED_LINE_TEMPLATE_ENVIRONMENT", raising=False)
 
         template_render_passes(root)()
+        assert (tmp_path / "render-env.txt").read_text() == "unset"
 
         assert (root / "output" / "data" / "release_inputs.json").is_file()
         invocations = log.read_text(encoding="utf-8").splitlines()

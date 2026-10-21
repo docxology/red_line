@@ -90,6 +90,9 @@ export RED_LINE_TEMPLATE_ROOT=/path/of/your/choosing/template
 ```
 
 `RED_LINE_TEMPLATE_ROOT` names the engine for both the render and the manifest.
+`RED_LINE_TEMPLATE_ENVIRONMENT` optionally selects a separate renderer uv
+environment. Nested render commands remove the project's `UV_PROJECT_ENVIRONMENT`
+and `VIRTUAL_ENV` to avoid rebuilding the project environment as the engine.
 When it is unset, `red_line.release.provenance.find_template_root` searches the
 ancestors of this project root for a directory named `template` that actually
 carries `scripts/pipeline/stage_03_render.py`, and reports `None` when there is

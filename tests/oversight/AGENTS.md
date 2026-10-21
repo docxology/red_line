@@ -6,7 +6,7 @@ This folder covers review-finding creation, finding rendering, authorizations, p
 
 | Module | What it exercises | Collected tests |
 | --- | --- | --- |
-| [test_findings.py](test_findings.py) | Review findings, rendered text, authorizations, provenance fields, and stale-review behavior. | 16 |
+| [test_findings.py](test_findings.py) | Review findings, rendered text, authorizations, provenance fields, and stale-review behavior. | 18 |
 | [test_transparency.py](test_transparency.py) | Classification, authorization, and blocked-count aggregation. | 2 |
 
 ## Helpers

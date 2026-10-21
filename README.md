@@ -25,7 +25,7 @@ It is two things at once:
   staleness of a fresh attestation is the signal), **not** the legal instrument: it
   makes weakening the standard visible and auditable; it does not prevent it.
 
-> Version `0.3.0` · registry SHA-256 `72835fd8…f5aad7` · living document — versioned, revisable, diffable (publicly so once published).
+> Version `0.4.0` · registry SHA-256 `72835fd8…f5aad7` · living document — versioned, revisable, diffable (publicly so once published).
 
 ## What it does
 
@@ -188,10 +188,10 @@ Red Line exports one envelope per review finding, under the schema string
 proposed for co-registration (see
 [`docs/correspondence.md`](docs/correspondence.md)). The envelope
 (`src/red_line/envelope.py`) points at the complete canonical finding by
-SHA-256 digest (`canonical_report`, schema `red-line.report/1.0`) rather than
+SHA-256 digest (`canonical_report`, schema `red-line.report/2.0`) rather than
 copying or reinterpreting it: `native_status` is the evaluator's own
-classification word, the full derivation (finding prose, reason codes,
-evidence stops, any named authorization) stays behind `report_ref`, and the
+classification word, the recorded derivation (finding prose, reason codes,
+evidence stops, matched exemptions, registry/evaluator identity and intake digest) stays behind `report_ref`, and the
 instrument's non-claims travel inside the record. Envelopes from different
 lines must not be compared, ranked, averaged, or merged on `native_status`;
 sibling instruments align by publishing the same schema string, never by
@@ -203,9 +203,17 @@ from red_line import canonical_report, envelope_matches_finding, finding_envelop
 
 finding = review_engagement(action, reviewed_on="2026-07-15")
 envelope = finding_envelope(finding, subject_id="worked-example", source_snapshot_refs=("git://…",))
-assert envelope_matches_finding(envelope, finding)  # archived-pair read-back
-archive_pair = (canonical_report(finding), envelope)  # smallest verifiable archive
+assert envelope_matches_finding(envelope, finding)  # narrow report-pointer agreement
+archive_pair = (canonical_report(finding), envelope)  # pointer agreement only
 ```
+
+Use `envelope_contract_issues` and `envelope_finding_issues` for contract and
+bound-finding checks. Full envelope change detection needs
+`archive_envelope_issues` against an independently retained prior digest.
+Archive `canonical_intake(action)` separately under evidence access controls for
+`replay_finding`; the native report binds its digest without exporting private
+evidence. Schema 1.0 reports keep their original bytes as unbound records. See
+[`docs/review-20261020.md`](docs/review-20261020.md) for the review dispositions.
 
 ## Skills
 

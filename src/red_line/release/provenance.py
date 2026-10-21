@@ -33,6 +33,8 @@ def sha256_file(path: Path) -> str:
 def git_revision(path: Path) -> str | None:
     """Return the checked-out revision, or ``None`` when it cannot be read."""
 
+    if not (path / ".git").exists():
+        return None
     try:
         return subprocess.run(
             ["git", "-C", str(path), "rev-parse", "HEAD"],
@@ -47,6 +49,8 @@ def git_revision(path: Path) -> str | None:
 def git_dirty(path: Path) -> bool | None:
     """Report whether the checkout has uncommitted changes, or ``None`` when unknown."""
 
+    if not (path / ".git").exists():
+        return None
     try:
         return bool(
             subprocess.run(

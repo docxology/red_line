@@ -47,6 +47,11 @@ def _git(repo: Path, *args: str) -> None:
 
 
 class TestSha256File:
+    def test_invalid_checkout_marker_reports_unknown(self, tmp_path):
+        (tmp_path / ".git").write_text("not a gitdir")
+        assert git_revision(tmp_path) is None
+        assert git_dirty(tmp_path) is None
+
     def test_digests_a_file_larger_than_one_chunk(self, tmp_path):
         payload = b"red-line" * 200_000  # 1.6 MiB forces more than one read iteration
         target = tmp_path / "large.bin"

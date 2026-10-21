@@ -44,7 +44,7 @@ evaluator, preserve the finding with its stable reason codes, and either narrow
 the work or stop. Maintaining a prior canary outside the author's write boundary
 is the one step that runs on a different clock. [@sec:operating-method] states
 the sequence in full; the operator version is in
-[`docs/decision-protocol.md`](../docs/decision-protocol.md), and day to day the
+[`docs/decision-protocol.md`](https://github.com/docxology/red_line/blob/main/docs/decision-protocol.md), and day to day the
 instrument is run through the `daf-red-line` skill in the author's private
 daf-skills toolchain, so this paper is the theory and the skill is the practice.
 The point is relevance to a real decision under time pressure. A polished

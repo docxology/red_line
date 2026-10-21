@@ -108,8 +108,7 @@ def template_render_passes(root: Path) -> Callable[[], None]:
         # The project gate runs from the sidecar's virtualenv, while the canonical
         # renderer belongs to the sibling template checkout. Do not let the parent
         # VIRTUAL_ENV make nested ``uv run`` resolve the wrong project environment.
-        render_env = os.environ.copy()
-        render_env.pop("VIRTUAL_ENV", None)
+        render_env = _template_environment()
         for script in RENDER_STAGES:
             subprocess.run(
                 [uv, "run", "python", script, "--project", "working/red_line"],
@@ -141,8 +140,7 @@ def template_full_pipeline(root: Path) -> Callable[[], None]:  # pragma: no cove
         uv = shutil.which("uv")
         if uv is None:
             raise RuntimeError("uv is required for the canonical engine pipeline")
-        pipeline_env = os.environ.copy()
-        pipeline_env.pop("VIRTUAL_ENV", None)
+        pipeline_env = _template_environment()
         subprocess.run(
             [
                 uv,
@@ -159,6 +157,16 @@ def template_full_pipeline(root: Path) -> Callable[[], None]:  # pragma: no cove
         )
 
     return run_pipeline
+
+
+def _template_environment() -> dict[str, str]:
+    environment = os.environ.copy()
+    environment.pop("VIRTUAL_ENV", None)
+    environment.pop("UV_PROJECT_ENVIRONMENT", None)
+    configured = environment.get("RED_LINE_TEMPLATE_ENVIRONMENT")
+    if configured:
+        environment["UV_PROJECT_ENVIRONMENT"] = configured
+    return environment
 
 
 def compare_artifacts(root: Path, *, render: Callable[[], None] | None = None) -> dict:

@@ -6,19 +6,19 @@ This folder holds the cross-cutting test suite for the project. The top level co
 
 ```mermaid
 flowchart TD
-  root["tests/ 882 collected"]
-  top["top-level modules 273"]
-  analysis["analysis/ 65"]
+  root["tests/ 916 collected"]
+  top["top-level modules 280"]
+  analysis["analysis/ 68"]
   canary["canary/ 43"]
-  evaluation["evaluation/ 20"]
+  evaluation["evaluation/ 25"]
   fixtures["fixtures/ 0"]
   hardening["hardening/ 125"]
   integration["integration/ 204"]
   invariants["invariants/ 18"]
-  model["model/ 20"]
-  oversight["oversight/ 18"]
+  model["model/ 35"]
+  oversight["oversight/ 20"]
   registry["registry/ 12"]
-  release["release/ 84"]
+  release["release/ 86"]
   root --> top
   root --> analysis
   root --> canary
@@ -47,22 +47,22 @@ flowchart TD
 | [test_no_substitutes.py](test_no_substitutes.py) | No substitute/mock enforcement | 16 |
 | [test_hardening_contracts.py](test_hardening_contracts.py) | Hardening contract enforcement | 43 |
 | [test_suite_inventory_binding.py](test_suite_inventory_binding.py) | Suite inventory against source | 53 |
-| [test_witness_envelope.py](test_witness_envelope.py) | Witness envelope export contract | 17 |
+| [test_witness_envelope.py](test_witness_envelope.py) | Witness envelope export contract | 24 |
 
 | Area | Path | Collected tests | Notes |
 | --- | --- | --- | --- |
-| cross-cutting | [tests](README.md) | 273 | Top-level figure, legibility, decision-surface plate, contract-hardening, script-CLI, no-substitute policy, standalone-copy contract, report-envelope, and publication-metadata tests. |
-| analysis | [tests/analysis](analysis/README.md) | 65 | Executed reports over the live registry and evaluator. |
+| cross-cutting | [tests](README.md) | 280 | Top-level figure, legibility, decision-surface plate, contract-hardening, script-CLI, no-substitute policy, standalone-copy contract, report-envelope, and publication-metadata tests. |
+| analysis | [tests/analysis](analysis/README.md) | 68 | Executed reports over the live registry and evaluator. |
 | canary | [tests/canary](canary/README.md) | 43 | Hashing, issuance, verification, and script entrypoints. |
-| evaluation | [tests/evaluation](evaluation/README.md) | 20 | Classification, carve-outs, aliases, and tier monotonicity. |
+| evaluation | [tests/evaluation](evaluation/README.md) | 25 | Classification, carve-outs, aliases, and tier monotonicity. |
 | fixtures | [tests/fixtures](fixtures/README.md) | 0 | Committed JSON fixtures consumed by other tests. |
 | hardening | [tests/hardening](hardening/README.md) | 125 | Adversarial constructor, scope, canary, and invariant checks. |
 | integration | [tests/integration](integration/README.md) | 204 | Cross-surface bindings over manuscript, docs, data, and release surfaces. |
 | invariants | [tests/invariants](invariants/README.md) | 18 | Structural invariant battery and proof-of-detection. |
-| model | [tests/model](model/README.md) | 20 | Core dataclasses, enums, and normalization helpers. |
-| oversight | [tests/oversight](oversight/README.md) | 18 | Review findings and transparency aggregation. |
+| model | [tests/model](model/README.md) | 35 | Core dataclasses, enums, and normalization helpers. |
+| oversight | [tests/oversight](oversight/README.md) | 20 | Review findings and transparency aggregation. |
 | registry | [tests/registry](registry/README.md) | 12 | Registry shape and provenance anchors. |
-| release | [tests/release](release/README.md) | 84 | Provenance digests, input snapshot, manifest, and render determinism. |
+| release | [tests/release](release/README.md) | 86 | Provenance digests, input snapshot, manifest, and render determinism. |
 
 ## Run
 
@@ -74,7 +74,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The current full-suite measurement is `100.00%` with `882` passed tests on `2026-09-06`.
+The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `916` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
 
 ## Related
 

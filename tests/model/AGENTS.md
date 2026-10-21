@@ -6,9 +6,9 @@ This folder covers core model types and normalization helpers. It does not cover
 
 | Module | What it exercises | Collected tests |
 | --- | --- | --- |
-| [test_action.py](test_action.py) | Action, context, evidence-record, and outside-scope semantics. | 9 |
+| [test_action.py](test_action.py) | Action, context, evidence-record, and outside-scope semantics. | 11 |
 | [test_enums.py](test_enums.py) | Deployment-tier oversight ordering. | 1 |
-| [test_red_line.py](test_red_line.py) | Registry shape, carve-outs, normalization, and typed exemptions. | 10 |
+| [test_red_line.py](test_red_line.py) | Registry shape, carve-outs, normalization, and typed exemptions. | 23 |
 
 ## Helpers
 

@@ -4,8 +4,8 @@
 paper:
   title: "Personal Red Lines for Development"
   subtitle: "An Evidence-Gated Personal Security Boundary and Explicit No Document for Dual-Use Development"
-  version: "0.3.0"
-  date: "2026-07-17"
+  version: "0.4.0"
+  date: "2026-10-21"
   description: "A personal security boundary and explicit No document for dual-use development."
   cover:
     image: "assets/cover/red_line_cover.png"

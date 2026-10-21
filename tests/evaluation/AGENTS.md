@@ -6,7 +6,7 @@ This folder covers `evaluate_action()` and tier monotonicity over real actions. 
 
 | Module | What it exercises | Collected tests |
 | --- | --- | --- |
-| [test_evaluator.py](test_evaluator.py) | Classification, carve-outs, aliases, stale evidence, and intake-blocking behavior. | 14 |
+| [test_evaluator.py](test_evaluator.py) | Classification, carve-outs, aliases, stale evidence, and intake-blocking behavior. | 19 |
 | [test_monotonicity.py](test_monotonicity.py) | Tier-floor monotonicity and regression coverage for the pre-fix inversion bug. | 6 |
 
 ## Helpers

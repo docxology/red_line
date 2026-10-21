@@ -5,7 +5,7 @@
 Cite this work via its minted DOI or repository:
 
 > Friedman, D. A. (2026). *Personal Red Lines for Development* (version
-> 0.3.0) [Software and manuscript]. Zenodo.
+> 0.4.0) [Software and manuscript]. Zenodo.
 > <https://doi.org/10.5281/zenodo.21754240>
 
 BibTeX:
@@ -14,7 +14,7 @@ BibTeX:
 @software{friedman_red_line_2026,
   author  = {Friedman, Daniel Ari},
   title   = {Personal Red Lines for Development},
-  version = {0.3.0},
+  version = {0.4.0},
   year    = {2026},
   doi     = {10.5281/zenodo.21754240}
 }
@@ -28,6 +28,10 @@ disagree.
 ## Persistent Identifiers and Verification
 
 This repository carries an asserted, verified Zenodo DOI (`10.5281/zenodo.21754240`).
+Version 0.4.0 retains that last verified DOI as a historical identifier; no new
+Zenodo version has been reserved or minted by this run. It must not be read as
+confirmation that the 0.4.0 artifacts are deposited there. Daniel reserves the
+successor version DOI before updating the metadata and depositing its render.
 `tests/test_publication_metadata.py` refuses any unverified DOI-shaped string in
 the citation metadata unless that exact DOI is listed as verified inside the test
 itself. A placeholder DOI that renders like a real one is worse than no DOI: it

@@ -359,7 +359,7 @@ FIGURE_TEXT = {
     },
     "fig:tier-monotonicity-lattice": {
         "filename": "tier_monotonicity_lattice.png",
-        "title": "Dropping retained oversight never softens a verdict",
+        "title": "Singleton sweep: dropping oversight does not soften verdicts",
         "caption": (
             "Executed verdict-strictness lattice computed by "
             "red_line.analysis.monotonicity.run_monotonicity_sweep. Every scope "
@@ -379,7 +379,8 @@ FIGURE_TEXT = {
             "assertion. Monotonicity is a consistency property of the local "
             "decision procedure exercised with fixture evidence; it is not a "
             "safety measurement, a review of any real engagement, or proof that "
-            "a scope token describes a capability truthfully."
+            "a scope token describes a capability truthfully. This finite singleton "
+            "domain does not establish arbitrary compound-scope or custom-registry monotonicity."
         ),
         "alt": (
             f"Lattice of {_MONOTONICITY.keyword_count} line/keyword-slot rows against "

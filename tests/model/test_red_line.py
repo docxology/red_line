@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from red_line import PERSONAL_RED_LINES
+from red_line import PERSONAL_RED_LINES, EvidenceStatus
 from red_line.model import EvidenceKind, RedLine, Severity, normalize_scope, normalize_token
 
 
@@ -72,3 +72,30 @@ def test_exemptions_have_typed_evidence_requirements():
         for line in PERSONAL_RED_LINES
         for exemption in line.exemptions
     )
+def test_review_alias_table_rejects_ambiguous_keys_and_cycles():
+    from red_line.model.red_line import validated_aliases
+
+    for table in ({"a-b": "one", "a_b": "two"}, {"a": "b", "b": "a"}, {"---": "a"}):
+        with pytest.raises(ValueError):
+            validated_aliases(table)
+    assert validated_aliases({"a-b": "a_b", "a_b": "a_b"}) == {"a_b": "a_b"}
+
+
+@pytest.mark.parametrize("status", list(EvidenceStatus))
+@pytest.mark.parametrize("recorded_on", ["2026-10-20", "2020-01-01", "2027-01-01"])
+def test_review_dated_applicability_preserves_duplicates(status, recorded_on):
+    from dataclasses import replace
+    from datetime import date
+    from red_line import EvidenceStatus
+    from red_line.analysis.outcome_coverage import _verified_context
+
+    context = _verified_context("2026-10-20")
+    duplicate = replace(context.evidence[0], status=status, recorded_on=recorded_on)
+    context = replace(context, evidence=context.evidence + (duplicate,))
+    line = PERSONAL_RED_LINES[0]
+    scope = line.exemptions[0].trigger_scope
+    ready = recorded_on == "2026-10-20" and status is not EvidenceStatus.CONTRADICTED
+    assert context.complete(date(2026, 10, 20)) == ready
+    assert bool(line.applicable_exemptions(scope, context, date(2026, 10, 20))) == ready
+    with pytest.raises(TypeError):
+        line.exemptions[0].applicable(scope, context, None)

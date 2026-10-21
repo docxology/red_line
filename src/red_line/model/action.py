@@ -57,6 +57,20 @@ class EvidenceRecord:
         return recorded > as_of or (as_of - recorded).days > max_age_days
 
 
+@dataclass(frozen=True, slots=True)
+class EvidenceGate:
+    """Shared evidence readiness result; every stale or contradicted duplicate remains visible."""
+
+    missing: tuple[EvidenceKind, ...]
+    unresolved: tuple[EvidenceKind, ...]
+    stale: tuple[EvidenceKind, ...]
+    unknowns: tuple[str, ...]
+
+    @property
+    def ready(self) -> bool:
+        return not (self.missing or self.unresolved or self.stale or self.unknowns)
+
+
 @dataclass(frozen=True)
 class ActionContext:
     """Required context for an evidence-gated action review.
@@ -185,13 +199,18 @@ class ActionContext:
             )
         )
 
-    def complete(self, as_of: date | None = None) -> bool:
-        review_date = date.today() if as_of is None else as_of
-        return (
-            not self.missing_fields(review_date)
-            and not self.unknowns
-            and not self.unresolved_evidence(review_date)
+    def evidence_gate(self, as_of: date) -> EvidenceGate:
+        """Evaluate evidence readiness at a required date, preserving all duplicate history."""
+
+        return EvidenceGate(
+            self.missing_fields(as_of), self.unresolved_evidence(as_of),
+            self.stale_evidence(as_of), self.unknowns,
         )
+
+    def complete(self, as_of: date | None = None) -> bool:
+        """Evidence readiness at ``as_of`` (today when omitted), also used by the evaluator."""
+
+        return self.evidence_gate(date.today() if as_of is None else as_of).ready
 
 
 @dataclass(frozen=True)
@@ -240,6 +259,30 @@ class ProposedAction:
 
 
 @dataclass(frozen=True)
+class LineDecision:
+    line_id: str
+    coverage_hits: tuple[str, ...]
+    matched_exemption_ids: tuple[str, ...]
+    supported_exemption_ids: tuple[str, ...]
+    below_tier_floor: bool
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.line_id, str) or not self.line_id.strip():
+            raise ValueError("decision trace requires a line id")
+        if not isinstance(self.below_tier_floor, bool):
+            raise TypeError("decision trace tier flag must be boolean")
+        for name in ("coverage_hits", "matched_exemption_ids", "supported_exemption_ids"):
+            values = getattr(self, name)
+            if not isinstance(values, (tuple, list)):
+                raise TypeError("decision trace dimensions must be tuples or lists")
+            if any(not isinstance(value, str) or not value.strip() for value in values):
+                raise ValueError("decision trace dimensions require nonblank strings")
+            if len(values) != len(set(values)):
+                raise ValueError("decision trace dimensions must be unique")
+            object.__setattr__(self, name, tuple(values))
+
+
+@dataclass(frozen=True)
 class ActionAssessment:
     """Result of :func:`evaluate_action` (Turner Review-Body finding analog)."""
 
@@ -252,6 +295,7 @@ class ActionAssessment:
     stale_evidence: tuple[EvidenceKind, ...] = field(default_factory=tuple)
     normalized_scope: tuple[str, ...] = field(default_factory=tuple)
     reason_codes: tuple[AssessmentReasonCode, ...] = field(default_factory=tuple)
+    decision_trace: tuple[LineDecision, ...] = ()
 
     def __post_init__(self) -> None:
         if not isinstance(self.action, ProposedAction):
@@ -267,6 +311,7 @@ class ActionAssessment:
             ("stale_evidence", self.stale_evidence),
             ("normalized_scope", self.normalized_scope),
             ("reason_codes", self.reason_codes),
+            ("decision_trace", self.decision_trace),
         ):
             if not isinstance(values, (tuple, list)):
                 raise TypeError(f"assessment {name} must be a tuple or list")
@@ -279,6 +324,8 @@ class ActionAssessment:
             raise TypeError("assessment reason_codes must use AssessmentReasonCode")
         if len(self.reason_codes) != len(set(self.reason_codes)):
             raise ValueError("assessment reason_codes must be unique")
+        if any(not isinstance(entry, LineDecision) for entry in self.decision_trace):
+            raise TypeError("assessment decision_trace requires LineDecision values")
         object.__setattr__(self, "implicated", tuple(self.implicated))
         object.__setattr__(self, "reasons", tuple(self.reasons))
         object.__setattr__(self, "missing_evidence", tuple(self.missing_evidence))
@@ -286,6 +333,7 @@ class ActionAssessment:
         object.__setattr__(self, "stale_evidence", tuple(self.stale_evidence))
         object.__setattr__(self, "normalized_scope", tuple(self.normalized_scope))
         object.__setattr__(self, "reason_codes", tuple(self.reason_codes))
+        object.__setattr__(self, "decision_trace", tuple(self.decision_trace))
 
     @property
     def outside_scope(self) -> bool:

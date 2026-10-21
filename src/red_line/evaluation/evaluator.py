@@ -8,12 +8,14 @@ from ..model import (
     ActionAssessment,
     AssessmentReasonCode,
     Classification,
+    DeploymentTier,
     EvidenceKind,
     ProposedAction,
     RedLine,
     normalize_scope,
 )
 from ..model.red_line import UNKNOWN_SCOPE_MARKERS
+from ..model.action import LineDecision
 from ..registry import PERSONAL_RED_LINES
 
 
@@ -43,9 +45,8 @@ def _intake_issues(
 ) -> tuple[tuple[EvidenceKind, ...], tuple[EvidenceKind, ...], tuple[EvidenceKind, ...], tuple[str, ...]]:
     """Collect blocking intake defects before policy matching begins."""
 
-    missing = action.context.missing_fields(as_of)
-    unresolved = action.context.unresolved_evidence(as_of)
-    stale = action.context.stale_evidence(as_of)
+    gate = action.context.evidence_gate(as_of)
+    missing, unresolved, stale = gate.missing, gate.unresolved, gate.stale
     unknown_scope = tuple(sorted(normalized_scope & UNKNOWN_SCOPE_MARKERS))
     issues = list(normalization_issues) + list(action.context.unknowns)
     issues.extend(f"unknown scope marker: {token}" for token in unknown_scope)
@@ -53,6 +54,9 @@ def _intake_issues(
         issues.append("scope declaration is empty")
     if action.ambiguous:
         issues.append("scope or context is explicitly ambiguous")
+    conflicts = normalized_scope & {tier.value for tier in DeploymentTier} - {action.tier.value}
+    if conflicts:
+        issues.append("deployment tier conflicts with declared scope: " + ", ".join(sorted(conflicts)))
     return missing, unresolved, stale, tuple(issues)
 
 
@@ -94,6 +98,8 @@ def evaluate_action(
         _append_code(reason_codes, AssessmentReasonCode.EMPTY_SCOPE)
     if action.ambiguous:
         _append_code(reason_codes, AssessmentReasonCode.AMBIGUOUS_INTAKE)
+    if normalized_scope & {tier.value for tier in DeploymentTier} - {action.tier.value}:
+        _append_code(reason_codes, AssessmentReasonCode.TIER_SCOPE_CONFLICT)
     if missing or unresolved or stale or intake_issues:
         _append_code(reason_codes, AssessmentReasonCode.INTAKE_BLOCKED)
         reasons = [
@@ -128,7 +134,8 @@ def evaluate_action(
     reasons: list[str] = []
     hard_block = False
     needs_modification = False
-    effective_scope = normalized_scope | {action.tier.value}
+    trace = []
+    effective_scope = (normalized_scope - {tier.value for tier in DeploymentTier}) | {action.tier.value}
 
     for line in lines:
         if not line.covers(effective_scope):
@@ -140,7 +147,10 @@ def evaluate_action(
             f"{line.id}: deployment tier '{action.tier.value}' retains less oversight "
             f"than the line's floor '{line.max_tier.value}'"
         )
-        satisfied = line.satisfied_exemptions(effective_scope, action.context, review_date)
+        satisfied = line.applicable_exemptions(effective_scope, action.context, review_date)
+        trace.append(LineDecision(line.id, tuple(sorted(coverage_hits)),
+                      tuple(ex.id for ex in line.matching_exemptions(effective_scope)),
+                      tuple(ex.id for ex in satisfied), below_floor))
         if satisfied:
             if len(coverage_hits) >= 2:
                 needs_modification = True
@@ -162,6 +172,7 @@ def evaluate_action(
         _append_code(reason_codes, AssessmentReasonCode.UNEXEMPTED_LINE)
         reasons.append(f"{line.id}: implicated, not exempted — {line.standard}")
         if below_floor:
+            _append_code(reason_codes, AssessmentReasonCode.BELOW_TIER_FLOOR)
             reasons.append(tier_reason)
 
     if hard_block:
@@ -185,4 +196,5 @@ def evaluate_action(
         stale_evidence=stale,
         normalized_scope=tuple(sorted(normalized_scope)),
         reason_codes=tuple(reason_codes),
+        decision_trace=tuple(trace),
     )

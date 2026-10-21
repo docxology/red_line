@@ -28,6 +28,12 @@ in [`src/red_line/contracts/`](../src/red_line/contracts/); everything under
 | `CLM-009` | Structured assessment records preserve why a result blocked or passed | implementation | `ActionAssessment.reason_codes`, `ReviewFinding`, evaluator and oversight tests, `docs/evaluator-semantics.md` | executable | executably_tested | Codes preserve the local decision trace; they do not establish semantic truth or honest input |
 | `CLM-010` | Every source-driven figure carries a bounded caption, alt text, and source binding | implementation | `src/red_line/figures/`, `src/red_line/contracts/visual_bindings.py`, `data/source_claims.json`, `docs/visualization-briefs.md`, rendered PDF/HTML | render_validated | executably_tested_and_render_inspected | Caption and source binding constrain interpretation; they do not make the underlying source or action true |
 
+The tier claim is measured in finite singleton and compound regression domains;
+custom registries receive their own measured results. The native report binds
+review-time registry, evaluator and restricted intake digests. Replay requires
+the restricted snapshot. Pointer agreement, envelope contract and trusted-prior
+integrity are separate checks; none is factual or independent attestation.
+
 ## Reading rule
 
 When a sentence crosses from one row to another, the manuscript must say so.

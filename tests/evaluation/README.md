@@ -6,7 +6,7 @@ This folder exercises the core evaluator over real `ProposedAction` instances. I
 
 | Module | What it exercises | Collected tests |
 | --- | --- | --- |
-| [test_evaluator.py](test_evaluator.py) | Classification, carve-outs, aliases, stale evidence, and intake-blocking behavior. | 14 |
+| [test_evaluator.py](test_evaluator.py) | Classification, carve-outs, aliases, stale evidence, and intake-blocking behavior. | 19 |
 | [test_monotonicity.py](test_monotonicity.py) | Tier-floor monotonicity and regression coverage for the pre-fix inversion bug. | 6 |
 
 ## Run
@@ -19,7 +19,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The current full-suite measurement is `100.00%` with `882` passed tests on `2026-09-06`.
+The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `916` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
 
 ## Related
 

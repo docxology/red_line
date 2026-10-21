@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.4.0 — 2026-10-21
+
+- Reject conflicting deployment-tier declarations before policy matching; derive
+  oversight credentials only from the typed tier. Repair dead authored aliases
+  with collision, chain and cycle validation, without heuristic stemming.
+- Share dated evidence readiness across completeness, evaluator and safe
+  applicability helpers. Preserve stale/contradicted duplicate history and
+  retain the below-tier reason code alongside hard refusals.
+- Bind new schema 2 findings to the reviewed registry, evaluator/package,
+  restricted intake digest and structured per-line decision trace; support
+  replay and preserve original unbound schema 1 report bytes.
+- Separate envelope pointer agreement, schema/nonclaims contract, finding
+  agreement diagnostics and trusted-prior archive digest checks.
+- Expand finite compound-scope analysis and correct semantic, exemption-proof,
+  monotonicity and archive-integrity claims. Registry content and canary remain
+  unchanged; no substantive boundary amendment is inferred.
+- Finish canonical manuscript documentation links and retain duplicate paths as
+  redirects. Isolate renderer environments and repository-root provenance.
+
+See [the review dispositions](docs/review-20261020.md) and the dated release
+packet for current verification results. The existing DOI remains unchanged;
+the new Zenodo version follows the author's reserve-first procedure.
+
 ## 0.3.0 — 2026-07-29
 
 The envelope window: the canonical native report and the cross-instrument

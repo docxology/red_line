@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from .action import (
     ActionAssessment,
+    LineDecision,
+    EvidenceGate,
     ActionContext,
     DEFAULT_EVIDENCE_MAX_AGE_DAYS,
     EvidenceRecord,
@@ -34,6 +36,8 @@ __all__ = [
     "EvidenceRecord",
     "ProposedAction",
     "ActionAssessment",
+    "LineDecision",
+    "EvidenceGate",
     "DEFAULT_EVIDENCE_MAX_AGE_DAYS",
     "SCOPE_ALIASES",
     "normalize_scope",

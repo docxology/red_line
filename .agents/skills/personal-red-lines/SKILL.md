@@ -10,7 +10,7 @@ description: >-
   coverage, has a red line changed, propose a red-line edit.
 source: docxology/daf-skills (private)
 public_descriptor: true
-version: 0.3.0
+version: 0.4.0
 ---
 
 # personal-red-lines
