@@ -2,11 +2,11 @@
 
 ## How to cite
 
-Cite this work via its minted DOI or repository:
+Cite version 0.4.0 through its repository until its own DOI is reserved and verified:
 
 > Friedman, D. A. (2026). *Personal Red Lines for Development* (version
-> 0.4.0) [Software and manuscript]. Zenodo.
-> <https://doi.org/10.5281/zenodo.21754240>
+> 0.4.0) [Software and manuscript]. GitHub.
+> <https://github.com/docxology/red_line>
 
 BibTeX:
 
@@ -16,19 +16,19 @@ BibTeX:
   title   = {Personal Red Lines for Development},
   version = {0.4.0},
   year    = {2026},
-  doi     = {10.5281/zenodo.21754240}
+  url     = {https://github.com/docxology/red_line}
 }
 ```
 
-`CITATION.cff` carries the same metadata in machine-readable form, and
-`.zenodo.json` carries the deposit metadata. All three are generated from
-`manuscript/config.yaml`; `tests/test_publication_metadata.py` fails if they
-disagree.
+`src/red_line/version.py` is the version authority. `CITATION.cff`,
+`.zenodo.json` and `manuscript/config.yaml` share its version;
+`tests/test_publication_metadata.py` fails if they disagree. Historical
+identifiers remain separate references rather than current-version identifiers.
 
 ## Persistent Identifiers and Verification
 
 This repository carries an asserted, verified Zenodo DOI (`10.5281/zenodo.21754240`).
-Version 0.4.0 retains that last verified DOI as a historical identifier; no new
+Version 0.4.0 retains that last verified DOI in historical references; no new
 Zenodo version has been reserved or minted by this run. It must not be read as
 confirmation that the 0.4.0 artifacts are deposited there. Daniel reserves the
 successor version DOI before updating the metadata and depositing its render.

@@ -158,6 +158,11 @@ tamper-evidence pattern, not legal protection or prevention.
 **Publication pipeline.** Deterministic figures, output validation, and rendered
 inspection reduce source-to-artifact risk, but they do not prove that a polished
 figure is rhetorically fair. PDF and HTML review remain required.
+The release comparison records non-PDF bytes and extracted PDF text against
+tracked-source and renderer state. Carrying that receipt across output cleanup
+and binding the final artifact bytes establishes local consistency. Equal PDF
+text alone does not establish identical layout, hermetic build security or
+independent attestation. A candidate remains blocked while a defined gate is red.
 
 **Release state.** This work is released as a standalone repository at <https://github.com/docxology/red_line>.
 It retains the verified DOI identified in the publication metadata, but has no

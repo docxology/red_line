@@ -28,6 +28,11 @@
   ],
   "related_identifiers": [
     {
+      "identifier": "10.5281/zenodo.21754240",
+      "relation": "references",
+      "scheme": "doi"
+    },
+    {
       "identifier": "https://github.com/docxology/red_line",
       "relation": "isSupplementTo",
       "scheme": "url"
@@ -83,5 +88,5 @@
       "scheme": "doi"
     }
   ],
-  "notes": "One of six related works (the line set and its witness register). The five sibling DOIs are listed in related_identifiers with relation 'cites'; this work's own DOI is recorded in CITATION.cff identifiers and the record link."
+  "notes": "One of six related works (the line set and its witness register). The five sibling DOIs are listed with relation 'cites'. The self-reference DOI is the last verified historical archive, not a DOI assigned to version 0.4.0. Daniel reserves and verifies the successor DOI before depositing that version."
 }

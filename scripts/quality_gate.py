@@ -7,8 +7,9 @@ import argparse
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 
-from red_line.release import tree_digest, wheel_smoke
+from red_line.release import tree_digest, wheel_smoke, finalize_render_pipeline
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -53,19 +54,14 @@ def main(argv: list[str] | None = None) -> int:
     wheel_smoke(ROOT)
     if args.render:
         _run([python, "scripts/compare_render_artifacts.py"])
-        # The comparison's render-only passes rewrite artifacts AFTER the
-        # engine's artifact manifest was captured, and the engine's PDF is
-        # not byte-stable, so the engine's own validation now reports drift.
-        # Run the engine's full core pipeline as the final tree-producing
-        # step: it regenerates the manifest alongside the artifacts and
-        # leaves a validation verdict about the tree it actually produced.
-        # Only then is the strict release manifest reading a coherent tree.
-        # Measured 2026-07-29: with the old order (compare -> strict) the
-        # gate failed at its own last step from every starting state.
+        # The full pipeline cleans output/. Park the executed comparison
+        # outside it and restore only after source and artifact checks agree.
         from red_line.release import template_full_pipeline
 
         print("+ engine full core pipeline (final tree-producing step)")
-        template_full_pipeline(ROOT)()
+        custody = Path(tempfile.mkdtemp(prefix="red-line-render-receipt-"))
+        print("+ preserved comparison custody:", custody)
+        finalize_render_pipeline(ROOT, template_full_pipeline(ROOT), custody)
         manifest_command = [python, "scripts/build_release_manifest.py", "--strict"]
         if args.as_of:
             manifest_command.extend(["--as-of", args.as_of])

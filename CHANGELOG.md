@@ -18,9 +18,13 @@
   unchanged; no substantive boundary amendment is inferred.
 - Finish canonical manuscript documentation links and retain duplicate paths as
   redirects. Isolate renderer environments and repository-root provenance.
+- Preserve the executed render comparison across engine cleanup, with tracked
+  source, renderer and final artifact bindings. Reject hash-only release evidence.
+- Cite this version through the repository; retain the verified DOI only in
+  historical references pending the author's reserve-first successor identifier.
 
 See [the review dispositions](docs/review-20261020.md) and the dated release
-packet for current verification results. The existing DOI remains unchanged;
+packet for current verification results. The existing DOI remains a historical identifier;
 the new Zenodo version follows the author's reserve-first procedure.
 
 ## 0.3.0 — 2026-07-29

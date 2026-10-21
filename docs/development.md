@@ -121,6 +121,14 @@ current. The `--render` path also requires the strict release manifest: every
 required report must exist and pass, and both the Red Line subtree and sibling
 template checkout must be clean.
 
+The gate parks comparison schema 2 outside the project before the full pipeline
+cleans `output/`. It then verifies tracked source and renderer state, non-PDF
+bytes and extracted PDF text before restoring the original receipt. A separate
+binding pins the final artifact bytes, and the strict manifest rechecks it.
+Pipeline failures retain external custody and propagate. A hash-only report
+cannot replace the two renderer invocations; PDF text equality does not prove
+identical layout or independent attestation.
+
 ```bash
 uv run python scripts/quality_gate.py --as-of 2026-07-24 --render
 ```
@@ -161,7 +169,7 @@ root-level list below is bound to disk by
 | `src/red_line/canary/{hashing,statement,verification}.py` | `tests/canary/test_{hashing,statement,verification}.py`, `tests/canary/test_scripts.py` |
 | `src/red_line/invariants/checks.py` | `tests/invariants/test_checks.py` |
 | `src/red_line/analysis/{registry_metrics,outcome_coverage,monotonicity}.py` | `tests/analysis/test_registry_metrics.py`, `tests/analysis/test_outcome_coverage.py`, `tests/analysis/test_monotonicity_sweep.py` |
-| `src/red_line/release/{provenance,snapshot,manifest,determinism}.py` | `tests/release/test_{provenance,snapshot,manifest,determinism}.py` |
+| `src/red_line/release/{provenance,snapshot,manifest,determinism,receipt}.py` | `tests/release/test_{provenance,snapshot,manifest,determinism}.py` |
 | `src/red_line/contracts/*.py` | `tests/integration/test_contracts_branch_coverage.py` (branch coverage) plus the live-tree checks in `tests/integration/test_release_bindings.py` |
 | `src/red_line/figures/*.py` | `tests/test_figures.py` |
 | `src/red_line/envelope.py` | `tests/test_witness_envelope.py` |

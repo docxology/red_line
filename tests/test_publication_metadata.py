@@ -67,6 +67,24 @@ def test_the_four_version_statements_agree() -> None:
     assert _config_paper_version() == __version__
 
 
+def test_current_citation_does_not_claim_the_historical_doi() -> None:
+    citation = CITATION.read_text()
+    current, references = citation.split("references:", 1)
+    assert "10.5281/zenodo.21754240" not in current
+    assert "10.5281/zenodo.21754240" in references
+    publication = (ROOT / "docs" / "publication.md").read_text()
+    recommendation = publication.split("## Persistent Identifiers", 1)[0]
+    assert "10.5281/zenodo.21754240" not in recommendation
+    assert "https://github.com/docxology/red_line" in recommendation
+    config = CONFIG.read_text().split("publication:", 1)[1].split("keywords:", 1)[0]
+    assert "10.5281/zenodo.21754240" not in config
+    assert "10.5281/zenodo.21754240" in CONFIG.read_text()
+    historical = [item for item in json.loads(ZENODO.read_text())["related_identifiers"]
+                  if item["identifier"] == "10.5281/zenodo.21754240"]
+    assert historical == [{"identifier": "10.5281/zenodo.21754240",
+                           "relation": "references", "scheme": "doi"}]
+
+
 def test_the_citation_names_this_repository_exactly() -> None:
     expected = f"https://github.com/docxology/{SELF}"
     assert _cff_field("repository-code") == expected

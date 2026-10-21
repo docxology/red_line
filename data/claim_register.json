@@ -114,11 +114,12 @@
       "supporting_surface": [
         "deterministic figures",
         "template validation",
-        "PDF/HTML inspection"
+        "PDF/HTML inspection",
+        "src/red_line/release/receipt.py"
       ],
       "status": "requires_each_render_run_and_render_gate",
       "verification_mode": "render_validated",
-      "stopping_point": "This is a per-run source-to-render claim; current pre-publication status, renderer boundary, and build-tool trust remain external residual risks"
+      "stopping_point": "Per-run source and final artifact bindings do not establish PDF layout equality, hermetic build security or independent attestation; a red render gate blocks the candidate release"
     },
     {
       "claim_id": "CLM-009",

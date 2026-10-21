@@ -19,10 +19,8 @@ authors:
     corresponding: true
 
 publication:
-  doi: "10.5281/zenodo.21754240"
   github_repository: "docxology/red_line"
   repository_url: "https://github.com/docxology/red_line"
-  # DOI reserved on first public release; not minted in this pass.
 
 keywords:
   - "red lines"
@@ -43,6 +41,9 @@ analysis:
     - build_release_data.py
 
 project_config:
+  historical_archive:
+    doi: "10.5281/zenodo.21754240"
+    note: "Last verified archive identifier; not the DOI of version 0.4.0."
   source_framework:
     author: "Alex Turner"
     title: "A Red Line and Oversight Framework for Government AI Contracts"

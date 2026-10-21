@@ -15,7 +15,7 @@ from red_line.contracts import (
     validate_source_claims,
     validate_visual_bindings,
 )
-from red_line.release import build_manifest
+from red_line.release import build_manifest, render_validation, render_source_binding, artifact_hashes, sha256_file
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -96,14 +96,22 @@ def test_release_manifest_carries_source_canary_and_artifact_hashes():
     assert manifest["publication_gate"]["external_witness"]["locator"] is None
     assert manifest["publication_gate"]["independent_reviewer"]["status"] == "not_obtained"
     assert manifest["publication_gate"]["independence_verified"] is False
-    # ``render_determinism`` is always present, so keying the guard on the key
-    # made this branch vacuous. Bind it to the artifact instead: when the
-    # render-determinism report exists it must pass, and when it does not the
-    # manifest must say so rather than report a silent pass.
     render_report = ROOT / "output" / "reports" / "render_determinism.json"
     render_determinism = manifest["validation_results"]["render_determinism"]
     if render_report.exists():
-        assert render_determinism["passed"]
+        assert render_validation(render_report)["passed"]
+        report = json.loads(render_report.read_text())
+        if render_determinism["passed"]:
+            assert report["schema_version"] == "2.0"
+            assert report["render_pass_count"] == 2
+            assert report["input_binding"] == render_source_binding(ROOT)
+            binding = json.loads((ROOT / "output/reports/render_comparison_binding.json").read_text())
+            assert binding["comparison_sha256"] == sha256_file(render_report)
+            assert binding["artifact_hashes"] == artifact_hashes(ROOT)
+        else:
+            assert render_determinism["errors"]
+            if report.get("schema_version") != "2.0":
+                assert any("two successful render passes" in error for error in render_determinism["errors"])
     else:
         assert render_determinism["passed"] is False
         assert render_determinism["errors"] == ["render determinism report is missing"]

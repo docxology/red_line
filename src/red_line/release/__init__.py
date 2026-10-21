@@ -37,9 +37,11 @@ from .provenance import (
     git_revision,
     require_template_root,
     sha256_file,
+    render_source_binding,
     template_root_candidates,
 )
 from .snapshot import analysis_metrics, build_snapshot, write_snapshot
+from .receipt import finalize_render_pipeline, render_binding_issues
 from .wheel_smoke import wheel_smoke
 
 __all__ = [
@@ -62,12 +64,15 @@ __all__ = [
     "decidable_failures",
     "digest_tree",
     "find_template_root",
+    "finalize_render_pipeline",
     "git_dirty",
     "git_revision",
     "pdf_text",
     "pdf_texts_equal",
     "release_ready",
     "render_validation",
+    "render_source_binding",
+    "render_binding_issues",
     "require_template_root",
     "sha256_file",
     "template_full_pipeline",

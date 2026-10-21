@@ -17,6 +17,7 @@ from red_line.contracts import (
 )
 
 from .provenance import digest_tree, find_template_root, git_dirty, git_revision, sha256_file
+from .receipt import render_binding_issues
 
 MANIFEST_SCHEMA_VERSION = "1.0"
 MANIFEST_FILENAME = "release_manifest.json"
@@ -72,7 +73,7 @@ def template_validation(path: Path) -> dict:
     }
 
 
-def render_validation(path: Path) -> dict:
+def render_validation(path: Path, *, root: Path | None = None) -> dict:
     """Interpret the render-determinism report as a pass or fail result."""
 
     if not path.exists():
@@ -81,6 +82,8 @@ def render_validation(path: Path) -> dict:
         report = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         return {"passed": False, "errors": [f"render determinism report cannot be read: {exc}"]}
+    if not isinstance(report, dict):
+        return {"passed": False, "errors": ["render determinism report must be an object"]}
     if report.get("identical") is not True:
         return {
             "passed": False,
@@ -88,9 +91,10 @@ def render_validation(path: Path) -> dict:
             "report_sha256": sha256_file(path),
             "template_revision": report.get("renderer", {}).get("template_revision"),
         }
+    issues = [] if root is None else render_binding_issues(root, report)
     return {
-        "passed": True,
-        "errors": [],
+        "passed": not issues,
+        "errors": issues,
         "report_sha256": sha256_file(path),
         "template_revision": report.get("renderer", {}).get("template_revision"),
     }
@@ -200,7 +204,7 @@ def build_manifest(
     template_report = root / "output" / "reports" / "validation_report.json"
     validation["template_output"] = template_validation(template_report)
     render_report = root / "output" / "reports" / "render_determinism.json"
-    validation["render_determinism"] = render_validation(render_report)
+    validation["render_determinism"] = render_validation(render_report, root=root)
     return {
         "manifest_schema_version": MANIFEST_SCHEMA_VERSION,
         "source_revision": git_revision(root),

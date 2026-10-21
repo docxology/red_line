@@ -132,3 +132,27 @@ def digest_tree(
         for path in sorted(base.rglob("*"))
         if path.is_file() and path.suffix.lower() in accepted and path.name not in exclude_names
     }
+
+
+def render_source_binding(root: Path) -> dict:
+    """Record tracked source bytes and renderer checkout state for a comparison."""
+
+    revision = git_revision(root)
+    hashes = {}
+    if revision is not None:
+        result = subprocess.run(
+            ["git", "-C", str(root), "ls-files", "-z"],
+            capture_output=True, check=True,
+        )
+        hashes = {
+            os.fsdecode(name): sha256_file(root / os.fsdecode(name))
+            for name in result.stdout.split(b"\0") if name
+        }
+    template = find_template_root(root)
+    return {
+        "source_revision": revision,
+        "source_dirty": git_dirty(root),
+        "source_hashes": hashes,
+        "template_revision": None if template is None else git_revision(template),
+        "template_dirty": None if template is None else git_dirty(template),
+    }

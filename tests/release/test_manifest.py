@@ -103,6 +103,11 @@ class TestTemplateValidation:
 
 
 class TestRenderValidation:
+    def test_non_object_report_fails_closed(self, tmp_path):
+        result = render_validation(_report(tmp_path / "array.json", []))
+        assert result["passed"] is False
+        assert "object" in result["errors"][0]
+
     def test_missing_report_fails_closed(self, tmp_path):
         result = render_validation(tmp_path / "missing.json")
         assert result["passed"] is False

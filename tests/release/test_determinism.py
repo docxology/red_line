@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
+import os
+import shutil
+import subprocess
 
 import pytest
 
@@ -23,6 +27,214 @@ from red_line.release import (
 )
 
 PDF_KEY = "output/pdf/manuscript.pdf"
+
+
+def _small_pdf(text: str = "bound text") -> bytes:
+    stream = f"BT /F1 12 Tf 20 100 Td ({text}) Tj ET".encode()
+    objects = [b"<< /Type /Catalog /Pages 2 0 R >>",
+               b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+               b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 200] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>",
+               b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+               b"<< /Length " + str(len(stream)).encode() + b" >>\nstream\n" + stream + b"\nendstream"]
+    payload = b"%PDF-1.4\n"
+    offsets = [0]
+    for index, obj in enumerate(objects, 1):
+        offsets.append(len(payload))
+        payload += f"{index} 0 obj\n".encode() + obj + b"\nendobj\n"
+    xref = len(payload)
+    payload += b"xref\n0 6\n0000000000 65535 f \n"
+    payload += b"".join(f"{offset:010} 00000 n \n".encode() for offset in offsets[1:])
+    return payload + f"trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n".encode()
+
+
+@pytest.fixture
+def receipt_tree(tmp_path, monkeypatch):
+    root = tmp_path / "red_line"
+    template = tmp_path / "template"
+    environment = os.environ | {
+        "GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": os.devnull,
+        "GIT_AUTHOR_NAME": "Receipt test", "GIT_AUTHOR_EMAIL": "receipt@example.invalid",
+        "GIT_COMMITTER_NAME": "Receipt test", "GIT_COMMITTER_EMAIL": "receipt@example.invalid",
+    }
+    for repo in (root, template):
+        repo.mkdir()
+        (repo / ".gitignore").write_text("output/\n")
+        (repo / "source.txt").write_text("intact\n")
+        for args in (["init", "-q"], ["add", "."], ["commit", "-qm", "fixture"]):
+            subprocess.run(["git", "-C", str(repo), *args], check=True, env=environment)
+    monkeypatch.setenv("RED_LINE_TEMPLATE_ROOT", str(template))
+    _populated_tree(root)
+    (root / PDF_KEY).parent.mkdir(parents=True)
+    (root / PDF_KEY).write_bytes(_small_pdf())
+    report = compare_artifacts(root, render=lambda: None)
+    destination = root / "output/reports/render_determinism.json"
+    destination.parent.mkdir(parents=True)
+    destination.write_text(json.dumps(report))
+    return root, report, destination, tmp_path / "custody"
+
+
+def _clean_and_rebuild(root):
+    contents = {key: (root / key).read_bytes() for key in artifact_hashes(root)}
+    shutil.rmtree(root / "output")
+    for key, payload in contents.items():
+        destination = root / key
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(payload)
+
+
+class TestRenderReceipt:
+    @pytest.mark.parametrize("changed_pass", [1, 2])
+    def test_committed_input_changes_during_comparison_are_rejected(self, receipt_tree, changed_pass):
+        root, _, _, _ = receipt_tree
+        calls = 0
+        def render():
+            nonlocal calls
+            calls += 1
+            if calls == changed_pass:
+                (root / "source.txt").write_text("changed during comparison")
+                subprocess.run(
+                    ["git", "-C", str(root), "-c", "user.name=Receipt test",
+                     "-c", "user.email=receipt@example.invalid", "commit", "-qam", "change"],
+                    check=True, env=os.environ | {"GIT_CONFIG_GLOBAL": os.devnull,
+                                                 "GIT_CONFIG_NOSYSTEM": "1"},
+                )
+        with pytest.raises(RuntimeError, match="changed during"):
+            compare_artifacts(root, render=render)
+
+    def test_non_object_receipt_is_rejected(self, receipt_tree):
+        from red_line.release import finalize_render_pipeline
+
+        root, _, path, custody = receipt_tree
+        path.write_text("[]")
+        with pytest.raises(RuntimeError, match="object"):
+            finalize_render_pipeline(root, lambda: None, custody)
+
+    def test_genuine_comparison_survives_output_cleanup(self, receipt_tree):
+        from red_line.release import finalize_render_pipeline, render_binding_issues, render_validation
+
+        root, report, path, custody = receipt_tree
+        original = path.read_bytes()
+        held = finalize_render_pipeline(root, lambda: _clean_and_rebuild(root), custody)
+        assert held.read_bytes() == path.read_bytes() == original
+        assert not held.is_relative_to(root)
+        assert render_binding_issues(root, report) == []
+        assert render_validation(path, root=root)["passed"] is True
+
+    @pytest.mark.parametrize("mutation", ["source", "html", "pdf", "addition", "renderer"])
+    def test_changed_inputs_or_artifacts_prevent_receipt_reuse(self, receipt_tree, mutation):
+        from red_line.release import finalize_render_pipeline
+
+        root, _, path, custody = receipt_tree
+        template = Path(os.environ["RED_LINE_TEMPLATE_ROOT"])
+        def pipeline():
+            _clean_and_rebuild(root)
+            if mutation == "source":
+                (root / "source.txt").write_text("changed")
+            elif mutation == "renderer":
+                (template / "source.txt").write_text("changed")
+            elif mutation == "pdf":
+                (root / PDF_KEY).write_bytes(_small_pdf("different text"))
+            else:
+                _artifact(root, "output/web/index.html" if mutation == "html" else "output/web/extra.html", "changed")
+        with pytest.raises(RuntimeError, match="binding|artifact"):
+            finalize_render_pipeline(root, pipeline, custody)
+        assert not path.exists()
+
+    def test_pipeline_failure_retains_external_receipt_and_failure(self, receipt_tree):
+        from red_line.release import finalize_render_pipeline
+
+        root, _, path, custody = receipt_tree
+        original = path.read_bytes()
+        def pipeline():
+            _clean_and_rebuild(root)
+            raise ValueError("deliberate pipeline failure")
+        with pytest.raises(RuntimeError, match="preserved") as error:
+            finalize_render_pipeline(root, pipeline, custody)
+        assert isinstance(error.value.__cause__, ValueError)
+        assert (custody / path.name).read_bytes() == original
+        assert not path.exists()
+
+    @pytest.mark.parametrize("field,value", [("render_pass_count", 0), ("schema_version", "1.0"),
+                                              ("identical", False), ("input_binding", {}),
+                                              ("second_pass_hashes", {})])
+    def test_unbound_or_hash_only_reports_are_rejected(self, receipt_tree, field, value):
+        from red_line.release import finalize_render_pipeline
+
+        root, report, path, custody = receipt_tree
+        report[field] = value
+        path.write_text(json.dumps(report))
+        with pytest.raises(RuntimeError):
+            finalize_render_pipeline(root, lambda: pytest.fail("pipeline must not run"), custody)
+
+    @pytest.mark.parametrize("mutation", ["missing", "malformed", "shape", "receipt", "source", "artifact",
+                                         "binding_schema", "binding_digest", "binding_source", "binding_artifacts"])
+    def test_final_binding_detects_later_mutation(self, receipt_tree, mutation):
+        from red_line.release import finalize_render_pipeline, render_binding_issues
+
+        root, report, path, custody = receipt_tree
+        finalize_render_pipeline(root, lambda: _clean_and_rebuild(root), custody)
+        binding = root / "output/reports/render_comparison_binding.json"
+        if mutation == "missing":
+            binding.unlink()
+        elif mutation == "malformed":
+            binding.write_text("{")
+        elif mutation == "shape":
+            binding.write_text("[]")
+        elif mutation == "receipt":
+            path.write_bytes(path.read_bytes() + b"\n")
+        elif mutation == "source":
+            (root / "source.txt").write_text("changed")
+        elif mutation.startswith("binding_"):
+            payload = json.loads(binding.read_text())
+            key = {"binding_schema": "schema", "binding_digest": "comparison_sha256",
+                   "binding_source": "input_binding", "binding_artifacts": "artifact_hashes"}[mutation]
+            payload[key] = None
+            binding.write_text(json.dumps(payload))
+        else:
+            (root / PDF_KEY).write_bytes((root / PDF_KEY).read_bytes() + b"\n% changed\n")
+        assert render_binding_issues(root, report)
+
+    def test_metadata_only_pdf_variation_requires_available_equal_text(self, receipt_tree):
+        from red_line.release import finalize_render_pipeline, render_binding_issues
+
+        root, report, path, custody = receipt_tree
+        def pipeline():
+            _clean_and_rebuild(root)
+            (root / PDF_KEY).write_bytes((root / PDF_KEY).read_bytes() + b"\n% metadata variation\n")
+        if pdf_text(root / PDF_KEY) is None:
+            with pytest.raises(RuntimeError, match="artifact"):
+                finalize_render_pipeline(root, pipeline, custody)
+        else:
+            finalize_render_pipeline(root, pipeline, custody)
+            assert render_binding_issues(root, report) == []
+
+    def test_custody_must_be_outside_the_project(self, receipt_tree):
+        from red_line.release import finalize_render_pipeline
+
+        root, _, _, _ = receipt_tree
+        with pytest.raises(ValueError, match="outside"):
+            finalize_render_pipeline(root, lambda: None, root / "output/custody")
+
+    def test_existing_custody_is_preserved(self, receipt_tree):
+        from red_line.release import finalize_render_pipeline
+
+        root, _, path, custody = receipt_tree
+        custody.mkdir()
+        held = custody / path.name
+        held.write_text("existing")
+        with pytest.raises(FileExistsError):
+            finalize_render_pipeline(root, lambda: None, custody)
+        assert held.read_text() == "existing"
+
+    def test_changed_external_receipt_is_rejected(self, receipt_tree):
+        from red_line.release import finalize_render_pipeline
+
+        root, _, path, custody = receipt_tree
+        def pipeline():
+            _clean_and_rebuild(root)
+            (custody / path.name).write_text("changed")
+        with pytest.raises(RuntimeError, match="preserved receipt changed"):
+            finalize_render_pipeline(root, pipeline, custody)
 
 
 def _template_checkout(directory: Path) -> Path:
@@ -346,7 +558,9 @@ class TestCompareArtifacts:
 
         result = compare_artifacts(tmp_path)
 
-        assert result["schema_version"] == "1.0"
+        assert result["schema_version"] == "2.0"
+        assert result["render_pass_count"] == 0
+        assert result["input_binding"]["source_revision"] is None
         assert result["comparison_scope"] == ["pdf", "web", "figures"]
         assert result["artifact_suffixes"] == sorted(result["artifact_suffixes"])
         assert "stage_03_render.py" in result["renderer"]["command"]

@@ -10,7 +10,7 @@ from pathlib import Path
 import shutil
 import subprocess
 
-from .provenance import digest_tree, find_template_root, git_revision, require_template_root
+from .provenance import digest_tree, find_template_root, git_revision, require_template_root, render_source_binding
 from .snapshot import write_snapshot
 
 ARTIFACT_DIRECTORIES = ("pdf", "web", "figures")
@@ -177,12 +177,17 @@ def compare_artifacts(root: Path, *, render: Callable[[], None] | None = None) -
     ``None`` the current artifact tree is hashed twice without re-rendering.
     """
 
+    input_binding = render_source_binding(root)
     if render is not None:
         render()
+    if render_source_binding(root) != input_binding:
+        raise RuntimeError("source or renderer changed during the first render pass")
     first = artifact_hashes(root)
     first_pdf_text = {key: pdf_text(root / key) for key in first if key.endswith(".pdf")}
     if render is not None:
         render()
+    if render_source_binding(root) != input_binding:
+        raise RuntimeError("source or renderer changed during the second render pass")
     second = artifact_hashes(root)
     byte_identical = first == second and bool(first)
     non_pdf_equal = {key: value for key, value in first.items() if not key.endswith(".pdf")} == {
@@ -201,7 +206,13 @@ def compare_artifacts(root: Path, *, render: Callable[[], None] | None = None) -
     # meaningful with no engine present, and the report says so with ``None``.
     template_root = find_template_root(root)
     return {
-        "schema_version": "1.0",
+        "schema_version": "2.0",
+        "render_pass_count": 0 if render is None else 2,
+        "input_binding": input_binding,
+        "pdf_text_hashes": {
+            key: None if value is None else hashlib.sha256(value.encode()).hexdigest()
+            for key, value in second_pdf_text.items()
+        },
         "comparison_scope": list(ARTIFACT_DIRECTORIES),
         "artifact_suffixes": sorted(ARTIFACT_SUFFIXES),
         "first_pass_hashes": first,
@@ -220,7 +231,8 @@ def compare_artifacts(root: Path, *, render: Callable[[], None] | None = None) -
         },
         "rendered_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "trust_boundary": (
-            "Two local passes establish artifact determinism for the recorded toolchain; "
-            "they do not establish hermetic build security, independent truth, or external certification."
+            "Local comparison records non-PDF bytes and PDF text; render_pass_count "
+            "distinguishes renderer invocations from hash-only inspection. These checks "
+            "do not establish hermetic build security, independent truth, or external certification."
         ),
     }

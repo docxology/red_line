@@ -19,7 +19,10 @@ This folder owns release assembly: provenance digests, the deterministic release
 | `candidate_ledger` | <code>def&nbsp;candidate_ledger(root:&nbsp;Path)&nbsp;-&gt;&nbsp;dict[str,&nbsp;str]&nbsp;\|&nbsp;None:</code> | Return the candidate ledger path and digest, or `None` when it is absent. | [manifest.py](manifest.py) |
 | `candidate_validation` | <code>def&nbsp;candidate_validation(root:&nbsp;Path)&nbsp;-&gt;&nbsp;dict:</code> | Report whether the candidate red-line ledger is present and digestible. | [manifest.py](manifest.py) |
 | `template_validation` | <code>def&nbsp;template_validation(path:&nbsp;Path)&nbsp;-&gt;&nbsp;dict:</code> | Interpret the template output-validation report as a pass or fail result. | [manifest.py](manifest.py) |
-| `render_validation` | <code>def&nbsp;render_validation(path:&nbsp;Path)&nbsp;-&gt;&nbsp;dict:</code> | Interpret the render-determinism report as a pass or fail result. | [manifest.py](manifest.py) |
+| `render_validation` | `def render_validation(path: Path, *, root: Path \| None = None) -> dict` | Interpret historical comparison results, or require current source/artifact custody when `root` is supplied. | [manifest.py](manifest.py) |
+| `render_source_binding` | `def render_source_binding(root: Path) -> dict` | Record tracked source hashes and source/renderer checkout identities and dirtiness. | [provenance.py](provenance.py) |
+| `finalize_render_pipeline` | `def finalize_render_pipeline(root: Path, pipeline: Callable[[], None], custody_directory: Path) -> Path` | Preserve the original comparison outside the project, run the full pipeline, verify bindings and retain the exact final artifact hashes. | [receipt.py](receipt.py) |
+| `render_binding_issues` | `def render_binding_issues(root: Path, report: dict) -> list[str]` | Recheck current source, comparison receipt and final artifact bytes. | [receipt.py](receipt.py) |
 | `undecided_before_render` | <code>def&nbsp;undecided_before_render(manifest:&nbsp;dict)&nbsp;-&gt;&nbsp;list[str]:</code> | Name the validations a render must run before they can be judged. | [manifest.py](manifest.py) |
 | `decidable_failures` | <code>def&nbsp;decidable_failures(manifest:&nbsp;dict)&nbsp;-&gt;&nbsp;list[str]:</code> | Name the validations that failed for a reason no render would change. | [manifest.py](manifest.py) |
 | `release_ready` | <code>def&nbsp;release_ready(manifest:&nbsp;dict,&nbsp;*,&nbsp;strict:&nbsp;bool&nbsp;=&nbsp;False)&nbsp;-&gt;&nbsp;bool:</code> | Report whether manifest validation results satisfy the publication gate. | [manifest.py](manifest.py) |
@@ -30,6 +33,7 @@ This folder owns release assembly: provenance digests, the deterministic release
 | `pdf_texts_equal` | <code>def&nbsp;pdf_texts_equal(</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;first:&nbsp;dict[str,&nbsp;str&nbsp;\|&nbsp;None],</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;second:&nbsp;dict[str,&nbsp;str&nbsp;\|&nbsp;None],</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;pdf_paths:&nbsp;list[str],</code><br><code>)&nbsp;-&gt;&nbsp;bool:</code> | Report whether both passes extracted identical text for every expected PDF. | [determinism.py](determinism.py) |
 | `classify_nondeterminism` | <code>def&nbsp;classify_nondeterminism(</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;*,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;byte_identical:&nbsp;bool,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;non_pdf_equal:&nbsp;bool,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;pdf_text_equal:&nbsp;bool,</code><br><code>)&nbsp;-&gt;&nbsp;list[str]:</code> | Name the artifact drift observed between two passes, if any. | [determinism.py](determinism.py) |
 | `template_render_passes` | <code>def&nbsp;template_render_passes(root:&nbsp;Path)&nbsp;-&gt;&nbsp;Callable[[],&nbsp;None]:</code> | Build the callable that runs one canonical render pass in the sibling template. | [determinism.py](determinism.py) |
+| `template_full_pipeline` | `def template_full_pipeline(root: Path) -> Callable[[], None]` | Run the prepared engine's full core pipeline using its current CLI. | [determinism.py](determinism.py) |
 | `compare_artifacts` | <code>def&nbsp;compare_artifacts(</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;root:&nbsp;Path,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;*,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;render:&nbsp;Callable[[],&nbsp;None]&nbsp;\|&nbsp;None&nbsp;=&nbsp;None,</code><br><code>)&nbsp;-&gt;&nbsp;dict:</code> | Compare two artifact passes for content-identical render output. | [determinism.py](determinism.py) |
 | `wheel_smoke` | <code>def&nbsp;wheel_smoke(root:&nbsp;Path)&nbsp;-&gt;&nbsp;None:</code> | Build the wheel and prove it imports in a clean venv; raise on any failing step. | [wheel_smoke.py](wheel_smoke.py) |
 
@@ -44,6 +48,7 @@ May import stdlib, the root package, `analysis/`, `canary/`, and `contracts/`. M
 - Digest keys stay root-relative and suffix matching stays case-insensitive; changing either silently invalidates every recorded manifest.
 - `release_ready` fails closed: an empty `validation_results` map is never ready.
 - Report interpretation fails closed. A missing, unreadable, or summary-less report is a failure, never a skip.
+- Current release comparisons require schema 2, two renderer invocations, unchanged tracked source and renderer state, and a checked final artifact binding. Historical/hash-only reports cannot replace this evidence. Failed rebuilds retain custody and propagate failure.
 - Manifest and snapshot JSON shapes are recorded evidence. Adding a key is a schema change; renaming or removing one breaks published manifests.
 
 ## Tests

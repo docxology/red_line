@@ -6,8 +6,8 @@ This folder holds the cross-cutting test suite for the project. The top level co
 
 ```mermaid
 flowchart TD
-  root["tests/ 922 collected"]
-  top["top-level modules 281"]
+  root["tests/ 953 collected"]
+  top["top-level modules 282"]
   analysis["analysis/ 68"]
   canary["canary/ 43"]
   evaluation["evaluation/ 25"]
@@ -18,7 +18,7 @@ flowchart TD
   model["model/ 36"]
   oversight["oversight/ 21"]
   registry["registry/ 12"]
-  release["release/ 88"]
+  release["release/ 118"]
   root --> top
   root --> analysis
   root --> canary
@@ -43,7 +43,7 @@ flowchart TD
 | [test_new_composition_figures.py](test_new_composition_figures.py) | New-composition figure contracts | 20 |
 | [test_script_clis.py](test_script_clis.py) | Every read-only script passes on good input | 49 |
 | [test_standalone_contract.py](test_standalone_contract.py) | Package works without sibling repos | 10 |
-| [test_publication_metadata.py](test_publication_metadata.py) | Publication metadata across config and package | 6 |
+| [test_publication_metadata.py](test_publication_metadata.py) | Publication metadata across config and package | 7 |
 | [test_no_substitutes.py](test_no_substitutes.py) | No substitute/mock enforcement | 16 |
 | [test_hardening_contracts.py](test_hardening_contracts.py) | Hardening contract enforcement | 43 |
 | [test_suite_inventory_binding.py](test_suite_inventory_binding.py) | Suite inventory against source | 53 |
@@ -51,7 +51,7 @@ flowchart TD
 
 | Area | Path | Collected tests | Notes |
 | --- | --- | --- | --- |
-| cross-cutting | [tests](README.md) | 281 | Top-level figure, legibility, decision-surface plate, contract-hardening, script-CLI, no-substitute policy, standalone-copy contract, report-envelope, and publication-metadata tests. |
+| cross-cutting | [tests](README.md) | 282 | Top-level figure, legibility, decision-surface plate, contract-hardening, script-CLI, no-substitute policy, standalone-copy contract, report-envelope, and publication-metadata tests. |
 | analysis | [tests/analysis](analysis/README.md) | 68 | Executed reports over the live registry and evaluator. |
 | canary | [tests/canary](canary/README.md) | 43 | Hashing, issuance, verification, and script entrypoints. |
 | evaluation | [tests/evaluation](evaluation/README.md) | 25 | Classification, carve-outs, aliases, and tier monotonicity. |
@@ -62,7 +62,7 @@ flowchart TD
 | model | [tests/model](model/README.md) | 36 | Core dataclasses, enums, and normalization helpers. |
 | oversight | [tests/oversight](oversight/README.md) | 21 | Review findings and transparency aggregation. |
 | registry | [tests/registry](registry/README.md) | 12 | Registry shape and provenance anchors. |
-| release | [tests/release](release/README.md) | 88 | Provenance digests, input snapshot, manifest, and render determinism. |
+| release | [tests/release](release/README.md) | 118 | Provenance digests, input snapshot, manifest, and render determinism. |
 
 ## Run
 
@@ -74,7 +74,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `922` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
+The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `953` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
 
 ## Related
 

@@ -27,7 +27,7 @@ This folder is the package root for `red_line`. It re-exports the public API fro
 | `analysis/` | Derived metrics over the registry and evaluator. | [analysis/AGENTS.md](analysis/AGENTS.md) |
 | `figures/` | Deterministic figure generation and the figure registry. | [figures/AGENTS.md](figures/AGENTS.md) |
 | `contracts/` | Release-binding validators returning `list[str]`. | [contracts/AGENTS.md](contracts/AGENTS.md) |
-| `release/` | Provenance digests, input snapshot, manifest, and render determinism. | [release/AGENTS.md](release/AGENTS.md) |
+| `release/` | Provenance digests, input snapshot, manifest, render comparison and checked receipt custody. | [release/AGENTS.md](release/AGENTS.md) |
 
 ## Import direction
 

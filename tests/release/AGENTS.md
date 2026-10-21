@@ -8,8 +8,8 @@ This folder covers the `red_line.release` package: provenance digests, the relea
 | --- | --- | --- |
 | [test_provenance.py](test_provenance.py) | Chunked file digests, real-repository revision and dirtiness, honest render-toolchain location, and directory digest filtering. | 17 |
 | [test_snapshot.py](test_snapshot.py) | Live analysis metrics, figure-registry binding and fallbacks, and snapshot writing. | 8 |
-| [test_manifest.py](test_manifest.py) | Candidate-ledger binding, fail-closed report interpretation, publication-gate readiness, pre-render deferral versus decidable failure, manifest assembly, and the recorded renderer when one is and is not present. | 30 |
-| [test_determinism.py](test_determinism.py) | Artifact hashing scope, aggregate tree digesting, the wheel smoke guard, PDF text comparison, drift classification, render and full-pipeline CLI invocation, and two-pass comparison outcomes. | 33 |
+| [test_manifest.py](test_manifest.py) | Candidate-ledger binding, fail-closed report interpretation, publication-gate readiness, pre-render deferral versus decidable failure, manifest assembly, and the recorded renderer when one is and is not present. | 31 |
+| [test_determinism.py](test_determinism.py) | Artifact hashing scope, aggregate tree digesting, the wheel smoke guard, PDF text comparison, drift classification, render and full-pipeline CLI invocation, and two-pass comparison outcomes. | 62 |
 
 ## Helpers
 
@@ -18,6 +18,9 @@ This folder covers the `red_line.release` package: provenance digests, the relea
 | `_isolated_git_env` | `def _isolated_git_env(home: Path) -> dict[str, str]` | [test_provenance.py](test_provenance.py) | Builds a git environment pinned to `tmp_path` with `GIT_CONFIG_GLOBAL` and `GIT_CONFIG_SYSTEM` set to `/dev/null`, so the test never reads or writes the developer's git configuration. |
 | `_artifact` | `def _artifact(root: Path, relative: str, payload: str) -> Path` | [test_determinism.py](test_determinism.py) | Writes one real artifact file, creating parents, inside a `tmp_path` output tree. |
 | `ROOT` | `Path` | [test_manifest.py](test_manifest.py) | The real repository root, used only by `build_manifest` assertions that need the live tree. |
+| `_small_pdf` | `def _small_pdf(text: str) -> bytes` | [test_determinism.py](test_determinism.py) | Builds a small valid PDF for real text-extraction controls. |
+| `receipt_tree` | pytest fixture | [test_determinism.py](test_determinism.py) | Commits real source/renderer Git repositories and supplies comparison artifacts under `tmp_path`. |
+| `_clean_and_rebuild` | local callable | [test_determinism.py](test_determinism.py) | Removes and regenerates owned temporary output to exercise receipt survival and planted drift. |
 
 ## No-mock policy
 

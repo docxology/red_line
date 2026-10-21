@@ -11,6 +11,9 @@ flowchart LR
   provenance --> determinism["determinism.py"]
   wheel_smoke["wheel_smoke.py<br/>clean-venv import proof"]
   snapshot --> determinism
+  provenance --> receipt["receipt.py"]
+  determinism --> receipt
+  receipt --> manifest
   analysis["analysis/"] --> snapshot
   contracts["contracts/ validators"] --> manifest
   canary["canary/"] --> manifest
@@ -34,6 +37,19 @@ report = compare_artifacts(Path('.'))
 
 Pass `render=template_render_passes(root)` to `compare_artifacts` to run the canonical
 template render before each hashing pass.
+
+Comparison schema 2 records the renderer invocation count, tracked source hashes,
+checkout identities, non-PDF bytes and extracted PDF text hashes. A hash-only
+inspection is not accepted by the current release gate. Historical schema 1
+reports remain readable as historical results without current-tree assurance.
+
+`finalize_render_pipeline` holds the original comparison outside the project
+while the engine cleans and rebuilds `output/`. It restores the exact receipt
+only after source, renderer and artifact comparisons agree, and writes a
+separate binding to the final artifact bytes. A failed pipeline retains the
+external receipt and propagates the failure. The strict manifest rechecks both
+bindings; a later PDF byte edit fails even when its extracted text is unchanged.
+Text equality does not establish identical PDF layout or independent attestation.
 
 ## Related
 
