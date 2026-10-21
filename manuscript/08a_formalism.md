@@ -238,7 +238,7 @@ are — fifty-eight executed evaluations, every row behaving as its mode
 requires.
 :::
 
-::: {.proposition #prop:tier-monotone title="Reducing oversight never softens a verdict"}
+::: {.proposition #prop:tier-monotone title="Singleton sweep: no observed tier inversions"}
 Within the exercised singleton domain, fix a declared scope and a fully evidenced
 context, and vary only the tier along
 $\mathtt{hosted} \to \mathtt{connected} \to \mathtt{air\_gapped}$. Strictness in
@@ -289,11 +289,18 @@ native finding, and the instrument's non-claims travel inside the same
 record.
 
 ::: {.definition #def:report-envelope title="Report envelope"}
-The report envelope is the frozen record $v = (\mathrm{schema\_version},\
-\mathrm{line\_id},\ \mathrm{subject\_id},\ \mathrm{review\_date},\
-\mathrm{registry\_version},\ \mathrm{registry\_digest},\
-\mathrm{native\_status},\ \mathrm{report\_ref},\
-\mathrm{source\_snapshot\_refs},\ \mathrm{scope\_and\_nonclaims})$ with
+The report envelope is the frozen record
+
+$$
+\begin{aligned}
+v = (&\mathrm{schema\_version},\ \mathrm{line\_id},\ \mathrm{subject\_id},\\
+     &\mathrm{review\_date},\ \mathrm{registry\_version},\ \mathrm{registry\_digest},\\
+     &\mathrm{native\_status},\ \mathrm{report\_ref},\\
+     &\mathrm{source\_snapshot\_refs},\ \mathrm{scope\_and\_nonclaims})
+\end{aligned}
+$$
+
+with
 exactly those ten fields, in order, exported under the schema string
 `line.report-envelope/1.0`. $\mathrm{native\_status}$ is this line's own
 classification word from [@def:classification]; it is one instrument's word
