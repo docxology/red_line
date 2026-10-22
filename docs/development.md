@@ -102,6 +102,15 @@ the release-input snapshot. Contract validators, package checks and render
 comparison remain explicit parts of the outer quality gate rather than being
 rediscovered recursively as analysis scripts.
 
+If an enclosing Git repository ignores the SSD's temporary directory, give
+`TMPDIR` its own filesystem backed by an image stored on that SSD. A Git
+discovery control in that directory must report no repository. The engine's
+inventory Git subprocess constructs its own environment, so exporting
+`GIT_CEILING_DIRECTORIES` alone does not isolate those calls. The 0.4.0 release
+packet records the image-backed scratch setup, process-scoped fsmonitor setting
+and unchanged engine checks. Detach the scratch volume after the run and retain
+the backing image and evidence.
+
 Manifest schema 1.1 records candidate-version state separately from historical
 public repository availability. Passing readiness checks does not attest that
 the version was tagged, pushed or deposited; record those verified actions in
