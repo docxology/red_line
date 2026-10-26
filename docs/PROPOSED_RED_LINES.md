@@ -58,7 +58,7 @@ separately because it is a scope-of-the-instrument decision, not just a new line
 ## Current-release decision records
 
 The following records make the non-adoption state explicit. No candidate has
-author assent for adoption in version `0.3.0`; each remains a proposal requiring
+author assent for adoption in version `0.4.0`; each remains a proposal requiring
 an affirmative future decision. These records are not registry entries and do
 not change `PERSONAL_RED_LINES`. The machine-readable mirror is
 `data/proposed_red_lines.json`; the release gate validates its six IDs, decision

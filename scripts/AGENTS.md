@@ -32,10 +32,10 @@ self-contained checks (figure-tree digest, wheel smoke) live in
 ## Canonical commands
 
 ```bash
-uv run pytest tests/ --cov=red_line --cov-fail-under=90
+uv run --extra dev pytest tests/ --cov=red_line --cov-fail-under=90
 uv run python scripts/check_canary.py
 uv run python scripts/build_figures.py
-uv run python scripts/quality_gate.py
+uv run --extra dev python scripts/quality_gate.py
 ```
 
 ## Gotchas

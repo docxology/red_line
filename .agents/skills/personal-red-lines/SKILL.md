@@ -173,7 +173,9 @@ envelope_matches_finding(envelope, finding)  # read-back check for an archived p
 ```
 
 One `line.report-envelope/1.0` record pointing at the complete canonical
-finding (`red-line.report/1.0`, absent authorization arm as explicit `null`).
+finding (`red-line.report/2.0`; the authorization arm is an explicit `null`
+when absent, and unbound schema-1 report bytes are preserved as historical
+records rather than re-serialized).
 `native_status` is this line's classification word; never compare, rank,
 average, or merge it across lines.
 

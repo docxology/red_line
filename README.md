@@ -82,6 +82,9 @@ in [`manuscript/02b_line_set_orientation.md`](manuscript/02b_line_set_orientatio
 ## Quick start
 
 ```bash
+# install the test tools declared under [project.optional-dependencies].dev
+uv sync --extra dev
+
 # run the gate (tests + coverage; ≥90% enforced on src/red_line/)
 uv run pytest tests/ --cov=red_line --cov-fail-under=90
 

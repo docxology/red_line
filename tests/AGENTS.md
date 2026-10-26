@@ -89,5 +89,5 @@ subdirectories by subsystem.
 ## Validation
 
 ```bash
-uv run pytest tests/ --cov=src --cov-fail-under=90 --cov-report=term-missing
+uv run --extra dev pytest tests/ --cov=red_line --cov-fail-under=90 --cov-report=term-missing
 ```

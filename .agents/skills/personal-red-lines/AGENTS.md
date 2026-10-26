@@ -61,15 +61,14 @@ Update the descriptor whenever any of these move:
 
 ## Verification
 
-The descriptor is checked by the sidecar's signpost validator, which reads agent
-prompts and skills across the project tree. It runs from the sidecar repo root,
-which is `../..` relative to the project root:
-
-```bash
-# from the project root
-cd ../..
-uv run python scripts/check_signposts.py working/red_line --manuscript-images --strict-pairs
-```
-
-The worked commands are verified by running them; there is no test that asserts
+The descriptor is checked by two gates inside this repository:
+`src/red_line/contracts/release_bindings.py` asserts that the frontmatter
+`version` matches `PROJECT_VERSION`, and `tests/test_figure_legibility.py`
+asserts that the stated figure count equals the live generator registry. The
+worked commands are verified by running them; there is no test that asserts
 the descriptor's transcribed output, so the re-run is the check.
+
+The sidecar's signpost validator (`scripts/check_signposts.py`, which reads
+agent prompts and skills across the author's private projects tree) is **not
+part of this repository** and has no path from here: `../..` resolves outside a
+standalone copy. Run it from the private sidecar checkout, never from this one.

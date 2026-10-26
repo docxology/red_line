@@ -85,7 +85,7 @@ already pinned in `tests/canary/test_hashing.py`.)
 ## Gate
 
 ```bash
-uv run pytest tests/ --cov=red_line --cov-branch -q
+uv run --extra dev pytest tests/ --cov=red_line --cov-branch -q
 ```
 
 Expected: all tests pass, total coverage 100.00% (line + branch).

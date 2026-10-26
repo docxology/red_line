@@ -144,7 +144,7 @@ cannot replace the two renderer invocations; PDF text equality does not prove
 identical layout or independent attestation.
 
 ```bash
-uv run python scripts/quality_gate.py --as-of 2026-07-24 --render
+uv run --extra dev python scripts/quality_gate.py --as-of 2026-07-24 --render
 ```
 
 When the shared template checkout has unrelated working changes, use a clean

@@ -23,7 +23,7 @@ same repo, and a force-push rewrites both).
 ```
 
 Compare against the hash pinned in `README.md`, `manuscript/09_red_lines.md`,
-and `tests/fixtures/canary_committed.json`. All four must agree; a mismatch
+and `tests/fixtures/canary_committed.json`. All three must agree; a mismatch
 means the registry changed without a full canary re-issue — itself a defect.
 
 ## Check freshness and drift against a prior statement
@@ -79,7 +79,7 @@ binding checks, canary verification, deterministic figure generation, and a
 clean wheel import smoke test:
 
 ```bash
-uv run python scripts/quality_gate.py --as-of 2026-07-17
+uv run --extra dev python scripts/quality_gate.py --as-of 2026-07-17
 ```
 
 The full release gate adds `--render`; it runs the canonical template
@@ -88,7 +88,7 @@ PDF/HTML/figure render twice, validates each rendered pass, writes
 manifest:
 
 ```bash
-uv run python scripts/quality_gate.py --as-of 2026-07-17 --render
+uv run --extra dev python scripts/quality_gate.py --as-of 2026-07-17 --render
 ```
 
 The strict manifest fails closed when a required validation report or rendered
