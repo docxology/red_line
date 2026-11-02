@@ -12,7 +12,7 @@ description = "A personal security boundary and explicit No document for dual-us
 authors = [
     {name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"},
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 # Pure-stdlib package (dataclasses, enum, hashlib, json, datetime, collections);
 # no third-party runtime dependencies. Test-only deps live under [dev] below.
 dependencies = []
