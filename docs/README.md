@@ -69,7 +69,8 @@ Run `uv run python scripts/build_figures.py`, a thin CLI over
 `plates_scholarship.py` for the source-derived plates, `plates_analysis.py` for
 the analysis-derived ones, `diagrams.py` for the schematics, and `registry.py`
 for the single name → generator mapping. The build writes deterministic
-SVG sources, PNG fallbacks, and `output/figures/figure_registry.json`. Eighteen
+SVG sources, PNG fallbacks, and `output/figures/figure_registry.json` (schema 2.0,
+with authored `alt_text` and no retired `alt` field). Eighteen
 figures cover the evidence-gated method, tier floors, canary boundary,
 outcome-precedence ladder, scholarship reading map, scholarship-transfer matrix,
 historical four-line orientation, the explicit improvement loop that connects

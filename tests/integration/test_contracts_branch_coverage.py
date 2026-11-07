@@ -591,7 +591,7 @@ def test_validate_visual_bindings_detects_binding_and_registry_drift(tmp_path: P
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     record = next(item for item in registry["figures"] if item["label"] == label)
     record["caption"] = "drifted caption"
-    record["alt"] = "drifted alt"
+    record["alt_text"] = "drifted alt"
     record["source_ids"] = ["registry-only-source"]
     registry_path.write_text(json.dumps(registry, indent=2) + "\n", encoding="utf-8")
     with _override_figure_spec(label, source_ids=("unknown-source",)):
@@ -604,6 +604,28 @@ def test_validate_visual_bindings_detects_binding_and_registry_drift(tmp_path: P
     assert f"{label}: unknown source ids: ['unknown-source']" in errors
     assert spec["caption"] != "drifted caption"
     assert spec["alt"] != "drifted alt"
+
+
+def test_validate_visual_bindings_rejects_retired_metadata_contract(tmp_path: Path):
+    _copy_visual_tree(tmp_path)
+    registry_path = tmp_path / "output" / "figures" / "figure_registry.json"
+    pristine = json.loads(registry_path.read_text(encoding="utf-8"))
+    registry = json.loads(json.dumps(pristine))
+    registry["schema_version"] = "1.1"
+    registry_path.write_text(json.dumps(registry), encoding="utf-8")
+    assert "figure registry schema_version must be 2.0" in validate_visual_bindings(tmp_path)
+
+    for remove_canonical in (False, True):
+        registry = json.loads(json.dumps(pristine))
+        record = registry["figures"][0]
+        record["alt"] = record["alt_text"]
+        if remove_canonical:
+            del record["alt_text"]
+        registry_path.write_text(json.dumps(registry), encoding="utf-8")
+        errors = validate_visual_bindings(tmp_path)
+        assert f"{record['label']}: registry contains retired alt field" in errors
+        if remove_canonical:
+            assert f"{record['label']}: registry alt text drifted from figure source" in errors
 
 
 def test_validate_visual_bindings_detects_blank_caption_alt_and_source_less_binding(tmp_path: Path):

@@ -42,6 +42,8 @@ def validate_visual_bindings(root: Path) -> list[str]:
         registry = json.loads(registry_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         return errors + [f"figure registry cannot be read: {exc}"]
+    if registry.get("schema_version") != "2.0":
+        errors.append("figure registry schema_version must be 2.0")
     records = registry.get("figures")
     labels = {record.get("label") for record in records} if isinstance(records, list) else set()
     if labels != expected:
@@ -73,7 +75,9 @@ def validate_visual_bindings(root: Path) -> list[str]:
             errors.append(f"{figure_label}: figure source has no non-empty alt text")
         if registry_record.get("caption") != spec.get("caption"):
             errors.append(f"{figure_label}: registry caption drifted from figure source")
-        if registry_record.get("alt") != spec.get("alt"):
+        if "alt" in registry_record:
+            errors.append(f"{figure_label}: registry contains retired alt field")
+        if registry_record.get("alt_text") != spec.get("alt"):
             errors.append(f"{figure_label}: registry alt text drifted from figure source")
         expected_sources = list(spec.get("source_ids", ()))
         if registry_record.get("source_ids", []) != expected_sources:

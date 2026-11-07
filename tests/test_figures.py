@@ -32,26 +32,14 @@ def _write_executable(path: Path, contents: str) -> Path:
     return path
 
 
-def test_cover_asset_is_configured_and_sized_for_the_title_page() -> None:
+def test_cover_assets_are_sized_for_the_title_page() -> None:
     cover = Path("manuscript/assets/cover/red_line_cover.png")
     hero = Path("manuscript/assets/cover/red_line_hero.png")
-    config = Path("manuscript/config.yaml").read_text(encoding="utf-8")
-    provenance = Path("manuscript/assets/cover/README.md").read_text(encoding="utf-8")
 
     assert cover.exists()
     assert hero.exists()
     assert _png_dimensions(cover) == (1024, 1536)
     assert _png_dimensions(hero) == (1672, 941)
-    assert 'image: "assets/cover/red_line_cover.png"' in config
-    assert 'editorial_hero_image: "assets/cover/red_line_hero.png"' in config
-    assert "portrait" in provenance.lower()
-    assert "provenance" in provenance.lower()
-
-
-def test_pdf_geometry_is_explicitly_tightened_in_project_config() -> None:
-    config = Path("manuscript/config.yaml").read_text(encoding="utf-8")
-
-    assert 'geometry: "left=0.33in,right=0.33in,top=0.55in,bottom=0.55in"' in config
 
 
 def test_build_figures_writes_registered_pngs_and_svg_sources(tmp_path: Path) -> None:
@@ -64,7 +52,6 @@ def test_build_figures_writes_registered_pngs_and_svg_sources(tmp_path: Path) ->
     assert "fig:boundary-instrument-plate" in FIGURE_TEXT
     assert "fig:scholarship-intake-bridge" in FIGURE_TEXT
     assert "fig:tier-monotonicity-lattice" in FIGURE_TEXT
-    assert registry["schema_version"] == "1.1"
     assert registry["figure_count"] == len(FIGURE_TEXT)
     assert {record["label"] for record in registry["figures"]} == set(FIGURE_TEXT)
     by_label = {record["label"]: record for record in registry["figures"]}
@@ -74,7 +61,6 @@ def test_build_figures_writes_registered_pngs_and_svg_sources(tmp_path: Path) ->
         "costanzachock2020design",
         "dignazioklein2020data",
     ]
-    assert by_label["fig:governance-architecture"]["generated_by"] == "red_line.figures::build_figures"
     assert by_label["fig:exemption-evidence-matrix"]["source_ids"] == []
     assert by_label["fig:outcome-coverage-plate"]["source_ids"] == []
     assert by_label["fig:tier-monotonicity-lattice"]["source_ids"] == []
@@ -205,9 +191,7 @@ def test_monotonicity_embed_numbers_re_derive_from_the_live_sweep() -> None:
     # token would make them equal and this sentence vacuous.
     assert report.keyword_count > report.distinct_keyword_count
     assert "`handoff` and `provenance` are each declared by" in body
-    shared = sorted(
-        token for token, count in scope_token_frequency().items() if count > 1
-    )
+    shared = sorted(token for token, count in scope_token_frequency().items() if count > 1)
     assert shared == ["handoff", "provenance"]
     run_claims = re.findall(r"(\d+) executed evaluations", body)
     assert len(run_claims) >= 2, "prose and caption must both state the run count"

@@ -2,6 +2,8 @@
 
 ## 0.5.0 — 2026-11-06
 
+- Emit figure registry schema 2.0 with authored `alt_text` and no retired `alt`
+  field; native visual validation rejects stale schemas and retired fields.
 - Remove `Exemption.satisfied`, `RedLine.satisfied_exemptions`, and
   `RedLine.carved_out`. Use dated `evaluate_action` assessments and their
   classifications/traces for action review; dated applicability remains a
@@ -13,9 +15,9 @@
   prospective examples from current token-silence and structural probes.
 - Use American English in maintained prose, captions, guidance, and owned test
   identifiers; preserve historical records and source identities.
-- Retire documentation-wording and static-count gates instead of re-pinning
-  prose; label the dated inventories as history and use native pytest collection
-  for the current runnable inventory.
+- Retire documentation-wording, figure-config source-copy, and static-count gates
+  instead of re-pinning prose; label the dated inventories as history and use
+  native pytest collection for the current runnable inventory.
 - Distinguish the retained citation cohort from current family membership in
   skill and citation metadata notes; preserve published source identities.
 - Refresh the generated dependency lock without changing declared constraints.

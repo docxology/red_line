@@ -36,7 +36,7 @@ def build_figures(project_root: Path, *, rasterizer: str | Path | None = None) -
                 "label": figure_label,
                 "filename": spec["filename"],
                 "caption": spec["caption"],
-                "alt": spec["alt"],
+                "alt_text": spec["alt"],
                 "source": spec["source"],
                 "source_ids": list(spec.get("source_ids", ())),
                 "generated_by": "red_line.figures::build_figures",
@@ -45,7 +45,7 @@ def build_figures(project_root: Path, *, rasterizer: str | Path | None = None) -
         )
     (figures_dir / "figure_registry.json").write_text(
         json.dumps(
-            {"schema_version": "1.1", "figure_count": len(records), "figures": records},
+            {"schema_version": "2.0", "figure_count": len(records), "figures": records},
             indent=2,
             ensure_ascii=False,
         )
