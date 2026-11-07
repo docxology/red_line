@@ -1,7 +1,7 @@
 # Test folder contract
 
 `tests/` exercises the public API, evaluator, registry, invariants, oversight,
-canary, analysis, figures, and integration contracts. Tests are organised in
+canary, analysis, figures, and integration contracts. Tests are organized in
 subdirectories by subsystem.
 
 ## Root-level test modules
@@ -15,7 +15,6 @@ subdirectories by subsystem.
 - `test_publication_metadata.py` — publication metadata across config and package
 - `test_no_substitutes.py` — no substitute/mock enforcement
 - `test_hardening_contracts.py` — hardening contract enforcement
-- `test_suite_inventory_binding.py` — suite inventory against source
 - `test_witness_envelope.py` — witness envelope export contract
 
 ## Tests by subsystem

@@ -1,5 +1,9 @@
 # release tests - Test-folder guidance
 
+Module-count tables are historical inventory observations from 2026-10-21,
+not current results. Obtain the current inventory from the collection command
+in [README.md](README.md), then run the relevant tests for execution evidence.
+
 This folder covers the `red_line.release` package: provenance digests, the release-input snapshot, manifest assembly and report interpretation, and two-pass artifact comparison. It does not cover the contract validators those functions call, which live under `tests/integration/`, nor the `scripts/` CLIs that wrap them.
 
 ## Test module inventory
@@ -30,7 +34,7 @@ Use real files, real subprocesses, and real callables. Do not add `unittest.mock
 - **A real executable on `PATH`.** `test_determinism.py` writes an executable `uv` shell script under `tmp_path` (named `recording_uv` in the test, because it records each invocation to `$UV_INVOCATION_LOG`), points `PATH` at that directory, and lets `template_render_passes` invoke it for real. This is the same pattern as [test_figures.py](../test_figures.py). Pointing `PATH` at an empty directory instead proves the missing-`uv` path fails loudly.
 - **A real render callable.** `compare_artifacts` takes an injected callable, so the two-pass paths are driven by an ordinary local function that records its invocations and mutates the tree, with no renderer and no sibling template checkout involved.
 
-The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offence tests proving it detects each one.
+The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offense tests proving it detects each one.
 
 ## Coverage note on PDF drift
 

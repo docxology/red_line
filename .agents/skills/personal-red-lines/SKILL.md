@@ -10,7 +10,7 @@ description: >-
   coverage, has a red line changed, propose a red-line edit.
 source: docxology/daf-skills (private)
 public_descriptor: true
-version: 0.4.0
+version: 0.5.0
 ---
 
 # personal-red-lines
@@ -28,9 +28,10 @@ inspectable and their weakening detectable — nothing more.
 ## What the full skill does (`daf-red-line` in `docxology/daf-skills`)
 
 1. **Evaluate** — wrap `red_line.evaluate_action` to classify a proposed engagement as
-   compliant / requires-modification / non-compliant, with reasons.
+   insufficient-information / outside-scope / compliant / requires-modification /
+   non-compliant, with reasons.
 2. **Review** — produce a durable `ReviewFinding` (via `red_line.oversight`) and
-   record any override for the transparency report.
+   record escalation metadata without bypassing a blocking finding.
 3. **Canary** — issue/verify the dated statement over the registry hash and
    surface drift or a warrant-canary trip.
 4. **Analyze** — derive registry-composition, outcome-coverage, and tier-
@@ -66,7 +67,7 @@ context = ActionContext(
 action = ProposedAction(description='Tune an autonomous targeting model',
                         scope=frozenset({'targeting', 'autonomous_weapon'}),
                         context=context)
-assessment = evaluate_action(action)
+assessment = evaluate_action(action, as_of='2026-07-17')
 print(assessment.classification)
 print(sorted(r.value for r in assessment.reason_codes))
 "
@@ -81,6 +82,9 @@ Classification.NON_COMPLIANT
 
 Missing or unverified evidence yields `INSUFFICIENT_INFORMATION`, never a false
 compliant; a scope outside every line yields `OUTSIDE_SCOPE`.
+Use the dated evaluator and retain both classification and decision trace.
+`Exemption.applicable` and `RedLine.applicable_exemptions` are dated context-only
+predicates, not action readiness; support-only helpers have been removed.
 
 ### Registry and coverage analytics (`red_line.analysis`)
 
@@ -181,15 +185,12 @@ average, or merge it across lines.
 
 ## Line-set orientation
 
-Red Line is one of four standalone works — the line **set** (never "suite"):
-Red Line (what must be refused), Black Line (strong concise work), Golden Line
-(higher direction), White Line (what is absent or withheld). They share no
-prose, registry entries, or code. Each is its own repository —
-`docxology/black_line`, `docxology/golden_line`, `docxology/white_line` — and
-the set's declaration, ordering, and non-overlap contract are published in the
-companion `line_set` work at <https://github.com/docxology/line_set>. A sixth
-companion, `witness_register` (<https://github.com/docxology/witness_register>),
-co-registers each line's report envelopes without aggregating them.
+The original four-instrument orientation used Red, Black, Golden, and White.
+That is historical framing, not current membership. The current eight-color
+declaration and ordering belong to <https://github.com/docxology/line_set>.
+Each instrument remains independent. Line Set is the reader companion;
+Witness Register (<https://github.com/docxology/witness_register>) co-registers
+report envelopes without aggregating their native conclusions.
 
 ## Boundary
 

@@ -82,11 +82,11 @@ limit is a property of the instrument, not of the separation.
 
 ## Where the companion works are
 
-Red Line is the first of four instruments and answers only *what must be
-refused*. Black Line asks how to do strong, concise work; Golden Line asks what
-higher direction is worth reaching toward; White Line records what is absent or
-withheld. A fifth work, `line_set`, is a thin reader that declares the set. Each
-is its own repository:
+Red Line answers only *what must be refused*. In the original historical
+four-instrument orientation, Black Line asks how to do strong, concise work;
+Golden Line asks what higher direction is worth reaching toward; White Line
+records what is absent or withheld. These references are not an exhaustive
+current membership list:
 
 - <https://github.com/docxology/black_line>
 - <https://github.com/docxology/golden_line>
@@ -96,13 +96,12 @@ is its own repository:
 Red Line does not import, depend on, or defer to any of them, and none of them
 needs to be present for anything in this repository to run.
 
-The set's relationship was first written down in a short internal note,
-`docs/line-set.md`, in the author's private projects tree. It is unpublished and
-does not travel with this repository, so it is cited by name rather than linked:
-a relative path out of the repository root resolves to nothing for anyone
-holding only this repository. The acknowledgement stays; the note's prose is
-never pasted into the manuscript in its place, and the durable references are
-the four repositories above.
+The [current Line Set declaration](https://github.com/docxology/line_set)
+declares eight colors: Red, Black, Golden, White, Silver, Blue, Violet, and Green.
+Declaration is distinct from installed or accessible source availability.
+Optional or access-controlled sources need not be present in a standalone
+copy. The reader and Witness Register are companions, not colors. The
+historical orientation remains an acknowledgment, not a combined evaluator.
 
 ## Validation after separation
 
@@ -117,8 +116,8 @@ path out of itself:
 That module is the executable form of this document. It asserts that every
 source file the suite needs is tracked by git (an untracked `conftest.py` is
 invisible to a clone), that no relative markdown link in a tracked file escapes
-the repository root, and that this file exists and still names what a separated
-copy cannot do.
+the repository root, and that generated output is not tracked. It does not
+substitute documentation wording checks for native behavior.
 
 The local gates are necessary and not sufficient. Rendered PDF and HTML output
 must also pass the template's own validation, which needs the external engine

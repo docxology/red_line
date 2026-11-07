@@ -2,7 +2,7 @@
 
 This folder exercises the `red_line.release` package: how a source checkout and a rendered artifact tree become recorded evidence, and how that evidence fails closed when a report is missing, unreadable, or negative.
 
-## Modules
+## Historical module inventory — 2026-10-21
 
 | Module | What it exercises | Collected tests |
 | --- | --- | --- |
@@ -21,7 +21,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. This folder is written to hold `red_line/release/` at full statement and branch coverage; the current full-suite measurement is recorded in the repository [README.md](../../README.md).
+The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. These counts are a historical inventory from `2026-10-21`, not a current result. Use `.venv/bin/python -m pytest tests/release --collect-only -q -o addopts=""` from the repository root for the current inventory; execution and coverage evidence require running the tests.
 
 ## Related
 

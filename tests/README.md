@@ -2,7 +2,15 @@
 
 This folder holds the cross-cutting test suite for the project. The top level covers figures and shared hardening contracts; the subfolders carry the package-area and adversarial partitions.
 
-## Suite layout
+## Historical suite layout — 2026-10-21
+
+The counts and tables below are historical observations of an earlier tree,
+including retired documentation-count tests, not current collection or pass
+results. For the current inventory, run from the repository root:
+
+```bash
+.venv/bin/python -m pytest tests/ --collect-only -q -o addopts=""
+```
 
 ```mermaid
 flowchart TD
@@ -46,7 +54,7 @@ flowchart TD
 | [test_publication_metadata.py](test_publication_metadata.py) | Publication metadata across config and package | 7 |
 | [test_no_substitutes.py](test_no_substitutes.py) | No substitute/mock enforcement | 16 |
 | [test_hardening_contracts.py](test_hardening_contracts.py) | Hardening contract enforcement | 43 |
-| [test_suite_inventory_binding.py](test_suite_inventory_binding.py) | Suite inventory against source | 53 |
+| `test_suite_inventory_binding.py` (retired) | Historical documentation-count gate, removed in the current refinement | 53 |
 | [test_witness_envelope.py](test_witness_envelope.py) | Witness envelope export contract | 24 |
 
 | Area | Path | Collected tests | Notes |
@@ -74,7 +82,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `954` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
+The project gate lives in [pyproject.toml](../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The `954` collected tests recorded on `2026-10-21` are a historical observation, not a current result. Use collection above and the test command to obtain current evidence; execution and coverage results belong in the release packet.
 
 ## Related
 

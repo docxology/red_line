@@ -13,7 +13,7 @@ core reused here; only the subject changes.
 
 Design rule (mirrors the ``template_code_project`` lineage): this package is
 infrastructure-independent — it MUST NOT import ``infrastructure.*``. It is pure
-domain logic with deterministic behaviour and no I/O.
+domain logic with deterministic behavior and no I/O.
 """
 
 from __future__ import annotations

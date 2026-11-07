@@ -101,9 +101,10 @@ action's unknown scope, ambiguity or tier consistency because they do not take
 that action. For action-aware dated applicability, use
 `evaluate_action(action, as_of=date)` and its `decision_trace`; an intake stop
 has an empty trace. Retain its classification alongside exemption IDs: a local
-exemption never compensates for another refusal. The older
-`satisfied`, `satisfied_exemptions` and `carved_out` helpers retain support-only
-semantics for compatibility and are deprecated for readiness decisions.
+exemption never compensates for another refusal. The support-only
+`Exemption.satisfied`, `RedLine.satisfied_exemptions`, and `RedLine.carved_out`
+APIs have been removed; migrate readiness callers to the dated evaluator, not
+to a context-only predicate.
 `has_verified_evidence(kind)` without a date intentionally skips freshness.
 
 Scope matching uses NFKC normalization, a strict ASCII boundary, and an

@@ -33,7 +33,7 @@ def label(
     """Emit one text run, never below the legibility floor.
 
     The floor is applied here rather than trusted at every call site: a figure
-    that draws sub-floor text ships an accessibility claim it cannot honour at
+    that draws sub-floor text ships an accessibility claim it cannot honor at
     print scale, and there are over a hundred call sites. Clamping is not the
     gate — ``tests/test_figure_legibility.py`` measures the emitted SVG against
     the real page geometry and can still fail if the canvas or the manuscript's

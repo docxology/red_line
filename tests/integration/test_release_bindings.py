@@ -15,7 +15,13 @@ from red_line.contracts import (
     validate_source_claims,
     validate_visual_bindings,
 )
-from red_line.release import build_manifest, render_validation, render_source_binding, artifact_hashes, sha256_file
+from red_line.release import (
+    build_manifest,
+    render_validation,
+    render_source_binding,
+    artifact_hashes,
+    sha256_file,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -62,7 +68,7 @@ def test_beacon_metadata_and_registry_bindings_are_complete():
     if missing:
         # Positive control: strict mode must *report* the absence rather than
         # pass silently. Asserting the exact message keeps this branch bound to
-        # the real behaviour instead of degrading into an unconditional skip.
+        # the real behavior instead of degrading into an unconditional skip.
         assert validate_release_bindings(ROOT, require_rendered=True) == [
             f"required rendered surfaces are missing: {missing}"
         ]

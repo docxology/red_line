@@ -2,7 +2,7 @@
 
 This folder exercises the structural invariant battery against the live registry and against planted-bad variants. It proves that each check can fail for a known defect instead of passing vacuously.
 
-## Modules
+## Historical module inventory — 2026-10-21
 
 | Module | What it exercises | Collected tests |
 | --- | --- | --- |
@@ -18,7 +18,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `954` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
+The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. These counts and the former `954`-test suite total are historical observations from `2026-10-21`, not current results. Use `.venv/bin/python -m pytest tests/invariants --collect-only -q -o addopts=""` from the repository root for the current inventory; use the test command above for current execution evidence.
 
 ## Related
 

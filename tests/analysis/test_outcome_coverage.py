@@ -131,7 +131,7 @@ class TestInputValidation:
         with pytest.raises(TypeError):
             run_outcome_coverage(battery=("not a case",))  # type: ignore[arg-type]
 
-    def test_custom_battery_is_honoured(self) -> None:
+    def test_custom_battery_is_honored(self) -> None:
         case = canonical_battery()[1]
         report = run_outcome_coverage(battery=(case,))
         assert len(report.results) == 1

@@ -19,4 +19,4 @@ This folder stores committed fixture data consumed by tests elsewhere in the sui
 
 Keep fixtures as real committed bytes. Do not replace them with `unittest.mock`, `MagicMock`, or `mocker.patch`; use `monkeypatch.setenv` only for environment isolation in the consuming tests. The preferred pattern is [test_scripts.py](../canary/test_scripts.py), which compares real script output to [canary_committed.json](canary_committed.json).
 
-The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offence tests proving it detects each one.
+The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offense tests proving it detects each one.

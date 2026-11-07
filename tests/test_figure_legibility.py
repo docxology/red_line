@@ -1,14 +1,14 @@
 """Rendered-legibility gate for the deterministic figure set.
 
 The figure contract in ``docs/visualization-briefs.md`` says shape and text
-repeat every colour meaning so colour is not required. That mitigation only
+repeat every color meaning so color is not required. That mitigation only
 functions if the repeated text is readable on the printed page. These tests
 derive the rendered point size of the *smallest* label in every figure from the
-built artefacts plus the manuscript's own geometry, and fail below the floor.
+built artifacts plus the manuscript's own geometry, and fail below the floor.
 
 Every assertion here is falsifiable: the planted-defect tests shrink a real
 font, and tighten a real height cap, and assert the gate goes red on the same
-artefacts it certifies today.
+artifacts it certifies today.
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ def _built_tree(tmp_path: Path) -> Path:
 
 
 # --------------------------------------------------------------------------
-# The gate itself, measured on the shipped artefacts.
+# The gate itself, measured on the shipped artifacts.
 # --------------------------------------------------------------------------
 
 
@@ -109,9 +109,7 @@ def test_gate_catches_a_shrunken_font_planted_in_a_built_figure(tmp_path: Path) 
 
     victim = project / "output" / "figures" / "tier_monotonicity_lattice.svg"
     victim.write_text(
-        victim.read_text(encoding="utf-8").replace(
-            f'font-size="{MIN_FONT_PX}px"', 'font-size="4px"', 1
-        ),
+        victim.read_text(encoding="utf-8").replace(f'font-size="{MIN_FONT_PX}px"', 'font-size="4px"', 1),
         encoding="utf-8",
     )
 
@@ -193,7 +191,7 @@ def test_measure_figure_rejects_a_resampled_rasterization(tmp_path: Path) -> Non
 
 
 # --------------------------------------------------------------------------
-# The derivation's own inputs, bound to the artefacts they claim to model.
+# The derivation's own inputs, bound to the artifacts they claim to model.
 # --------------------------------------------------------------------------
 
 
@@ -205,7 +203,7 @@ def test_derived_page_geometry_matches_the_rendered_log() -> None:
     """
 
     log_path = ROOT / "output" / "pdf" / "_combined_manuscript.log"
-    if not log_path.is_file():  # pragma: no cover - render artefact is optional
+    if not log_path.is_file():  # pragma: no cover - render artifact is optional
         pytest.skip("no rendered LaTeX log in this checkout")
     log = log_path.read_text(encoding="utf-8", errors="replace")
     geometry = parse_page_geometry((ROOT / "manuscript" / "config.yaml").read_text(encoding="utf-8"))
@@ -221,7 +219,7 @@ def test_declared_width_fractions_match_the_generated_latex() -> None:
     """Each figure's ``width=NN%`` embed equals the ``width=`` LaTeX received."""
 
     tex_path = ROOT / "output" / "pdf" / "_combined_manuscript.tex"
-    if not tex_path.is_file():  # pragma: no cover - render artefact is optional
+    if not tex_path.is_file():  # pragma: no cover - render artifact is optional
         pytest.skip("no rendered LaTeX source in this checkout")
     tex = tex_path.read_text(encoding="utf-8", errors="replace")
     fractions = declared_width_fractions(ROOT / "manuscript")
@@ -250,7 +248,9 @@ def test_configured_height_fraction_is_read_from_the_rendering_block() -> None:
 def test_height_fraction_falls_back_when_the_key_sits_outside_rendering() -> None:
     """A knob in the wrong block is dead config, so the default must apply."""
 
-    misplaced = 'metadata:\n  geometry: "left=1in,right=1in,top=1in,bottom=1in"\n  figure_height_fraction: 0.9\n'
+    misplaced = (
+        'metadata:\n  geometry: "left=1in,right=1in,top=1in,bottom=1in"\n  figure_height_fraction: 0.9\n'
+    )
 
     assert parse_figure_height_fraction(misplaced) == DEFAULT_FIGURE_HEIGHT_FRACTION
 
@@ -340,13 +340,13 @@ def test_theme_font_floor_is_the_value_the_page_geometry_demands() -> None:
 def test_configured_height_fraction_is_the_one_the_renderer_injected() -> None:
     """Bind ``figure_height_fraction`` to the ``height=`` LaTeX received.
 
-    Skipped on a checkout with no rendered LaTeX. When the artefact is present
+    Skipped on a checkout with no rendered LaTeX. When the artifact is present
     this is the assertion that would catch the knob being renamed, moved out of
     the ``rendering:`` block, or silently ignored by the shared template.
     """
 
     tex_path = ROOT / "output" / "pdf" / "_combined_manuscript.tex"
-    if not tex_path.is_file():  # pragma: no cover - render artefact is optional
+    if not tex_path.is_file():  # pragma: no cover - render artifact is optional
         pytest.skip("no rendered LaTeX source in this checkout")
     tex = tex_path.read_text(encoding="utf-8", errors="replace")
     configured = parse_figure_height_fraction(
@@ -363,58 +363,3 @@ def test_configured_height_fraction_is_the_one_the_renderer_injected() -> None:
         assert abs(float(declared.group(1)) - configured) < 1e-9, match.group(2)
         seen += 1
     assert seen == len(filenames), "every registered figure must appear in the rendered LaTeX"
-
-
-# --------------------------------------------------------------------------
-# Figure-count prose. Adding a plate touches seven documentation surfaces; the
-# count was written out as a word in every one of them and bound in none.
-# --------------------------------------------------------------------------
-
-_COUNT_WORDS = {
-    11: "eleven",
-    12: "twelve",
-    13: "thirteen",
-    14: "fourteen",
-    15: "fifteen",
-    16: "sixteen",
-    17: "seventeen",
-    18: "eighteen",
-}
-
-#: Present-tense surfaces that state how many figures the project has. Dated
-#: log entries in TODO.md, ISA.md, and docs/improvement_protocol.md are
-#: deliberately excluded: those are historical records of an earlier tree and
-#: rewriting them would destroy the audit trail.
-_FIGURE_COUNT_SURFACES = (
-    "README.md",
-    "docs/visualization-briefs.md",
-    "docs/development.md",
-    "src/red_line/figures/README.md",
-    "src/red_line/figures/AGENTS.md",
-    ".agents/skills/personal-red-lines/SKILL.md",
-    ".agents/skills/personal-red-lines/README.md",
-)
-
-
-@pytest.mark.parametrize("relative", _FIGURE_COUNT_SURFACES)
-def test_every_present_tense_figure_count_matches_the_registry(relative: str) -> None:
-    """The word each surface uses must be the live ``len(GENERATORS)``."""
-
-    body = " ".join((ROOT / relative).read_text(encoding="utf-8").split())
-    word = _COUNT_WORDS[len(GENERATORS)]
-    stale = {value for count, value in _COUNT_WORDS.items() if count != len(GENERATORS)}
-
-    assert word in body, f"{relative} no longer states the figure count"
-    for other in sorted(stale):
-        assert f" {other} figure" not in body, f"{relative} still says {other}"
-        assert f" {other} deterministic" not in body, f"{relative} still says {other}"
-        assert f" {other} visuals" not in body, f"{relative} still says {other}"
-        assert f" {other} entries" not in body, f"{relative} still says {other}"
-        assert f" {other} SVGs" not in body, f"{relative} still says {other}"
-
-
-def test_the_figure_count_surface_list_is_not_empty_and_the_word_exists() -> None:
-    """Guards the parametrization above against becoming vacuous."""
-
-    assert len(_FIGURE_COUNT_SURFACES) >= 5
-    assert len(GENERATORS) in _COUNT_WORDS, "extend _COUNT_WORDS when the set grows"

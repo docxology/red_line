@@ -1,5 +1,9 @@
 # oversight tests - Test-folder guidance
 
+Module-count tables are historical inventory observations from 2026-10-21,
+not current results. Obtain the current inventory from the collection command
+in [README.md](README.md), then run the relevant tests for execution evidence.
+
 This folder covers review-finding creation, finding rendering, authorizations, provenance fields, and transparency aggregation. It does not cover the underlying evaluator classifications themselves; those stay under `tests/evaluation/`.
 
 ## Test module inventory
@@ -20,4 +24,4 @@ This folder covers review-finding creation, finding rendering, authorizations, p
 
 Use real `ReviewAuthorization`, `ReviewFinding`, and evaluator results. Do not add `unittest.mock`, `MagicMock`, or `mocker.patch`; use `monkeypatch.setenv` only for environment isolation. The preferred pattern here is [test_findings.py](test_findings.py), which creates real actions with `tests.helpers.action(...)` and passes them through the real `review_engagement()` function.
 
-The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offence tests proving it detects each one.
+The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offense tests proving it detects each one.

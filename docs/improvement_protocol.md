@@ -244,6 +244,8 @@ without an external canary witness or independent reviewer.
 
 ## Verification result — 2026-07-27, substitution audit
 
+Historical verification record; original wording and spelling retained.
+
 A follow-up pass removed the remaining affordances that let a real thing be
 described as a stand-in, and made the no-mock rule executable rather than
 advisory.

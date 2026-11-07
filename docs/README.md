@@ -72,7 +72,7 @@ for the single name → generator mapping. The build writes deterministic
 SVG sources, PNG fallbacks, and `output/figures/figure_registry.json`. Eighteen
 figures cover the evidence-gated method, tier floors, canary boundary,
 outcome-precedence ladder, scholarship reading map, scholarship-transfer matrix,
-four-line orientation, the explicit improvement loop that connects
+historical four-line orientation, the explicit improvement loop that connects
 deconstruction, evidence, evaluation, recording, revision, the boundary
 instrument plate, scholarship-intake bridge, evaluation decision path, and
 seven analysis-derived views: the exemption evidence matrix, outcome-coverage
@@ -92,7 +92,8 @@ four validators are its siblings in
 [`src/red_line/contracts/`](../src/red_line/contracts/): `source_claims`,
 `claim_register`, `proposed_red_lines`, and `release_bindings`.
 
-Red Line remains the refusal boundary. Black, Golden, and White are separate
-sibling instruments documented by the sidecar line-set map.
+Red Line remains the refusal boundary. The historical four-instrument orientation
+does not exhaust current membership; use the eight-color
+[Line Set declaration](https://github.com/docxology/line_set).
 
 See [AGENTS.md](AGENTS.md) for the working contract.

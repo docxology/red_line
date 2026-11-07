@@ -7,7 +7,7 @@ fixtures is run through the real :func:`~red_line.evaluation.evaluator.evaluate_
 (no stand-ins, no patched internals), and the report records which
 :class:`~red_line.model.enums.Classification` each case actually reached.
 
-The harness analyses the existing public API; it does not alter evaluator
+The harness analyzes the existing public API; it does not alter evaluator
 semantics, the registry, or any enum vocabulary. Reachability of an outcome is
 a structural property of the evaluator's control flow — it is NOT evidence
 that any real engagement was safe, lawful, or correctly described, and a

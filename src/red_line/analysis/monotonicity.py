@@ -126,7 +126,7 @@ def run_monotonicity_sweep(
 
     Each evaluation uses a fully evidenced fixture intake (the same
     ``_verified_context`` the outcome-coverage battery uses), so the only
-    variable across a row is retained oversight. The function analyses the
+    variable across a row is retained oversight. The function analyzes the
     real evaluator; a future inversion regression surfaces here as a nonzero
     ``inversion_count`` and ``monotone`` False, never as a silent pass.
     """
@@ -192,7 +192,8 @@ def _validate_sweep(lines: tuple[RedLine, ...], as_of: str) -> None:
 
 
 def run_combination_sweep(
-    lines: tuple[RedLine, ...] = PERSONAL_RED_LINES, as_of: str = BATTERY_AS_OF,
+    lines: tuple[RedLine, ...] = PERSONAL_RED_LINES,
+    as_of: str = BATTERY_AS_OF,
 ) -> CombinationReport:
     """Exercise same-line pairs, shared-token pairs, live triggers, tier conflicts and authored aliases."""
 
@@ -216,28 +217,46 @@ def run_combination_sweep(
     rows = []
     count = 0
     for scope in sorted(scopes, key=lambda values: tuple(sorted(values))):
-        verdicts = tuple(evaluate_action(ProposedAction("compound fixture", scope, context, tier),
-                                         tuple(lines), as_of).classification
-                         for tier in TIERS_BY_DESCENDING_OVERSIGHT)
+        verdicts = tuple(
+            evaluate_action(
+                ProposedAction("compound fixture", scope, context, tier), tuple(lines), as_of
+            ).classification
+            for tier in TIERS_BY_DESCENDING_OVERSIGHT
+        )
         rows.append((tuple(sorted(scope)), verdicts))
         count += len(verdicts)
     conflicts = []
     for tier in DeploymentTier:
         for declared in tiers - {tier.value}:
-            result = evaluate_action(ProposedAction("tier conflict fixture", frozenset({"model_release", declared}),
-                                                     context, tier), tuple(lines), as_of)
-            conflicts.append(result.classification is Classification.INSUFFICIENT_INFORMATION
-                             and any(code.value == "tier_scope_conflict" for code in result.reason_codes))
+            result = evaluate_action(
+                ProposedAction(
+                    "tier conflict fixture", frozenset({"model_release", declared}), context, tier
+                ),
+                tuple(lines),
+                as_of,
+            )
+            conflicts.append(
+                result.classification is Classification.INSUFFICIENT_INFORMATION
+                and any(code.value == "tier_scope_conflict" for code in result.reason_codes)
+            )
             count += 1
     aliases = []
     for alias, target in SCOPE_ALIASES.items():
         for anchor in (frozenset(), frozenset({"targeting"})):
-            first = evaluate_action(ProposedAction("alias fixture", anchor | {alias}, context), tuple(lines), as_of)
-            second = evaluate_action(ProposedAction("alias fixture", anchor | {target}, context), tuple(lines), as_of)
-            aliases.append((first.classification, first.implicated) == (second.classification, second.implicated))
+            first = evaluate_action(
+                ProposedAction("alias fixture", anchor | {alias}, context), tuple(lines), as_of
+            )
+            second = evaluate_action(
+                ProposedAction("alias fixture", anchor | {target}, context), tuple(lines), as_of
+            )
+            aliases.append(
+                (first.classification, first.implicated) == (second.classification, second.implicated)
+            )
             count += 2
     return CombinationReport(
-        rows=tuple(rows), evaluation_count=count,
+        rows=tuple(rows),
+        evaluation_count=count,
         monotone=bool(rows) and all(strictness_is_monotone(verdicts) for _, verdicts in rows),
-        conflicts_blocked=all(conflicts), aliases_agree=all(aliases),
+        conflicts_blocked=all(conflicts),
+        aliases_agree=all(aliases),
     )

@@ -25,7 +25,7 @@ It is two things at once:
   staleness of a fresh attestation is the signal), **not** the legal instrument: it
   makes weakening the standard visible and auditable; it does not prevent it.
 
-> Version `0.4.0` · registry SHA-256 `72835fd8…f5aad7` · living document — versioned, revisable, diffable (publicly so once published).
+> Version `0.5.0` · registry SHA-256 `72835fd8…f5aad7` · living document — versioned, revisable, diffable (publicly so once published).
 
 ## What it does
 
@@ -53,10 +53,10 @@ The full architecture — the modular `src/red_line/` package, the import DAG, a
 `tests/` mirrors it — is in [`docs/architecture.md`](docs/architecture.md); the
 [`docs/`](docs/README.md) directory is the complete reference.
 
-## The four-line set
+## Historical four-line orientation
 
 Red Line answers **what must be refused**. It is the security boundary and the
-explicit No document. Three separate works are being developed beside it:
+explicit No document. The original orientation paired it with three works:
 
 - **Black Line** asks how to do strong, concise, intelligent work and research.
 - **Golden Line** asks what higher direction is worth reaching toward.
@@ -65,19 +65,16 @@ explicit No document. Three separate works are being developed beside it:
 
 The works are standalone and non-redundant, and each is its own repository:
 `docxology/black_line`, `docxology/golden_line`, and `docxology/white_line`.
-Their relationship was first written down in a short internal note,
-`docs/line-set.md`, in the author's private projects tree; that note is
-unpublished and does not travel with this repository, so it is named here rather
-than linked — a relative path out of the repository root resolves to nothing for
-anyone holding only this repository. The durable references are the companion
-repositories themselves. Red Line does not borrow the substantive methods of the
-companion works.
+This is a historical four-instrument account, not current exhaustive membership.
+The [Line Set declaration](https://github.com/docxology/line_set) now declares
+eight colors: Red, Black, Golden, White, Silver, Blue, Violet, and Green.
+Declaration does not establish that every source is installed or accessible;
+optional or access-controlled sources must be reported as such.
 
-A fifth work, `line_set`, is a thin reader that declares the set and checks that
-no two lines gave the same spelling to different things. It adds no substantive
-instrument — the set is still four lines — and Red Line does not import, depend
-on, or defer to it. The same acknowledgement, with the shared-token detail, is
-in [`manuscript/02b_line_set_orientation.md`](manuscript/02b_line_set_orientation.md).
+The reader `line_set` and the Witness Register are companions, not additional
+colors. Red Line does not import, depend on, or defer to them. The historical
+orientation and shared-token acknowledgment are developed in
+[`manuscript/02b_line_set_orientation.md`](manuscript/02b_line_set_orientation.md).
 
 ## Quick start
 
@@ -123,7 +120,7 @@ action = ProposedAction(
     scope=frozenset({"targeting", "autonomous_weapon"}),
     context=context,
 )
-print(evaluate_action(action).classification)  # Classification.NON_COMPLIANT
+print(evaluate_action(action, as_of="2026-07-17").classification)  # Classification.NON_COMPLIANT
 ```
 
 ## The red lines

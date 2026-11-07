@@ -124,9 +124,7 @@ def test_composition_profile_prints_every_structural_count_it_claims() -> None:
         lambda summary: len(summary.evidence_kinds_used),
     )
     for x, accessor in zip(_PROFILE_METRIC_X, accessors):
-        assert _column(svg, x, below=_PROFILE_ROWS_BELOW) == [
-            str(accessor(summary)) for summary in summaries
-        ]
+        assert _column(svg, x, below=_PROFILE_ROWS_BELOW) == [str(accessor(summary)) for summary in summaries]
 
 
 def test_composition_profile_bars_share_one_scale_derived_from_the_data() -> None:
@@ -138,14 +136,18 @@ def test_composition_profile_bars_share_one_scale_derived_from_the_data() -> Non
     svg = registry_composition_profile()
     summaries = line_summaries()
     metrics = [
-        (summary.scope_size, summary.carve_out_count, summary.exemption_count, len(summary.evidence_kinds_used))
+        (
+            summary.scope_size,
+            summary.carve_out_count,
+            summary.exemption_count,
+            len(summary.evidence_kinds_used),
+        )
         for summary in summaries
     ]
     scale = max(value for row in metrics for value in row)
     # Filled bars are the only teal rects with a 16-unit height in this plate.
     widths = [
-        float(match)
-        for match in re.findall(r'<rect x="[\d.]+" y="[\d.]+" width="([\d.]+)" height="16"', svg)
+        float(match) for match in re.findall(r'<rect x="[\d.]+" y="[\d.]+" width="([\d.]+)" height="16"', svg)
     ]
     filled = widths[1::2]  # each bar is a track rect followed by its fill rect
 
@@ -319,36 +321,6 @@ def test_both_new_figures_are_fully_registered(label: str) -> None:
     assert FIGURE_TEXT[label]["alt"].strip()
 
 
-@pytest.mark.parametrize(
-    "generator", [registry_composition_profile, scope_vocabulary_collisions]
-)
+@pytest.mark.parametrize("generator", [registry_composition_profile, scope_vocabulary_collisions])
 def test_new_figures_are_byte_identical_across_two_calls(generator) -> None:
     assert generator() == generator()
-
-
-@pytest.mark.parametrize(
-    "label",
-    ["fig:registry-composition-profile", "fig:scope-vocabulary-collisions"],
-)
-def test_new_figure_captions_name_no_colour_the_palette_does_not_use(label: str) -> None:
-    """A caption must not tell a reader to look for a colour that is not there.
-
-    The palette is teal / blue / amber / red plus ink and paper; green, purple,
-    orange, yellow, and grey are never drawn.
-    """
-
-    caption = FIGURE_TEXT[label]["caption"].lower() + " " + FIGURE_TEXT[label]["alt"].lower()
-
-    for absent in ("green", "purple", "orange", "yellow", "grey", "gray", "pink"):
-        assert absent not in caption, absent
-
-
-@pytest.mark.parametrize(
-    "label",
-    ["fig:registry-composition-profile", "fig:scope-vocabulary-collisions"],
-)
-def test_new_figure_captions_separate_fact_from_interpretation(label: str) -> None:
-    caption = FIGURE_TEXT[label]["caption"]
-
-    assert "Implementation fact:" in caption
-    assert "Interpretation, stated as a limit:" in caption

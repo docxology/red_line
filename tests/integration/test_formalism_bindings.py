@@ -187,15 +187,15 @@ def test_the_formalism_scan_set_is_not_empty() -> None:
 
 
 def test_every_formalism_block_carries_a_prefixed_label() -> None:
-    """An unlabelled block is numbered but unreferenceable, so it must fail."""
+    """An unlabeled block is numbered but unreferenceable, so it must fail."""
 
-    unlabelled: list[tuple[str, str]] = []
+    unlabeled: list[tuple[str, str]] = []
     for path in _body_files():
         for kind, label in _blocks(path.read_text(encoding="utf-8")):
             if not re.fullmatch(r"[a-z]+:[a-z0-9-]+", label):
-                unlabelled.append((path.name, kind))
+                unlabeled.append((path.name, kind))
 
-    assert unlabelled == []
+    assert unlabeled == []
 
 
 def test_every_formalism_label_is_declared_exactly_once() -> None:
@@ -272,7 +272,7 @@ def test_the_dangling_reference_guard_rejects_a_planted_typo() -> None:
     assert [label for label in found if label not in declared] == ["prop:tier-monotonic"]
 
 
-def test_the_unlabelled_block_guard_rejects_a_planted_block() -> None:
+def test_the_unlabeled_block_guard_rejects_a_planted_block() -> None:
     """Proof of detection: a block written without a label must be caught."""
 
     planted = '::: {.definition title="No label"}\nbody\n:::\n'
@@ -549,9 +549,7 @@ def test_outcome_precedence_is_exhaustive_and_ordered() -> None:
     registry so the ordering claim is not merely lexical.
     """
 
-    source = (
-        ROOT / "src" / "red_line" / "evaluation" / "evaluator.py"
-    ).read_text(encoding="utf-8")
+    source = (ROOT / "src" / "red_line" / "evaluation" / "evaluator.py").read_text(encoding="utf-8")
     tail = source.split("    if hard_block:", 1)[1]
     order = re.findall(r"classification = Classification\.([A-Z_]+)", tail)
 
@@ -658,9 +656,7 @@ def test_tier_monotonicity_numbers_match_the_executed_sweep() -> None:
     assert report.tiers == TIERS_BY_DESCENDING_OVERSIGHT
 
     text = _formalism()
-    chain = " \\to ".join(
-        "\\mathtt{" + tier.value.replace("_", "\\_") + "}" for tier in report.tiers
-    )
+    chain = " \\to ".join("\\mathtt{" + tier.value.replace("_", "\\_") + "}" for tier in report.tiers)
     assert chain in text
     assert (
         f"is {NUMBER_WORDS[report.evaluation_count]} executed evaluations with "
@@ -673,9 +669,9 @@ def test_tier_monotonicity_numbers_match_the_executed_sweep() -> None:
 def test_normalization_closure_is_executed_not_asserted() -> None:
     """[@prop:normalization-closure]: idempotence, then the fail-closed stop."""
 
-    declared = frozenset(
-        token for line in PERSONAL_RED_LINES for token in line.scope
-    ) | frozenset({"Autonomous-Weapons", "BULK  DATA", "opt-in"})
+    declared = frozenset(token for line in PERSONAL_RED_LINES for token in line.scope) | frozenset(
+        {"Autonomous-Weapons", "BULK  DATA", "opt-in"}
+    )
     once = normalize_scope(declared)
 
     assert normalize_scope(once) == once

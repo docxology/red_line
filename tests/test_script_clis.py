@@ -110,7 +110,7 @@ def test_check_canary_as_of_reaches_the_freshness_check() -> None:
     """A far-future review date must make the attestation read as stale.
 
     If ``--as-of`` were discarded again this call would evaluate against today
-    and exit 0, so this is the assertion that pins the flag to behaviour rather
+    and exit 0, so this is the assertion that pins the flag to behavior rather
     than to a help string.
     """
 
@@ -183,9 +183,7 @@ def test_render_comparison_names_the_absent_toolchain_instead_of_raising(
     copy.mkdir()
     (copy / "scripts").mkdir()
     for name in ("__init__.py", "compare_render_artifacts.py"):
-        (copy / "scripts" / name).write_text(
-            (SCRIPTS / name).read_text(encoding="utf-8"), encoding="utf-8"
-        )
+        (copy / "scripts" / name).write_text((SCRIPTS / name).read_text(encoding="utf-8"), encoding="utf-8")
 
     result = subprocess.run(
         [sys.executable, str(copy / "scripts" / "compare_render_artifacts.py")],

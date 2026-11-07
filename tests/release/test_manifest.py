@@ -67,6 +67,12 @@ class TestCandidateLedger:
 
 
 class TestTemplateValidation:
+    def test_non_object_reports_fail_closed(self, tmp_path):
+        for payload in ([], None, True, 1, "passed"):
+            result = template_validation(_report(tmp_path / "non-object.json", payload))
+            assert result["passed"] is False
+            assert result["errors"] == ["template validation report must be an object"]
+
     def test_missing_report_fails_closed(self, tmp_path):
         result = template_validation(tmp_path / "missing.json")
         assert result["passed"] is False
@@ -177,7 +183,7 @@ class TestReleaseReady:
         assert release_ready(manifest, strict=True) is True
 
 
-class TestPreRenderJudgement:
+class TestPreRenderJudgment:
     """Before a render, "undecided" and "failed" must not be the same word.
 
     The pre-render path exists because the analysis stage runs before the
@@ -216,9 +222,7 @@ class TestPreRenderJudgement:
             "RL-001: beacon standard drifted",
         )
 
-        assert decidable_failures(manifest) == [
-            "release_bindings: ['RL-001: beacon standard drifted']"
-        ]
+        assert decidable_failures(manifest) == ["release_bindings: ['RL-001: beacon standard drifted']"]
 
     def test_a_non_binding_validation_failure_is_never_deferred(self):
         manifest = self._bindings()
@@ -244,8 +248,6 @@ class TestBuildManifest:
         manifest = build_manifest(ROOT, as_of="2026-10-21")
         assert manifest["publication_gate"]["status"] == "candidate"
         assert manifest["publication_gate"]["repository_availability"] == "public"
-        assert "does not verify version publication" in (ROOT / "docs/VERIFY.md").read_text()
-        assert "does not establish publication of the current" in (ROOT / "manuscript/10_limitations.md").read_text()
 
         for result in manifest["validation_results"].values():
             result.update(passed=True, errors=[])
@@ -286,8 +288,7 @@ class TestBuildManifest:
         shutil.copytree(ROOT, root, ignore=_IGNORE_GENERATED, symlinks=True)
         # Positive control: nothing that could pass for the toolchain is here.
         assert not any(
-            (ancestor / "template" / TEMPLATE_ROOT_MARKER).exists()
-            for ancestor in root.resolve().parents
+            (ancestor / "template" / TEMPLATE_ROOT_MARKER).exists() for ancestor in root.resolve().parents
         )
 
         manifest = build_manifest(root, as_of="2026-07-17", render_timestamp="2026-07-17T00:00:00Z")

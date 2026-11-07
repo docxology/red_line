@@ -9,7 +9,7 @@ policy. It is the existing instrument written so that a mismatch is a red test
 rather than an unnoticed sentence.
 
 Two limits carry through every result below. Each is a statement about a local
-program's behaviour on declared inputs, never about the world those inputs
+program's behavior on declared inputs, never about the world those inputs
 describe; and each is scoped to the registry version pinned by the digest in
 [@sec:red-lines], because these are properties of a decision procedure applied
 to particular content.
@@ -110,8 +110,8 @@ that can narrow a line only after the full dated intake gate. The public
 `applicable` helper requires complete dated context evidence, but cannot validate
 an action's scope, tier consistency or ambiguity. Action-aware applicability is
 the evaluator's dated assessment and structured trace; intake stops have no
-trace. The older support-only `satisfied` predicate does not establish review
-readiness.
+trace. Support-only exemption helpers have been removed; no context-only
+predicate establishes action readiness or the factual truth of an exemption.
 :::
 
 ::: {.definition #def:red-line title="Red line"}
@@ -374,7 +374,7 @@ plates. [@fig:evidence-gate-sensitivity] renders the forty-five perturbations
 behind [@prop:evidence-conjunction], and [@fig:exemption-trigger-semantics]
 renders the fifty-eight probes behind [@prop:trigger-mode].
 
-![Degrade one intake dimension and the compliant result is withdrawn. Single-dimension perturbation sweep computed by `red_line.analysis.evidence_sensitivity.run_evidence_sensitivity`: a compliant baseline is re-run through the real `evaluate_action` with exactly one of its nine verified records removed, downgraded, or aged past the freshness window. Every cell reports the classification actually returned and the reason codes it raised, and the trailing column confirms the gate named only the degraded dimension. Conjunctive behaviour is a property of the local gate — not evidence that a verified record is true, that these are the right nine dimensions, or that any real intake was reviewed.](../output/figures/evidence_gate_sensitivity.png){#fig:evidence-gate-sensitivity width=95%}
+![Degrade one intake dimension and the compliant result is withdrawn. Single-dimension perturbation sweep computed by `red_line.analysis.evidence_sensitivity.run_evidence_sensitivity`: a compliant baseline is re-run through the real `evaluate_action` with exactly one of its nine verified records removed, downgraded, or aged past the freshness window. Every cell reports the classification actually returned and the reason codes it raised, and the trailing column confirms the gate named only the degraded dimension. Conjunctive behavior is a property of the local gate — not evidence that a verified record is true, that these are the right nine dimensions, or that any real intake was reviewed.](../output/figures/evidence_gate_sensitivity.png){#fig:evidence-gate-sensitivity width=95%}
 
 ![One convenient word cannot reach an ALL-mode exemption. Trigger-semantics probe computed by `red_line.analysis.trigger_semantics.run_trigger_semantics`: every typed exemption is run through the real `evaluate_action` twice, once declaring a single trigger token beside an anchor from its own line's coverage scope and once declaring the whole trigger set. ANY-mode rows match on every single token; ALL-mode rows match on none and clear their line only when every trigger token is present. A matched trigger is a declaration and never proof — the typed evidence must still be verified, and the plate reports match semantics rather than whether a declaration describes the work honestly.](../output/figures/exemption_trigger_semantics.png){#fig:exemption-trigger-semantics width=95%}
 

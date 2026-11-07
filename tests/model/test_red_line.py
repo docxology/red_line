@@ -30,12 +30,11 @@ def test_has_standard_one_and_two_analogs():
     assert len(canary) >= 2
 
 
-def test_covers_and_carved_out_helpers():
+def test_covers_and_matching_exemptions():
     line = next(rl for rl in PERSONAL_RED_LINES if rl.id == "s1-human-control-force")
     assert line.covers(frozenset({"targeting"}))
     assert not line.covers(frozenset({"unrelated"}))
     assert line.matching_exemptions(frozenset({"logistics"}))
-    assert not line.carved_out(frozenset({"logistics"}))
 
 
 def test_tokens_filters_short_tokens():
@@ -72,6 +71,8 @@ def test_exemptions_have_typed_evidence_requirements():
         for line in PERSONAL_RED_LINES
         for exemption in line.exemptions
     )
+
+
 def test_review_alias_table_rejects_ambiguous_keys_and_cycles():
     from red_line.model.red_line import validated_aliases
 
@@ -79,6 +80,14 @@ def test_review_alias_table_rejects_ambiguous_keys_and_cycles():
         with pytest.raises(ValueError):
             validated_aliases(table)
     assert validated_aliases({"a-b": "a_b", "a_b": "a_b"}) == {"a_b": "a_b"}
+
+
+def test_support_only_exemption_apis_are_removed():
+    from red_line.model import Exemption
+
+    assert not hasattr(Exemption, "satisfied")
+    assert not hasattr(RedLine, "satisfied_exemptions")
+    assert not hasattr(RedLine, "carved_out")
 
 
 @pytest.mark.parametrize("status", list(EvidenceStatus))
@@ -90,6 +99,8 @@ def test_review_dated_applicability_preserves_duplicates(status, recorded_on):
     from red_line.analysis.outcome_coverage import _verified_context
 
     context = _verified_context("2026-10-20")
+    from red_line import Classification, ProposedAction, evaluate_action
+
     duplicate = replace(context.evidence[0], status=status, recorded_on=recorded_on)
     context = replace(context, evidence=context.evidence + (duplicate,))
     line = PERSONAL_RED_LINES[0]
@@ -97,6 +108,15 @@ def test_review_dated_applicability_preserves_duplicates(status, recorded_on):
     ready = recorded_on == "2026-10-20" and status is not EvidenceStatus.CONTRADICTED
     assert context.complete(date(2026, 10, 20)) == ready
     assert bool(line.applicable_exemptions(scope, context, date(2026, 10, 20))) == ready
+    candidate = ProposedAction(
+        "synthetic adjacent use",
+        frozenset({"targeting", "logistics"}),
+        context,
+    )
+    assessment = evaluate_action(candidate, as_of=date(2026, 10, 20))
+    expected = Classification.COMPLIANT if ready else Classification.INSUFFICIENT_INFORMATION
+    assert assessment.classification is expected
+    assert bool(assessment.decision_trace) == ready
     with pytest.raises(TypeError):
         line.exemptions[0].applicable(scope, context, None)
 
@@ -105,6 +125,9 @@ def test_context_predicates_require_action_level_intake_validation():
     from red_line import Classification, DeploymentTier, evaluate_action
     from tests.helpers import action
     from datetime import date
+    from red_line.analysis.outcome_coverage import _verified_context
+
+    review_date = date(2026, 10, 20)
 
     line = next(line for line in PERSONAL_RED_LINES if line.id == "cogsec-integrity")
     for scope, tier, ambiguous in (
@@ -112,8 +135,14 @@ def test_context_predicates_require_action_level_intake_validation():
         ({"cogsec", "education", "connected"}, DeploymentTier.HOSTED, False),
         ({"cogsec", "education"}, DeploymentTier.HOSTED, True),
     ):
-        candidate = action("synthetic", frozenset(scope), tier=tier, ambiguous=ambiguous)
-        assert line.applicable_exemptions(candidate.scope, candidate.context, date.today())
-        result = evaluate_action(candidate, as_of=date.today())
+        candidate = action(
+            "synthetic",
+            frozenset(scope),
+            tier=tier,
+            ambiguous=ambiguous,
+            context=_verified_context(review_date.isoformat()),
+        )
+        assert line.applicable_exemptions(candidate.scope, candidate.context, review_date)
+        result = evaluate_action(candidate, as_of=review_date)
         assert result.classification is Classification.INSUFFICIENT_INFORMATION
         assert not result.decision_trace

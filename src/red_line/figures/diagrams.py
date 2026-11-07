@@ -8,11 +8,27 @@ from red_line.registry.lines import PERSONAL_RED_LINES
 from .svg import circle, figure_header, label, line, paragraph, rect, svg_document
 from .text import FIGURE_TEXT
 from .theme import (
-    AMBER, BLUE, GRID, INK,
-    MUTED, MUTED_FILL, MUTED_FILL_ALT,
-    PALE_AMBER, PALE_AMBER_BG, PALE_BLUE, PALE_RED, PALE_TEAL,
-    PALE_TEAL_BG, PAPER, RED, TABLE_HEADER, TABLE_ROW_ALT,
-    TABLE_ROW_ALT2, TEAL, TEAL_STROKE, WHITE,
+    AMBER,
+    BLUE,
+    GRID,
+    INK,
+    MUTED,
+    MUTED_FILL,
+    MUTED_FILL_ALT,
+    PALE_AMBER,
+    PALE_AMBER_BG,
+    PALE_BLUE,
+    PALE_RED,
+    PALE_TEAL,
+    PALE_TEAL_BG,
+    PAPER,
+    RED,
+    TABLE_HEADER,
+    TABLE_ROW_ALT,
+    TABLE_ROW_ALT2,
+    TEAL,
+    TEAL_STROKE,
+    WHITE,
 )
 
 
@@ -354,7 +370,7 @@ def line_set_compass() -> str:
     body = [
         figure_header(
             FIGURE_TEXT["fig:line-set-compass"]["title"],
-            "Each line has one job; cross-reference is not substitution.",
+            "Historical four-instrument orientation; cross-reference is not substitution.",
         )
     ]
     body.append(rect(50, 145, 1300, 560, fill=WHITE, stroke=GRID, radius=14))
@@ -410,10 +426,8 @@ def line_set_compass() -> str:
         paragraph(
             90,
             575,
-            # The set map (../../docs/line-set.md) states the working order as
-            # refuse → method → aspire → account-for-absence. This caption uses
-            # the same four jobs in noun form, matching the figure's own title.
-            "The set is ordered as refusal → method → aspiration → absence. Each work remains complete when separated from the others.",
+            # Preserve the original four jobs, not an exhaustive membership claim.
+            "Historical order: refusal → method → aspiration → absence. Current membership is declared by Line Set; each instrument remains independent.",
             width=118,
             size=16,
             leading=22,

@@ -36,8 +36,7 @@ def _registry_with(line_id: str, **changes: object) -> tuple[RedLine, ...]:
     """Swap one line of the live registry for a modified copy."""
 
     return tuple(
-        dataclasses.replace(line, **changes) if line.id == line_id else line
-        for line in PERSONAL_RED_LINES
+        dataclasses.replace(line, **changes) if line.id == line_id else line for line in PERSONAL_RED_LINES
     )
 
 
@@ -57,9 +56,7 @@ def test_sweep_covers_every_dimension_and_perturbation_exactly_once():
         (kind, perturbation) for kind in EvidenceKind for perturbation in PERTURBATIONS
     }
     assert report.evaluation_count == len(EvidenceKind) * len(PERTURBATIONS)
-    assert coordinates == [
-        (kind, perturbation) for kind in EvidenceKind for perturbation in PERTURBATIONS
-    ]
+    assert coordinates == [(kind, perturbation) for kind in EvidenceKind for perturbation in PERTURBATIONS]
 
 
 def test_baseline_is_compliant_and_every_perturbation_withdraws_it():
@@ -85,10 +82,7 @@ def test_each_perturbation_raises_the_reason_code_it_is_named_for():
     report = run_evidence_sensitivity()
     signatures = {
         perturbation: {
-            code
-            for cell in report.cells
-            if cell.perturbation == perturbation
-            for code in cell.reason_codes
+            code for cell in report.cells if cell.perturbation == perturbation for code in cell.reason_codes
         }
         for perturbation in PERTURBATIONS
     }
@@ -110,9 +104,7 @@ def test_the_stale_perturbation_sits_just_outside_the_configured_window():
     expected = (review - timedelta(days=DEFAULT_EVIDENCE_MAX_AGE_DAYS + 1)).isoformat()
 
     assert (review - date.fromisoformat(expected)).days == DEFAULT_EVIDENCE_MAX_AGE_DAYS + 1
-    assert report.cell(EvidenceKind.PURPOSE, "stale").reached is (
-        Classification.INSUFFICIENT_INFORMATION
-    )
+    assert report.cell(EvidenceKind.PURPOSE, "stale").reached is (Classification.INSUFFICIENT_INFORMATION)
 
 
 def test_sweep_is_deterministic_across_runs():
@@ -125,7 +117,7 @@ def test_sensitivity_cell_lookup_rejects_an_unswept_coordinate():
 
 
 def test_degradation_rejects_an_unknown_perturbation_name():
-    """Fail closed: an unrecognised label must raise, never be a silent no-op."""
+    """Fail closed: an unrecognized label must raise, never be a silent no-op."""
 
     from red_line.analysis.evidence_sensitivity import _degraded_context
     from red_line.analysis.outcome_coverage import _verified_context
@@ -166,9 +158,7 @@ def test_sweep_rejects_a_malformed_review_date_and_a_non_red_line():
 
 def test_probe_covers_every_typed_exemption_in_a_deterministic_order():
     report = run_trigger_semantics()
-    expected = {
-        (line.id, exemption.id) for line in PERSONAL_RED_LINES for exemption in line.exemptions
-    }
+    expected = {(line.id, exemption.id) for line in PERSONAL_RED_LINES for exemption in line.exemptions}
     seen = [(row.line_id, row.exemption_id) for row in report.rows]
 
     assert set(seen) == expected
@@ -209,7 +199,7 @@ def test_all_mode_rows_are_blocked_on_one_token_and_clear_on_the_full_set():
 
 
 def test_every_anchor_belongs_to_its_own_line_and_is_unshared_when_possible():
-    """The probe's anchor must implicate the line under test, not a neighbour."""
+    """The probe's anchor must implicate the line under test, not a neighbor."""
 
     report = run_trigger_semantics()
     by_id = {line.id: line for line in PERSONAL_RED_LINES}

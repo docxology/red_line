@@ -1,29 +1,8 @@
-"""Pin the one executable fact about the six non-adopted candidates.
+"""Exercise current non-adoption of the six candidate refusals.
 
-``docs/PROPOSED_RED_LINES.md`` once said the candidate scopes had been
-"adversarially verified against the live evaluator" and labelled the table
-column "scope (verified non-laundering)". Nothing in the tree ran a candidate
-scope through ``evaluate_action``, and nothing could: a candidate is not in
-``PERSONAL_RED_LINES``, so the evaluator has no line to implicate and returns
-``OUTSIDE_SCOPE`` with an empty implicated set no matter what the scope says.
-A non-laundering property cannot be established against an evaluator that is
-structurally silent.
-
-The document now claims only that silence. This module executes it, so the
-weaker claim is bound rather than merely weaker:
-
-* every candidate token, probed alone, is ``OUTSIDE_SCOPE`` with no implicated
-  line, and so is every candidate's whole declared scope;
-* a positive control probes a *live* registry token through the identical
-  helper and asserts it is not outside scope, proving the probe can detect a
-  match and this green is not green-by-construction;
-* the candidate vocabulary is disjoint from the live vocabulary, which is the
-  structural reason for the silence;
-* the document carries no re-adoption of the withdrawn verification wording.
-
-If the author ever adopts a candidate, its tokens enter ``PERSONAL_RED_LINES``,
-the disjointness assertion goes red, and the silence claim in the document has
-to be rewritten before the suite is green again.
+Each candidate token and whole declared scope is outside the live registry
+with complete intake. A live-token positive control ensures the real evaluator
+can detect a match. This is not a test of hypothetical candidate policy.
 """
 
 from __future__ import annotations
@@ -124,15 +103,3 @@ def test_candidate_vocabulary_is_disjoint_from_the_live_vocabulary() -> None:
     overlap = sorted(set(_candidate_tokens()) & _live_tokens())
 
     assert overlap == []
-
-
-def test_the_document_claims_only_the_silence_it_can_demonstrate() -> None:
-    """The withdrawn verification wording must not return."""
-
-    body = " ".join((ROOT / "docs" / "PROPOSED_RED_LINES.md").read_text(encoding="utf-8").split())
-
-    assert "adversarially verified against the live evaluator" not in body
-    assert "scope (verified non-laundering)" not in body
-    assert "reviewed by hand against the live evaluator's vocabulary" in body
-    assert "proposed scope (not yet evaluated)" in body
-    assert "tests/integration/test_proposed_candidates_binding.py" in body

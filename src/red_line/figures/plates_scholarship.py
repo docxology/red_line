@@ -8,10 +8,26 @@ from red_line.registry.lines import PERSONAL_RED_LINES
 from .svg import circle, figure_header, label, line, paragraph, path, rect, svg_document, text_lines
 from .text import FIGURE_TEXT
 from .theme import (
-    AMBER, BLUE, CREAM, GOLD_STROKE, GRID, INK,
-    MUTED, PALE_AMBER, PALE_AMBER_BG, PALE_BLUE, PALE_RED,
-    PALE_TEAL, PALE_TEAL_BG, PAPER, RED, TABLE_HEADER,
-    TABLE_ROW_ALT, TEAL, TEAL_STROKE, WHITE,
+    AMBER,
+    BLUE,
+    CREAM,
+    GOLD_STROKE,
+    GRID,
+    INK,
+    MUTED,
+    PALE_AMBER,
+    PALE_AMBER_BG,
+    PALE_BLUE,
+    PALE_RED,
+    PALE_TEAL,
+    PALE_TEAL_BG,
+    PAPER,
+    RED,
+    TABLE_HEADER,
+    TABLE_ROW_ALT,
+    TEAL,
+    TEAL_STROKE,
+    WHITE,
 )
 
 READING_CARDS = [
@@ -262,7 +278,7 @@ def boundary_instrument_plate() -> str:
     body.append(label(922, 174, "OUTSIDE THE WRITE BOUNDARY", size=16, fill=AMBER, weight="700"))
 
     # Three flowing traces turn the intake into a visual instrument rather than
-    # another rectangular flowchart. Each trace remains explicitly labelled.
+    # another rectangular flowchart. Each trace remains explicitly labeled.
     traces = [
         (
             "DECLARATION",
@@ -303,7 +319,7 @@ def boundary_instrument_plate() -> str:
     )
 
     # The live enum gives the plate its semantic compass: no color-only legend
-    # is needed because every node is text-labelled.
+    # is needed because every node is text-labeled.
     body.append(
         label(86, 594, f"{len(dimensions)} REQUIRED INTAKE DIMENSIONS", size=12, fill=BLUE, weight="700")
     )
@@ -341,7 +357,7 @@ def boundary_instrument_plate() -> str:
         "insufficient information": MUTED,
     }
     # Node, then its name placed outward along the same radius with an anchor
-    # chosen by side, so no name overprints the ring, the hub, or a neighbour
+    # chosen by side, so no name overprints the ring, the hub, or a neighbor
     # at the 16-unit font floor. Long names split at their own word break.
     outcome_layout = [
         ((1118, 266), 1118, 238, "middle"),
@@ -356,9 +372,7 @@ def boundary_instrument_plate() -> str:
         words = outcome.split(" ")
         parts = [outcome] if len(outcome) <= 14 else [words[0], " ".join(words[1:])]
         for part_index, part in enumerate(parts):
-            body.append(
-                label(label_x, label_y + part_index * 22, part, size=16, fill=INK, anchor=anchor)
-            )
+            body.append(label(label_x, label_y + part_index * 22, part, size=16, fill=INK, anchor=anchor))
     body.append(path("M 1215 486 C 1275 522, 1265 578, 1198 610", stroke=AMBER, width=3, dash=True))
     body.append(circle(1198, 610, 9, fill=AMBER, stroke=PALE_AMBER_BG, width=3))
     body.append(label(1217, 615, "external prior", size=16, fill=AMBER, weight="700"))

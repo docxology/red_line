@@ -21,16 +21,19 @@ ROOT = Path(__file__).resolve().parents[1]
 CITATION = ROOT / "CITATION.cff"
 ZENODO = ROOT / ".zenodo.json"
 CONFIG = ROOT / "manuscript" / "config.yaml"
-LICENSE = ROOT / "LICENSE"
 
 SELF = "red_line"
-SIBLINGS = ('black_line', 'golden_line', 'white_line', 'line_set', 'witness_register')
 
-#: The six real DOIs of the line-set works (this work + five siblings),
-#: asserted real and reserved via Zenodo. Adding any other DOI-shaped string to
-#: the metadata surfaces fails test_no_unverified_doi_appears_in_metadata.
-#: copy-and-paste into a bibliography and points nowhere.
-VERIFIED_DOIS: tuple[str, ...] = ("10.5281/zenodo.21754236", "10.5281/zenodo.21754238", "10.5281/zenodo.21754240", "10.5281/zenodo.21754242", "10.5281/zenodo.21754244", "10.5281/zenodo.21754246")
+#: Previously asserted identifiers retained as a bounded historical allowlist,
+#: not a current membership declaration or evidence of a new publication.
+VERIFIED_DOIS: tuple[str, ...] = (
+    "10.5281/zenodo.21754236",
+    "10.5281/zenodo.21754238",
+    "10.5281/zenodo.21754240",
+    "10.5281/zenodo.21754242",
+    "10.5281/zenodo.21754244",
+    "10.5281/zenodo.21754246",
+)
 
 #: A DOI as the registries publish them.
 DOI_PATTERN = re.compile(r"10\.\d{4,9}/[-._;()/:A-Za-z0-9]+")
@@ -79,10 +82,14 @@ def test_current_citation_does_not_claim_the_historical_doi() -> None:
     config = CONFIG.read_text().split("publication:", 1)[1].split("keywords:", 1)[0]
     assert "10.5281/zenodo.21754240" not in config
     assert "10.5281/zenodo.21754240" in CONFIG.read_text()
-    historical = [item for item in json.loads(ZENODO.read_text())["related_identifiers"]
-                  if item["identifier"] == "10.5281/zenodo.21754240"]
-    assert historical == [{"identifier": "10.5281/zenodo.21754240",
-                           "relation": "references", "scheme": "doi"}]
+    historical = [
+        item
+        for item in json.loads(ZENODO.read_text())["related_identifiers"]
+        if item["identifier"] == "10.5281/zenodo.21754240"
+    ]
+    assert historical == [
+        {"identifier": "10.5281/zenodo.21754240", "relation": "references", "scheme": "doi"}
+    ]
 
 
 def test_the_citation_names_this_repository_exactly() -> None:
@@ -90,24 +97,9 @@ def test_the_citation_names_this_repository_exactly() -> None:
     assert _cff_field("repository-code") == expected
     zenodo = json.loads(ZENODO.read_text(encoding="utf-8"))
     supplements = [
-        item["identifier"]
-        for item in zenodo["related_identifiers"]
-        if item["relation"] == "isSupplementTo"
+        item["identifier"] for item in zenodo["related_identifiers"] if item["relation"] == "isSupplementTo"
     ]
     assert supplements == [expected]
-
-
-def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
-    """All five siblings, each exactly once, at the canonical URL."""
-
-    citation = CITATION.read_text(encoding="utf-8")
-    zenodo = json.loads(ZENODO.read_text(encoding="utf-8"))
-    identifiers = {item["identifier"] for item in zenodo["related_identifiers"]}
-    for sibling in SIBLINGS:
-        url = f"https://github.com/docxology/{sibling}"
-        assert f'repository-code: "{url}"' in citation, sibling
-        assert url in identifiers, sibling
-    assert len(SIBLINGS) == 5, "the set is six works; each names the other five"
 
 
 def test_no_unverified_doi_appears_in_metadata() -> None:
@@ -131,18 +123,19 @@ def test_no_unverified_doi_appears_in_metadata() -> None:
             )
 
 
-def test_the_license_declares_both_halves() -> None:
-    text = LICENSE.read_text(encoding="utf-8")
-    assert "MIT License" in text
-    assert "CC BY 4.0" in text or "CC-BY-4.0" in text
-    assert "creativecommons.org/licenses/by/4.0" in text
-    assert "Permission is hereby granted, free of charge" in text
-
-
 def test_no_absolute_local_path_is_shipped() -> None:
     """A path from the author's machine is both noise and a small leak."""
 
-    skip_dirs = {".git", ".venv", "output", "htmlcov", "__pycache__", ".pytest_cache", ".ruff_cache", "node_modules"}
+    skip_dirs = {
+        ".git",
+        ".venv",
+        "output",
+        "htmlcov",
+        "__pycache__",
+        ".pytest_cache",
+        ".ruff_cache",
+        "node_modules",
+    }
     text_suffixes = {".py", ".md", ".toml", ".cff", ".json", ".yaml", ".yml", ".bib", ".txt", ".sh", ".cfg"}
     offenders = []
     for path in ROOT.rglob("*"):

@@ -133,7 +133,7 @@ asks. The Wassenaar Arrangement maintains a list of dual-use goods and
 technologies that participating states implement in national law
 [@wassenaar2025duallist]. Its structure is instructive twice over. It keys
 control to declared *capability categories* rather than to an assessment of the
-person applying for a licence, which is the same lexical bet Red Line makes and
+person applying for a license, which is the same lexical bet Red Line makes and
 the same one [@sec:limitations] concedes is escapable by description. And its
 2013 addition of "intrusion software" is the reference case for what goes wrong
 when a capability definition is drawn slightly too wide: a category meant to

@@ -15,7 +15,7 @@ real process arguments. It previously parsed a hard-coded empty list whenever
 ``argv`` was ``None`` — the ``__main__`` path — which silently discarded every
 flag the command line carried: ``--as-of`` never reached the freshness check and
 an unknown flag exited 0. ``tests/test_script_clis.py`` now pins the live
-behaviour of both flags through this entrypoint.
+behavior of both flags through this entrypoint.
 """
 
 from __future__ import annotations

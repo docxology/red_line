@@ -106,7 +106,7 @@ class TestFindTemplateRoot:
     """
 
     def test_environment_override_wins_and_is_taken_as_given(self, tmp_path, monkeypatch):
-        # No marker is planted: an explicit operator statement is honoured
+        # No marker is planted: an explicit operator statement is honored
         # verbatim so a differently-shaped checkout stays usable.
         override = tmp_path / "elsewhere" / "template"
         override.mkdir(parents=True)
@@ -142,9 +142,7 @@ class TestFindTemplateRoot:
 
         assert find_template_root(root) is None
 
-    def test_a_standalone_clone_reports_absence_instead_of_a_fictional_path(
-        self, tmp_path, monkeypatch
-    ):
+    def test_a_standalone_clone_reports_absence_instead_of_a_fictional_path(self, tmp_path, monkeypatch):
         """The regression: this is the fresh-clone case the old default got wrong."""
 
         monkeypatch.delenv("RED_LINE_TEMPLATE_ROOT", raising=False)

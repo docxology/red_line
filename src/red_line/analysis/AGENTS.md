@@ -30,7 +30,7 @@ This folder provides read-only analytics over the live registry and evaluator. I
 | `EvidenceSensitivityReport` | <code>class&nbsp;EvidenceSensitivityReport:</code> | Aggregate report for one single-dimension perturbation sweep. | [evidence_sensitivity.py](evidence_sensitivity.py) |
 | `run_trigger_semantics` | <code>def&nbsp;run_trigger_semantics(</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;lines:&nbsp;tuple[RedLine,&nbsp;...]&nbsp;=&nbsp;PERSONAL_RED_LINES,</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;as_of:&nbsp;str&nbsp;=&nbsp;BATTERY_AS_OF,</code><br><code>)&nbsp;-&gt;&nbsp;TriggerSemanticsReport:</code> | Probe every exemption with one trigger token at a time, then with all. | [trigger_semantics.py](trigger_semantics.py) |
 | `TriggerProbe` | <code>class&nbsp;TriggerProbe:</code> | One executed probe of one token subset against one exemption. | [trigger_semantics.py](trigger_semantics.py) |
-| `TriggerRow` | <code>class&nbsp;TriggerRow:</code> | Structural and executed trigger behaviour for one typed exemption. | [trigger_semantics.py](trigger_semantics.py) |
+| `TriggerRow` | <code>class&nbsp;TriggerRow:</code> | Structural and executed trigger behavior for one typed exemption. | [trigger_semantics.py](trigger_semantics.py) |
 | `TriggerSemanticsReport` | <code>class&nbsp;TriggerSemanticsReport:</code> | Aggregate report for one trigger-semantics sweep. | [trigger_semantics.py](trigger_semantics.py) |
 
 ## Import direction

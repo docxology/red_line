@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import date
+
 from red_line import Classification, DeploymentTier, PERSONAL_RED_LINES, evaluate_action
 from tests.helpers import action as make_action
 
@@ -94,7 +96,7 @@ def test_monotonicity_sweep_is_exhaustive_and_has_a_positive_control():
         for line in PERSONAL_RED_LINES:
             if not line.covers(effective):
                 continue
-            if line.carved_out(effective):
+            if line.applicable_exemptions(effective, action.context, date.today()):
                 continue
             if action.tier.oversight_rank < line.max_tier.oversight_rank:
                 needs_mod = True

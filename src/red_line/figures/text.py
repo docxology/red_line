@@ -173,19 +173,20 @@ FIGURE_TEXT = {
     },
     "fig:line-set-compass": {
         "filename": "line_set_compass.png",
-        "title": "Four questions keep refusal, method, aspiration, and absence distinct",
+        "title": "Historical orientation: refusal, method, aspiration, and absence",
         "caption": (
-            "Orientation schematic for the four-line set. Red Line is the refusal "
+            "Historical schematic of the original four-line orientation. Red Line is the refusal "
             "boundary and explicit No document; Black Line is the positive wire "
             "for strong, concise, intelligent work; Golden Line is an aspirational "
             "direction rather than a pass/fail rule; and White Line records what is "
             "absent, withheld, uncertain, or left outside a claim. The colors are "
             "semantic accents, not severity scores. The four works are standalone "
-            "instruments with different registries and evaluators, and the figure "
-            "does not imply that one line can substitute for another."
+            "instruments with different registries and evaluators; this figure is "
+            "not the current membership declaration and does not imply that one "
+            "line can substitute for another."
         ),
-        "alt": "Four labeled panels distinguish Red refusal, Black method, Golden aspiration, and White absence, with arrows showing cross-reference without substitution.",
-        "source": "../../docs/line-set.md (sidecar line-set map) and manuscript/02b_line_set_orientation.md",
+        "alt": "Four labeled historical panels distinguish Red refusal, Black method, Golden aspiration, and White absence, with arrows showing cross-reference without substitution; not a current membership list.",
+        "source": "https://github.com/docxology/line_set and manuscript/02b_line_set_orientation.md",
     },
     "fig:outcome-precedence": {
         "filename": "outcome_precedence_ladder.png",
@@ -261,9 +262,9 @@ FIGURE_TEXT = {
         "title": "A boundary is an instrument: declare, evidence, stop, witness",
         "caption": (
             "Editorial plate generated from the live Red Line registry and evaluator "
-            "interfaces. Three labelled traces — the declaration, the evidence demand, "
+            "interfaces. Three labeled traces — the declaration, the evidence demand, "
             f"and the {_LINE_COUNT}-line commitment boundary — feed a local review; the "
-            f"{_EVIDENCE_KIND_COUNT} required intake dimensions appear as a labelled "
+            f"{_EVIDENCE_KIND_COUNT} required intake dimensions appear as a labeled "
             "field derived from the live evidence-kind enum; "
             "the five evaluator outcomes remain distinct; and the red vertical boundary "
             "separates a locally recorded result from the external witness required for "
@@ -275,7 +276,7 @@ FIGURE_TEXT = {
         "alt": (
             "Art-directed boundary instrument: declaration, evidence, and boundary "
             "traces converge on a local review beside a red commitment line, a "
-            "labelled field lists the required intake dimensions, and five outcome "
+            "labeled field lists the required intake dimensions, and five outcome "
             "nodes with an external prior witness sit beyond the boundary."
         ),
         "source": "src/red_line/registry/lines.py, src/red_line/model/action.py, src/red_line/model/enums.py, and src/red_line/canary/verification.py",
@@ -351,7 +352,7 @@ FIGURE_TEXT = {
         ),
         "alt": (
             "Five battery cases, each flowing through the real evaluator to a "
-            "labelled outcome chip: insufficient information, outside scope, "
+            "labeled outcome chip: insufficient information, outside scope, "
             "compliant, requires modification, and non-compliant, with reason "
             "codes and a five-of-five coverage summary."
         ),
@@ -400,7 +401,7 @@ FIGURE_TEXT = {
             "severity_distribution, tier_floor_distribution, and "
             "unevidenced_exemptions at build time. Each row is one of the "
             f"{_LINE_COUNT} current lines in id order, carrying its severity "
-            "grade and oversight floor as text-labelled chips and four counts "
+            "grade and oversight floor as text-labeled chips and four counts "
             "on one shared bar scale: declared scope tokens, narrative "
             f"carve-outs, typed exemptions, and distinct evidence kinds used. "
             f"The registry splits {_SEVERITY_SPLIT} by severity and "
@@ -470,7 +471,7 @@ FIGURE_TEXT = {
             "the degraded dimension, which is the part a stop signal has to get "
             "right to be usable. Every stop is INSUFFICIENT_INFORMATION: an "
             "information gap, not a policy finding against the work. Conjunctive "
-            "behaviour is a property of the local gate. It is not evidence that a "
+            "behavior is a property of the local gate. It is not evidence that a "
             "VERIFIED record is true, that these are the right dimensions, or "
             "that any real intake was reviewed."
         ),

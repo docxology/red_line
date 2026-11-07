@@ -25,12 +25,22 @@ from red_line.registry import PERSONAL_RED_LINES
 from .svg import circle, figure_header, label, line, paragraph, rect, svg_document
 from .text import FIGURE_TEXT
 from .theme import (
-    AMBER, BLUE, GRID, INK,
-    MUTED, MUTED_FILL,
-    PALE_AMBER, PALE_BLUE,
-    PALE_RED, PALE_TEAL,
-    PALE_TEAL_BG, PAPER, RED,
-    TABLE_ROW_ALT, TEAL, WHITE,
+    AMBER,
+    BLUE,
+    GRID,
+    INK,
+    MUTED,
+    MUTED_FILL,
+    PALE_AMBER,
+    PALE_BLUE,
+    PALE_RED,
+    PALE_TEAL,
+    PALE_TEAL_BG,
+    PAPER,
+    RED,
+    TABLE_ROW_ALT,
+    TEAL,
+    WHITE,
 )
 
 _MONOTONICITY = run_monotonicity_sweep()
@@ -55,9 +65,7 @@ def exemption_evidence_matrix_figure() -> str:
     tail_w = 150
     total_w = label_w + col_w * len(EVIDENCE_KIND_COLUMNS) + tail_w
     header_h = 72
-    body.append(
-        rect(x0, y0, total_w, header_h + row_h * len(rows) + 50, fill=WHITE, stroke=GRID, radius=10)
-    )
+    body.append(rect(x0, y0, total_w, header_h + row_h * len(rows) + 50, fill=WHITE, stroke=GRID, radius=10))
     body.append(label(x0 + 16, y0 + 30, "LINE · EXEMPTION", size=16, fill=MUTED, weight="700"))
     for index, kind in enumerate(EVIDENCE_KIND_COLUMNS):
         x = x0 + label_w + index * col_w
@@ -433,8 +441,8 @@ def tier_monotonicity_lattice() -> str:
     )
 
 
-#: Severity accents. Grade is repeated as text in every chip, so the colour is
-#: an accent and never the encoding — the plate reads unchanged in greyscale.
+#: Severity accents. Grade is repeated as text in every chip, so the color is
+#: an accent and never the encoding — the plate reads unchanged in grayscale.
 _SEVERITY_ACCENTS = {
     "canary": (RED, PALE_RED),
     "absolute": (AMBER, PALE_AMBER),
@@ -489,7 +497,9 @@ def registry_composition_profile(lines: tuple[RedLine, ...] = PERSONAL_RED_LINES
     body.append(label(x0 + 16, y0 + 30, "RED LINE", size=16, fill=MUTED, weight="700"))
     body.append(label(x0 + 16, y0 + 54, "sorted by id", size=16, fill=MUTED))
     body.append(label(x0 + label_w + 16, y0 + 30, "SEVERITY", size=16, fill=MUTED, weight="700"))
-    body.append(label(x0 + label_w + severity_w + 16, y0 + 30, "TIER FLOOR", size=16, fill=MUTED, weight="700"))
+    body.append(
+        label(x0 + label_w + severity_w + 16, y0 + 30, "TIER FLOOR", size=16, fill=MUTED, weight="700")
+    )
     metric_x0 = x0 + label_w + severity_w + tier_w
     for index, (heading, subheading, _) in enumerate(_COMPOSITION_METRICS):
         x = metric_x0 + index * metric_w
@@ -504,7 +514,9 @@ def registry_composition_profile(lines: tuple[RedLine, ...] = PERSONAL_RED_LINES
         body.append(label(x0 + 16, y + 38, summary.line_id, size=16, fill=TEAL, weight="700"))
         accent, fill = _SEVERITY_ACCENTS[summary.severity]
         body.append(
-            rect(x0 + label_w + 12, y + 14, severity_w - 28, 32, fill=fill, stroke=accent, radius=8, width=1.5)
+            rect(
+                x0 + label_w + 12, y + 14, severity_w - 28, 32, fill=fill, stroke=accent, radius=8, width=1.5
+            )
         )
         body.append(
             label(
@@ -542,9 +554,7 @@ def registry_composition_profile(lines: tuple[RedLine, ...] = PERSONAL_RED_LINES
 
     strip_y = y0 + grid_h + 22
     body.append(rect(x0, strip_y, total_w, 92, fill=WHITE, stroke=GRID, radius=10))
-    severity_text = " · ".join(
-        f"{severity.value.upper()} {count}" for severity, count in severities.items()
-    )
+    severity_text = " · ".join(f"{severity.value.upper()} {count}" for severity, count in severities.items())
     floor_text = " · ".join(
         f"{tier.value.replace('_', '-').upper()} {count}" for tier, count in floors.items()
     )
@@ -665,10 +675,10 @@ def scope_vocabulary_collisions(lines: tuple[RedLine, ...] = PERSONAL_RED_LINES)
                 )
             )
     tail_x = x0 + token_w + line_w * len(line_ids)
-    body.append(label(tail_x + tail_w / 2, y0 + 30, "LINES", size=16, fill=MUTED, weight="700", anchor="middle"))
     body.append(
-        label(tail_x + tail_w / 2, y0 + 54, "declaring it", size=16, fill=MUTED, anchor="middle")
+        label(tail_x + tail_w / 2, y0 + 30, "LINES", size=16, fill=MUTED, weight="700", anchor="middle")
     )
+    body.append(label(tail_x + tail_w / 2, y0 + 54, "declaring it", size=16, fill=MUTED, anchor="middle"))
     body.append(line(x0, y0 + header_h, x0 + total_w, y0 + header_h, stroke=GRID, width=1.5))
 
     for row_index, (token, owners) in enumerate(membership):
@@ -679,7 +689,14 @@ def scope_vocabulary_collisions(lines: tuple[RedLine, ...] = PERSONAL_RED_LINES)
         elif row_index % 2 == 0:
             body.append(rect(x0, y, total_w, row_h, fill=TABLE_ROW_ALT, stroke="none", radius=0, width=0))
         body.append(
-            label(x0 + 16, y + 22, token, size=16, fill=AMBER if collision else INK, weight="700" if collision else "400")
+            label(
+                x0 + 16,
+                y + 22,
+                token,
+                size=16,
+                fill=AMBER if collision else INK,
+                weight="700" if collision else "400",
+            )
         )
         for index, line_id in enumerate(line_ids):
             x = x0 + token_w + index * line_w
@@ -701,9 +718,7 @@ def scope_vocabulary_collisions(lines: tuple[RedLine, ...] = PERSONAL_RED_LINES)
             )
         )
         if collision:
-            body.append(
-                label(tail_x + 62, y + 22, "SHARED", size=16, fill=AMBER, weight="700")
-            )
+            body.append(label(tail_x + 62, y + 22, "SHARED", size=16, fill=AMBER, weight="700"))
 
     strip_y = y0 + grid_h + 22
     strip_h = 54 + 30 * len(shared)
@@ -764,7 +779,7 @@ _VERDICT_SHORT = {
 }
 
 #: Accent and fill per verdict. The verdict is spelled out in every chip, so
-#: colour stays an accent and the plates read unchanged in greyscale.
+#: color stays an accent and the plates read unchanged in grayscale.
 _VERDICT_ACCENTS = {
     Classification.INSUFFICIENT_INFORMATION: (MUTED, MUTED_FILL),
     Classification.OUTSIDE_SCOPE: (BLUE, PALE_BLUE),
@@ -782,9 +797,7 @@ _SIGNATURE_CODES = ("missing_evidence", "unresolved_evidence", "stale_evidence")
 def blocking_signature(codes: Sequence[object]) -> str:
     """Render one cell's blocking signature from its returned reason codes."""
 
-    present = [
-        getattr(code, "value", "") for code in codes if getattr(code, "value", "") in _SIGNATURE_CODES
-    ]
+    present = [getattr(code, "value", "") for code in codes if getattr(code, "value", "") in _SIGNATURE_CODES]
     return " + ".join(name.replace("_evidence", "") for name in present) or "no evidence code"
 
 

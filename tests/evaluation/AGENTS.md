@@ -1,5 +1,9 @@
 # evaluation tests - Test-folder guidance
 
+Module-count tables are historical inventory observations from 2026-10-21,
+not current results. Obtain the current inventory from the collection command
+in [README.md](README.md), then run the relevant tests for execution evidence.
+
 This folder covers `evaluate_action()` and tier monotonicity over real actions. It does not cover review finding rendering or transparency aggregation; those live under `tests/oversight/`.
 
 ## Test module inventory
@@ -20,4 +24,4 @@ This folder covers `evaluate_action()` and tier monotonicity over real actions. 
 
 Use real `ProposedAction` instances and the live registry. Do not add `unittest.mock`, `MagicMock`, or `mocker.patch`; use `monkeypatch.setenv` only for environment isolation. The preferred pattern here is [test_evaluator.py](test_evaluator.py), which builds actions with `tests.helpers.action(...)` and asserts on the real `ActionAssessment` returned by `evaluate_action()`.
 
-The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offence tests proving it detects each one.
+The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offense tests proving it detects each one.

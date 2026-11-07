@@ -12,7 +12,7 @@
   ],
   "license": "cc-by-4.0",
   "access_right": "open",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "keywords": [
     "red lines",
     "AI governance",
@@ -88,5 +88,5 @@
       "scheme": "doi"
     }
   ],
-  "notes": "One of six related works (the line set and its witness register). The five sibling DOIs are listed with relation 'cites'. The self-reference DOI is the last verified historical archive, not a DOI assigned to version 0.4.0. Daniel reserves and verifies the successor DOI before depositing that version."
+  "notes": "An independently maintained instrument in the Line Set. The retained sibling DOI citations form a citation cohort, not an exhaustive current membership list; the line_set declaration owns membership. The self-reference DOI is the last verified historical archive, not a DOI assigned to version 0.5.0. Daniel reserves and verifies a successor DOI before depositing that version."
 }

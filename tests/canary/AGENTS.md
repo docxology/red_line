@@ -1,5 +1,9 @@
 # canary tests - Test-folder guidance
 
+Module-count tables are historical inventory observations from 2026-10-21,
+not current results. Obtain the current inventory from the collection command
+in [README.md](README.md), then run the relevant tests for execution evidence.
+
 This folder covers canary hashing, issuance, verification, and the `scripts/build_canary.py` and `scripts/check_canary.py` entrypoints. It does not cover cross-surface beacon or release-document bindings; those live under `tests/integration/`.
 
 ## Test module inventory
@@ -22,4 +26,4 @@ This folder covers canary hashing, issuance, verification, and the `scripts/buil
 
 Use real canary statements, real fixture bytes, and real subprocesses. Do not add `unittest.mock`, `MagicMock`, or `mocker.patch`; use `monkeypatch.setenv` only for environment isolation. The preferred pattern here is [test_scripts.py](test_scripts.py), which calls the real script module and a real subprocess, then compares the `--json` output to [canary_committed.json](../fixtures/canary_committed.json).
 
-The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offence tests proving it detects each one.
+The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offense tests proving it detects each one.

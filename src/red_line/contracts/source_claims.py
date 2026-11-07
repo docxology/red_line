@@ -92,7 +92,7 @@ def _distinct_ledger_rows(method: str) -> int:
 
 
 def _record_count_errors(counts: object, records: list, method: str) -> list[str]:
-    """Re-derive the published source and row counts from the artefacts.
+    """Re-derive the published source and row counts from the artifacts.
 
     The manuscript states both numbers; if they were only stored here, a
     hand-edit could make the ledger agree with a wrong sentence.

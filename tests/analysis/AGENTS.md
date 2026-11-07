@@ -1,5 +1,9 @@
 # analysis tests - Test-folder guidance
 
+Module-count tables are historical inventory observations from 2026-10-21,
+not current results. Obtain the current inventory from the collection command
+in [README.md](README.md), then run the relevant tests for execution evidence.
+
 This folder covers analysis reports and their derived counts. It does not cover manuscript prose bindings or release-surface validation; those live under `tests/integration/`.
 
 ## Test module inventory
@@ -22,4 +26,4 @@ This folder covers analysis reports and their derived counts. It does not cover 
 
 Use the live registry and the real analysis functions. Do not add `unittest.mock`, `MagicMock`, or `mocker.patch`; use `monkeypatch.setenv` only for environment isolation. The preferred pattern here is [test_outcome_coverage.py](test_outcome_coverage.py), which runs `run_outcome_coverage()` against `PERSONAL_RED_LINES` and checks the returned classifications and reason codes directly.
 
-The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offence tests proving it detects each one.
+The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offense tests proving it detects each one.

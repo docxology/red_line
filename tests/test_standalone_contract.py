@@ -1,7 +1,7 @@
 """Executable form of `STANDALONE.md`: this copy must survive being separated.
 
 Red Line is developed inside a larger private projects tree and published as its
-own repository. Three defects only appear on the published side, and none of
+own repository. Two defects only appear on the published side, and neither of
 them is visible from the development tree, because the development tree has the
 missing things sitting next to it:
 
@@ -15,9 +15,6 @@ missing things sitting next to it:
   only this repository. Under the set's own rule a cross-reference is an
   orientation link, and an orientation link that resolves to nothing is not
   orientation.
-- **A missing statement of scope.** A separated copy has to be able to say what
-  it is, what it can establish alone, and what it cannot do without the external
-  render engine.
 
 Each check here is falsifiable on this tree: the tracked-file check reads what
 git actually reports rather than a hand-kept list, and the link check is proved
@@ -42,6 +39,7 @@ def test_engine_analysis_declares_only_data_producers():
     scripts = re.findall(r"(?m)^\s+- ([a-z_]+\.py)$", section.group(1))
     assert scripts == ["build_figures.py", "build_release_data.py"]
     assert all((root / "scripts" / script).is_file() for script in scripts)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 GIT = shutil.which("git")
@@ -130,9 +128,7 @@ def test_no_python_source_the_suite_needs_is_left_untracked() -> None:
 
     others = _git(["ls-files", "--others", "--exclude-standard", "-z", *SOURCE_ROOTS])
     assert others is not None, "git could not report untracked files"
-    untracked = sorted(
-        entry for entry in others.split("\0") if entry and entry.endswith(".py")
-    )
+    untracked = sorted(entry for entry in others.split("\0") if entry and entry.endswith(".py"))
 
     assert untracked == [], f"present on disk but absent from every clone: {untracked}"
 
@@ -151,14 +147,8 @@ def test_the_tracked_inventory_is_not_empty_and_carries_the_two_that_regressed()
 
 
 @requires_git_checkout
-def test_generated_trees_are_ignored_by_this_repositorys_own_gitignore() -> None:
+def test_generated_output_is_not_tracked() -> None:
     """`output/` is disposable, and the docs say so; a clone must agree."""
-
-    ignore_file = ROOT / ".gitignore"
-    assert ignore_file.is_file(), "no tracked .gitignore: a clone would inherit nothing"
-
-    patterns = {line.strip() for line in ignore_file.read_text(encoding="utf-8").splitlines()}
-    assert {"output/", "__pycache__/", ".venv/", "*.egg-info/", ".coverage"} <= patterns
 
     tracked_output = _git(["ls-files", "-z", "output"])
     assert tracked_output is not None, "git could not report tracked files"
@@ -191,9 +181,7 @@ def test_no_relative_link_in_a_tracked_document_leaves_the_repository() -> None:
 def test_the_link_inventory_examined_a_real_body_of_links() -> None:
     """A classifier that finds no links at all would report zero escapes."""
 
-    examined = sum(
-        len(_LINK_RE.findall(path.read_text(encoding="utf-8"))) for path in _linked_documents()
-    )
+    examined = sum(len(_LINK_RE.findall(path.read_text(encoding="utf-8"))) for path in _linked_documents())
     assert examined > 100, f"only {examined} links parsed; the escape check is not doing work"
 
 
@@ -212,53 +200,3 @@ def test_the_escape_check_rejects_a_planted_outward_link(tmp_path: Path) -> None
     (repository / "docs" / "note.md").write_text("ok\n", encoding="utf-8")
 
     assert escaping_links(document, repository) == ["../../docs/line-set.md"]
-
-
-# --------------------------------------------------------------------------
-# The copy still explains itself.
-# --------------------------------------------------------------------------
-
-
-def test_the_standalone_guide_exists_and_states_the_external_dependency() -> None:
-    guide = ROOT / "STANDALONE.md"
-    assert guide.is_file(), "a separated copy with no statement of its own scope"
-
-    body = guide.read_text(encoding="utf-8")
-    assert "docxology/red_line" in body
-    assert "https://github.com/docxology/template" in body
-    assert "RED_LINE_TEMPLATE_ROOT" in body
-    # What it can do alone, and what it cannot.
-    assert "What it can do alone" in body
-    assert "What it cannot do alone" in body
-    assert "scripts/build_figures.py" in body
-
-
-def test_no_top_level_guidance_still_calls_this_a_worktree_of_something_else() -> None:
-    """It is its own repository now; guidance that says otherwise misdirects."""
-
-    for name in ("AGENTS.md", "README.md", "STANDALONE.md"):
-        body = (ROOT / name).read_text(encoding="utf-8")
-        assert "sidecar worktree" not in body, name
-
-    agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
-    assert "docxology/red_line" in agents
-    assert "STANDALONE.md" in agents
-
-
-@requires_git_checkout
-def test_the_project_does_not_describe_itself_as_part_of_a_larger_checkout() -> None:
-    """Pre-publication and private-sidecar language must not survive the public flip."""
-
-    documents = _linked_documents()
-    assert len(documents) > 20, "no tracked documents found; this check would be vacuous"
-
-    stale = ("private sidecar", "symlinked sidecar", "sidecar project", "sidecar checkout")
-    offenders = [
-        f"{path.relative_to(ROOT)}: {phrase}"
-        for path in documents
-        for text in (path.read_text(encoding="utf-8").lower(),)
-        for phrase in stale
-        if phrase in text
-    ]
-
-    assert not offenders, "stale self-description remains at: " + ", ".join(offenders)

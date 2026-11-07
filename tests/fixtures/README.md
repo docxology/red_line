@@ -20,7 +20,7 @@ Use the project venv directly here. In the current managed environment, `uv run`
 
 ## Coverage gate
 
-The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The suite inventory is synchronized with `954` collected tests on `2026-10-21`. Execution and coverage results belong in the release packet.
+The project gate lives in [pyproject.toml](../../pyproject.toml) as `--cov-fail-under=90` over `source = ["red_line"]`. The former `954`-test suite total is a historical observation from `2026-10-21`, not a current result. Use `.venv/bin/python -m pytest tests/ --collect-only -q -o addopts=""` from the repository root for the current inventory; use the fixture-consuming command above for current execution evidence.
 
 ## Related
 

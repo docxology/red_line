@@ -137,20 +137,14 @@ class Exemption:
             return trigger <= action
         return bool(trigger & action)
 
-    def satisfied(self, context: "ActionContext | None", as_of: date | None = None) -> bool:
-        """Deprecated support-only predicate; ``applicable`` adds dated context evidence checks.
-
-        An omitted date deliberately retains historical undated support semantics.
-        A favorable record alone does not resolve duplicates or prove the exception.
-        """
-        if context is None:
-            return False
-        return all(context.has_verified_evidence(kind, as_of) for kind in self.required_evidence)
-
     def applicable(self, action_scope: frozenset[str], context: "ActionContext", as_of: date) -> bool:
         """Dated context-evidence predicate; action scope, tier and ambiguity need evaluator validation."""
 
-        return context.evidence_gate(as_of).ready and self.matches(action_scope) and self.satisfied(context, as_of)
+        return (
+            context.evidence_gate(as_of).ready
+            and self.matches(action_scope)
+            and all(context.has_verified_evidence(kind, as_of) for kind in self.required_evidence)
+        )
 
 
 @dataclass(frozen=True)
@@ -232,25 +226,6 @@ class RedLine:
         """Return explicitly declared exemptions whose trigger is present."""
 
         return tuple(ex for ex in self.exemptions if ex.matches(action_scope))
-
-    def satisfied_exemptions(
-        self,
-        action_scope: frozenset[str],
-        context: "ActionContext | None",
-        as_of: date | None = None,
-    ) -> tuple[Exemption, ...]:
-        """Return matching exemptions whose required evidence is verified."""
-
-        return tuple(ex for ex in self.matching_exemptions(action_scope) if ex.satisfied(context, as_of))
-
-    def carved_out(
-        self,
-        action_scope: frozenset[str],
-        context: "ActionContext | None" = None,
-    ) -> bool:
-        """Deprecated undated support helper; not review readiness or factual applicability."""
-
-        return bool(self.satisfied_exemptions(action_scope, context))
 
     def applicable_exemptions(
         self, action_scope: frozenset[str], context: "ActionContext", as_of: date

@@ -10,7 +10,7 @@ it to the emitted SVG.
 Three tests plant a defect in a copy of the registry and require the plate to
 follow it, so no green here is green-by-construction:
 
-* relabelling an ALL-mode exemption as ANY must flip its single-token row from
+* relabeling an ALL-mode exemption as ANY must flip its single-token row from
   a block to a compliant result;
 * removing an exemption must make the sensitivity plate refuse to render at all,
   because its baseline is no longer compliant;
@@ -55,9 +55,7 @@ def _texts(svg: str) -> list[str]:
 
 
 def _registry_with(line_id: str, **changes: object) -> tuple:
-    return tuple(
-        replace(line, **changes) if line.id == line_id else line for line in PERSONAL_RED_LINES
-    )
+    return tuple(replace(line, **changes) if line.id == line_id else line for line in PERSONAL_RED_LINES)
 
 
 # --------------------------------------------------------------------------
@@ -80,9 +78,7 @@ def test_plate_is_registered_and_captioned(label: str, generator) -> None:
     assert FIGURE_TEXT[label]["source"].startswith("src/red_line/analysis/")
 
 
-@pytest.mark.parametrize(
-    "generator", [evidence_gate_sensitivity, exemption_trigger_semantics]
-)
+@pytest.mark.parametrize("generator", [evidence_gate_sensitivity, exemption_trigger_semantics])
 def test_plate_is_byte_identical_across_two_builds(generator) -> None:
     assert generator() == generator()
 
@@ -137,9 +133,7 @@ def test_blocking_signature_names_only_evidence_codes() -> None:
     assert blocking_signature(()) == "no evidence code"
     assert blocking_signature((AssessmentReasonCode.INTAKE_BLOCKED,)) == "no evidence code"
     assert (
-        blocking_signature(
-            (AssessmentReasonCode.MISSING_EVIDENCE, AssessmentReasonCode.STALE_EVIDENCE)
-        )
+        blocking_signature((AssessmentReasonCode.MISSING_EVIDENCE, AssessmentReasonCode.STALE_EVIDENCE))
         == "missing + stale"
     )
 
@@ -196,7 +190,7 @@ def test_trigger_plate_summary_reproduces_the_executed_counts() -> None:
     )
 
 
-def test_trigger_plate_follows_a_relabelled_exemption_mode() -> None:
+def test_trigger_plate_follows_a_relabeled_exemption_mode() -> None:
     """Planted defect: widen an ALL-mode exemption and require the plate to move."""
 
     line = next(entry for entry in PERSONAL_RED_LINES if entry.id == "s2-untargeted-profiling")

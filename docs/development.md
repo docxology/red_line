@@ -170,9 +170,9 @@ private-file scrubbing.
 adversarial battery, an `integration/` package for cross-module trust-model
 tests, and the root-level modules that sit outside the mirror by design because
 each one checks a property of the whole tree rather than of one module. The
-root-level list below is bound to disk by
-`tests/test_suite_inventory_binding.py`, which is what stopped it from saying
-"two" while seven modules were present:
+root-level list below is a navigation aid, not a count or verification gate.
+For the current runnable inventory, use
+`.venv/bin/python -m pytest tests/ --collect-only -q -o addopts=""`.
 
 | `src/red_line/` module | test package |
 | --- | --- |
@@ -189,7 +189,7 @@ root-level list below is bound to disk by
 | `src/red_line/envelope.py` | `tests/test_witness_envelope.py` |
 | (adversarial, cross-cutting) | `tests/hardening/test_{canary,constructor_rejections,digest,invariants,registry_anchors,scope,staleness}.py` |
 | (cross-module) | `tests/integration/test_beacon_binding.py`, `tests/integration/test_trust_model.py`, `tests/integration/test_manuscript_composition_binding.py`, `tests/integration/test_release_bindings.py`, `tests/integration/test_release_hardening.py` |
-| (root-level, outside the mirror) | `tests/test_figures.py` (figure registry and generators), `tests/test_figure_legibility.py` (rendered point size of every figure's smallest label), `tests/test_new_composition_figures.py` (derivation and planted-defect falsifiability for the two composition plates), `tests/test_decision_surface_figures.py` (derivation and planted-defect falsifiability for the evidence-gate sensitivity sweep and the exemption trigger-semantics probe), `tests/test_no_substitutes.py` (lexical no-mock policy over `src/`, `tests/`, `scripts/`), `tests/test_script_clis.py` (fail-closed argument handling for every `scripts/` entrypoint), `tests/test_suite_inventory_binding.py` (this table and the `tests/` maps, recomputed from a real collection), `tests/test_standalone_contract.py` (the separated-copy contract: tracked sources, no link out of the repository root, and a current `STANDALONE.md`), `tests/test_witness_envelope.py` (the canonical review-finding serialization, its digest, and the common report envelope — determinism, completeness, tamper detection, and the non-claims traveling inside the record), and `tests/test_hardening_contracts.py` (residual multi-concern contract suite — see [`tests/AGENTS.md`](../tests/AGENTS.md) for why it has not been folded into `tests/hardening/`), and `tests/test_publication_metadata.py` (publication-metadata contract: version agreement across four artifacts, exact sibling URLs, no unverified DOI, dual LICENSE, no absolute local paths) |
+| (root-level, outside the mirror) | `tests/test_figures.py`, `tests/test_figure_legibility.py`, `tests/test_new_composition_figures.py`, and `tests/test_decision_surface_figures.py` (figures and real analysis); `tests/test_no_substitutes.py` (no-mock policy); `tests/test_script_clis.py` (native argument handling); `tests/test_standalone_contract.py` (repository boundary); `tests/test_witness_envelope.py` (native serialization and tamper detection); `tests/test_hardening_contracts.py` (residual cross-module contracts); `tests/test_publication_metadata.py` (metadata identity and local-path exclusion) |
 
 `pyproject.toml` sets `pythonpath = ["src", "."]` for pytest, so the package
 imports as `red_line` (`from red_line.canary import registry_hash`) and the test
@@ -200,7 +200,7 @@ git-committed prior attestation the canary scripts anchor against.
 **Where to add a test:** put it in the test module that mirrors the `src/red_line/`
 module you touched. If a change spans modules (e.g. registry content that must
 re-bind against the beacon prose or the canary hash), add it under
-`tests/integration/`. New behaviour must land with the test that would fail
+`tests/integration/`. New behavior must land with the test that would fail
 without it, and every branch you introduce must be covered.
 
 ## No mocks, real objects
@@ -212,7 +212,7 @@ isolate the environment (`setenv`/`delenv` on `PATH`, `VIRTUAL_ENV`, and
 enforced, not just stated: [`tests/test_no_substitutes.py`](../tests/test_no_substitutes.py)
 scans every `.py` file under `src/`, `tests/`, and `scripts/` for the framework
 tokens, the replacing `monkeypatch` forms, and retired substitute branding, and
-carries planted-offence tests proving it detects each one. The policy path is
+carries planted-offense tests proving it detects each one. The policy path is
 deterministic and I/O-free, so tests construct real values and assert on real
 output:
 
@@ -320,7 +320,7 @@ construction. See [`VERIFY.md`](VERIFY.md) for the third-party runbook.
 
 - `src/red_line/` **must never import `infrastructure.*`** and must stay **pure
   stdlib**. This mirrors the `template_code_project` lineage: the package is
-  infrastructure-independent domain logic with deterministic behaviour and no
+  infrastructure-independent domain logic with deterministic behavior and no
   I/O. Any I/O belongs in `scripts/`.
 - The public API is re-exported from
   [`src/red_line/__init__.py`](../src/red_line/__init__.py) — `RedLine`, `DeploymentTier`
@@ -337,7 +337,7 @@ construction. See [`VERIFY.md`](VERIFY.md) for the third-party runbook.
   `envelope_matches_finding`).
   Import from `red_line` (or the submodule), and update `__all__` when you add a
   public symbol.
-- Keep behaviour deterministic: no wall-clock reads inside the hashed content,
+- Keep behavior deterministic: no wall-clock reads inside the hashed content,
   no randomness, no network.
 
 ## Evaluator semantics (for tests you write)

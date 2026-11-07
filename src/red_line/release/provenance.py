@@ -84,7 +84,7 @@ def find_template_root(root: Path) -> Path | None:
     """Locate the external render toolchain, or report that there is none.
 
     ``RED_LINE_TEMPLATE_ROOT`` is an explicit statement by the operator and is
-    honoured verbatim — it is taken as given, not re-validated, so a checkout
+    honored verbatim — it is taken as given, not re-validated, so a checkout
     laid out differently is still usable. Without it the ancestors of ``root``
     are searched for a directory carrying :data:`TEMPLATE_ROOT_MARKER`.
     """
@@ -142,11 +142,13 @@ def render_source_binding(root: Path) -> dict:
     if revision is not None:
         result = subprocess.run(
             ["git", "-C", str(root), "ls-files", "-z"],
-            capture_output=True, check=True,
+            capture_output=True,
+            check=True,
         )
         hashes = {
             os.fsdecode(name): sha256_file(root / os.fsdecode(name))
-            for name in result.stdout.split(b"\0") if name
+            for name in result.stdout.split(b"\0")
+            if name
         }
     template = find_template_root(root)
     return {

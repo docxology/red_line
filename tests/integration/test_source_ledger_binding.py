@@ -84,14 +84,14 @@ def _locator_counts() -> tuple[int, int]:
 
 
 def test_source_count_in_the_prose_re_derives_from_the_ledger_records() -> None:
-    """"39 sources" is the record set, and every record's URL is in a table.
+    """ "39 sources" is the record set, and every record's URL is in a table.
 
     An earlier revision of this test derived 38 by counting *rows* and calling
     them sources. That is one row short of the record set and one row over the
     distinct-row count at the same time: Kukutai and Taylor occupies two rows,
     and the Cugoano row cites two works. Both corrections are asserted here so
     the arithmetic cannot be split again — the prose states 39 sources in 38
-    rows, and each half is recomputed from a different artefact.
+    rows, and each half is recomputed from a different artifact.
     """
 
     index_table, deep_table = _ledger_tables()[:2]
@@ -99,9 +99,7 @@ def test_source_count_in_the_prose_re_derives_from_the_ledger_records() -> None:
     rows = [*index_table, *deep_table]
     record_urls = {record["verified_url"] for record in LEDGER["records"]}
     table_urls = {
-        url
-        for line in (*index_lines, *deep_lines)
-        for url in re.findall(r"https?://[^\s)|\]]+", line)
+        url for line in (*index_lines, *deep_lines) for url in re.findall(r"https?://[^\s)|\]]+", line)
     }
 
     assert len(index_table) == 23
@@ -170,11 +168,7 @@ def test_locator_coverage_prose_matches_the_recomputed_ledger_counts() -> None:
 def test_every_recorded_locator_names_a_real_edition_or_section() -> None:
     """A recorded locator must be more than the sentinel or a citation key."""
 
-    recorded = [
-        record
-        for record in LEDGER["records"]
-        if record["edition_locator"] != LOCATOR_SENTINEL
-    ]
+    recorded = [record for record in LEDGER["records"] if record["edition_locator"] != LOCATOR_SENTINEL]
 
     assert len(recorded) == 22
     for record in recorded:
@@ -188,9 +182,7 @@ def test_no_record_carries_the_old_self_referential_locator() -> None:
     """The exact defect that was shipped must stay impossible to reintroduce."""
 
     for record in LEDGER["records"]:
-        assert record["edition_locator"] != (
-            f"references.bib:{record['source_id']}; docs/research-method.md"
-        )
+        assert record["edition_locator"] != (f"references.bib:{record['source_id']}; docs/research-method.md")
 
 
 # --------------------------------------------------------------------------

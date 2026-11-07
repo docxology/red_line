@@ -1,5 +1,9 @@
 # registry tests - Test-folder guidance
 
+Module-count tables are historical inventory observations from 2026-10-21,
+not current results. Obtain the current inventory from the collection command
+in [README.md](README.md), then run the relevant tests for execution evidence.
+
 This folder covers registry shape, standard-analog presence, and author provenance. It does not cover the deeper invariant battery or release bindings.
 
 ## Test module inventory
@@ -20,4 +24,4 @@ This folder covers registry shape, standard-analog presence, and author provenan
 
 Use the live registry directly. Do not add `unittest.mock`, `MagicMock`, or `mocker.patch`; use `monkeypatch.setenv` only for environment isolation. The preferred pattern here is [test_provenance.py](test_provenance.py), which reads `PERSONAL_RED_LINES` directly and checks each line's `stated_by`, `stated_on`, and first-person standard text.
 
-The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offence tests proving it detects each one.
+The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offense tests proving it detects each one.

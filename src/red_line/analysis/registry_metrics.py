@@ -244,7 +244,7 @@ def scope_token_membership(
     it — the other line is evaluated on its own terms.
 
     Ordering is fully sorted (tokens, then ids within each token) so a caller
-    can write the result straight into a deterministic artefact without
+    can write the result straight into a deterministic artifact without
     re-sorting. No set or dict iteration order reaches the output.
     """
 

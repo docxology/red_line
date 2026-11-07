@@ -35,7 +35,7 @@ The split is by **provenance of the numbers**, not by size. A plate that starts 
 | `tier_ladder` | <code>def&nbsp;tier_ladder()&nbsp;-&gt;&nbsp;str:</code> | Render the deployment-tier ladder SVG. | [diagrams.py](diagrams.py) |
 | `evaluation_path` | <code>def&nbsp;evaluation_path()&nbsp;-&gt;&nbsp;str:</code> | Render the evaluation-path SVG schematic. | [diagrams.py](diagrams.py) |
 | `canary_trust_boundary` | <code>def&nbsp;canary_trust_boundary()&nbsp;-&gt;&nbsp;str:</code> | Render the canary trust-boundary SVG. | [diagrams.py](diagrams.py) |
-| `line_set_compass` | <code>def&nbsp;line_set_compass()&nbsp;-&gt;&nbsp;str:</code> | Render the four-line orientation SVG. | [diagrams.py](diagrams.py) |
+| `line_set_compass` | <code>def&nbsp;line_set_compass()&nbsp;-&gt;&nbsp;str:</code> | Render the historical four-line orientation SVG, not current membership. | [diagrams.py](diagrams.py) |
 | `outcome_precedence` | <code>def&nbsp;outcome_precedence()&nbsp;-&gt;&nbsp;str:</code> | Render the outcome-precedence ladder SVG. | [diagrams.py](diagrams.py) |
 | `improvement_method_loop` | <code>def&nbsp;improvement_method_loop()&nbsp;-&gt;&nbsp;str:</code> | Render the improvement-loop SVG schematic. | [diagrams.py](diagrams.py) |
 | `scholarship_map` | <code>def&nbsp;scholarship_map()&nbsp;-&gt;&nbsp;str:</code> | Render the scholarship reading-map SVG plate. | [plates_scholarship.py](plates_scholarship.py) |

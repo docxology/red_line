@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.5.0 — 2026-11-06
+
+- Remove `Exemption.satisfied`, `RedLine.satisfied_exemptions`, and
+  `RedLine.carved_out`. Use dated `evaluate_action` assessments and their
+  classifications/traces for action review; dated applicability remains a
+  context-evidence predicate, not full action readiness or proof of an exemption.
+- Preserve author policy, refusal noncompensation, typed-tier authority,
+  evidence-first stops, and all six non-adopted candidates.
+- Label the original four-instrument orientation as historical and direct
+  current eight-color membership to the Line Set declaration. Separate candidate
+  prospective examples from current token-silence and structural probes.
+- Use American English in maintained prose, captions, guidance, and owned test
+  identifiers; preserve historical records and source identities.
+- Retire documentation-wording and static-count gates instead of re-pinning
+  prose; label the dated inventories as history and use native pytest collection
+  for the current runnable inventory.
+- Distinguish the retained citation cohort from current family membership in
+  skill and citation metadata notes; preserve published source identities.
+- Refresh the generated dependency lock without changing declared constraints.
+- Interpret non-object template-validation JSON as an explicit failed report,
+  matching the render-report boundary instead of raising `AttributeError`.
+- Cut over current package, manuscript, skill and citation metadata to 0.5.0;
+  preserve issued canaries and historical release packets. No new DOI,
+  independently published canary or current publication render is asserted.
+
 ## 0.4.0 — 2026-10-21
 
 - Reject conflicting deployment-tier declarations before policy matching; derive
@@ -26,9 +51,9 @@
   public availability; green readiness checks do not attest version publication.
 
 See [the review dispositions](docs/review-20261020.md) and the dated
-[candidate packet](docs/releases/v0.4.0.md) for current verification results.
+[candidate packet](docs/releases/v0.4.0.md) for historical verification results.
 The existing DOI remains a historical identifier;
-the new Zenodo version follows the author's reserve-first procedure.
+successor Zenodo versions follow the author's reserve-first procedure.
 
 ## 0.3.0 — 2026-07-29
 

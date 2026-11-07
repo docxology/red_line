@@ -1,12 +1,12 @@
 """Rendered-legibility derivation for the deterministic figure set.
 
-Every figure in this project repeats its colour encoding in text so the plate
-stays readable in greyscale. That mitigation is worthless if the repeated text
+Every figure in this project repeats its color encoding in text so the plate
+stays readable in grayscale. That mitigation is worthless if the repeated text
 is too small to read on the printed page, and until this module existed nothing
 in the tree measured it: the accessibility claim in
 ``docs/visualization-briefs.md`` was asserted, never derived.
 
-This module derives, from artefacts that already exist, the point size at which
+This module derives, from artifacts that already exist, the point size at which
 each figure's *smallest* label lands in the rendered PDF:
 
 ``rendered_pt = min_font_px * rendered_width_pt / canvas_width_px``
@@ -28,7 +28,7 @@ When the height cap binds first, the whole plate shrinks and every label shrinks
 with it — the failure mode this module was written to catch.
 
 Page geometry is derived from ``manuscript/config.yaml`` rather than from a
-build artefact, so the gate runs on a fresh checkout with no rendered PDF
+build artifact, so the gate runs on a fresh checkout with no rendered PDF
 present. Lengths are TeX points (``1in = 72.27pt``), which is the unit both
 ``geometry`` and LaTeX font sizes use; the conversion cancels out of the ratio
 above, but is kept explicit so the intermediate values match the render log.
@@ -208,7 +208,7 @@ def rendered_width_pt(
 ) -> tuple[float, bool]:
     """Return the on-page raster width and whether the height cap bound it.
 
-    Reproduces ``keepaspectratio``: the declared width wins unless honouring it
+    Reproduces ``keepaspectratio``: the declared width wins unless honoring it
     would exceed the height cap, in which case the plate is scaled down until
     its height fits and every label shrinks with it.
     """
@@ -264,7 +264,7 @@ def measure_figure(
 def measure_figure_set(project_root: Path) -> tuple[FigureLegibility, ...]:
     """Measure every registered figure, sorted by label.
 
-    Reads the built ``output/figures/`` artefacts, the manuscript embeds, and
+    Reads the built ``output/figures/`` artifacts, the manuscript embeds, and
     ``manuscript/config.yaml``. Fails closed when a registered figure has no
     embed, no rendered SVG, or no rendered PNG: an unmeasurable figure is a gap
     in the gate, not a pass.
@@ -285,9 +285,7 @@ def measure_figure_set(project_root: Path) -> tuple[FigureLegibility, ...]:
         png_path = figures_dir / filename
         svg_path = figures_dir / filename.replace(".png", ".svg")
         if not png_path.is_file() or not svg_path.is_file():
-            raise FileNotFoundError(
-                f"{label}: build the figures first — expected {svg_path} and {png_path}"
-            )
+            raise FileNotFoundError(f"{label}: build the figures first — expected {svg_path} and {png_path}")
         measured.append(
             measure_figure(
                 label,

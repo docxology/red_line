@@ -80,6 +80,9 @@ describe that current tree, not an earlier snapshot.
 
 ## Log
 
+Historical verification records below retain their original wording and
+spelling. They describe earlier trees, not current membership or verification.
+
 - 2026-08-01 — autonomous intelligence & visualization assessment pass.
   **Made.** (1) Reconciled `tests/test_figures.py:54` to the in-flight
   `manuscript/config.yaml` geometry (`left=0.42in` → `left=0.33in`, the value

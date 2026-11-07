@@ -57,6 +57,8 @@ def template_validation(path: Path) -> dict:
         report = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         return {"passed": False, "errors": [f"template validation report cannot be read: {exc}"]}
+    if not isinstance(report, dict):
+        return {"passed": False, "errors": ["template validation report must be an object"]}
     summary = report.get("summary")
     if not isinstance(summary, dict):
         return {"passed": False, "errors": ["template validation report has no summary"]}

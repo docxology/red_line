@@ -83,7 +83,7 @@ class TriggerProbe:
 
 @dataclass(frozen=True)
 class TriggerRow:
-    """Structural and executed trigger behaviour for one typed exemption.
+    """Structural and executed trigger behavior for one typed exemption.
 
     Attributes:
         line_id: Owning red line's stable id.
@@ -188,9 +188,7 @@ def run_trigger_semantics(
         anchor, anchor_shared = _anchor_for(line, owners)
         for exemption in sorted(line.exemptions, key=lambda entry: entry.id):
             trigger = tuple(sorted(normalize_scope(exemption.trigger_scope)))
-            singles = tuple(
-                _probe(exemption, anchor, (token,), registry, as_of) for token in trigger
-            )
+            singles = tuple(_probe(exemption, anchor, (token,), registry, as_of) for token in trigger)
             full = _probe(exemption, anchor, trigger, registry, as_of)
             evaluation_count += len(singles) + 1
             single_matches = sum(1 for probe in singles if probe.matched)

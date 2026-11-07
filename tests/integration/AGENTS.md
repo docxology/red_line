@@ -1,5 +1,9 @@
 # integration tests - Test-folder guidance
 
+Module-count tables are historical inventory observations from 2026-10-21,
+not current results. Obtain the current inventory from the collection command
+in [README.md](README.md), then run the relevant tests for execution evidence.
+
 This folder covers beacon bindings, contract-validator branch coverage, manuscript number binding, release-surface validation on the live tree, and trust-boundary attacks. It does not unit-test individual package helpers in isolation; those stay in the package-area folders. Fail-closed behavior of the `red_line.release` functions themselves moved to [../release/](../release/AGENTS.md); what stays here is the live-tree binding check and the contract regressions around it.
 
 ## Test module inventory
@@ -30,7 +34,7 @@ This folder covers beacon bindings, contract-validator branch coverage, manuscri
 
 Use real files under `tmp_path`, real JSON payloads, and the packaged validators. Do not add `unittest.mock`, `MagicMock`, or `mocker.patch`; use `monkeypatch.setenv` only for environment isolation. The preferred pattern here is [test_contracts_branch_coverage.py](test_contracts_branch_coverage.py), which writes synthetic repo trees under `tmp_path` and calls the real validator functions over those paths.
 
-The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offence tests proving it detects each one.
+The rule is enforced rather than only stated: [test_no_substitutes.py](../test_no_substitutes.py) scans every `.py` file under `src/`, `tests/`, and `scripts/` for mocking-framework tokens, the replacing `monkeypatch` forms, and retired substitute branding, and carries planted-offense tests proving it detects each one.
 
 ## Invariants
 

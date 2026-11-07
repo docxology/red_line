@@ -1,7 +1,7 @@
-# The four-line set: boundary, method, aspiration, absence {#sec:line-set}
+# Historical four-line orientation: boundary, method, aspiration, absence {#sec:line-set}
 
-Red Line is the first work in a four-line set, but it is not an omnibus theory.
-It is the security boundary and explicit **No document**: a dated record of work
+Red Line began in a four-line orientation; that account is historical, not the
+current exhaustive declaration. It is the security boundary and explicit **No document**: a dated record of work
 the author refuses, the conditions under which a proposed action is reviewed, and
 the limits of a self-authored canary.
 
@@ -22,11 +22,11 @@ The relationship is recorded in the companion `line_set` work
 (<https://github.com/docxology/line_set>), which declares the set and checks
 that no two instruments gave the same spelling to different things.
 
-The distinction is summarized in [@fig:line-set-compass]. The diagram is an
-orientation aid, not a hierarchy: the colors name different jobs, not different
-degrees of moral worth.
+The original distinction is summarized in [@fig:line-set-compass]. The diagram
+is a historical orientation aid, not a current membership list or hierarchy:
+the colors name different jobs, not different degrees of moral worth.
 
-![Four questions keep refusal, method, aspiration, and absence distinct. Orientation schematic for the four-line set: Red Line is the refusal boundary and explicit No document; Black Line is the positive wire for strong, concise, intelligent work; Golden Line is an aspirational direction rather than a pass/fail rule; and White Line records what is absent, withheld, uncertain, or left outside a claim. The colors are semantic accents, not severity scores. The four works are standalone instruments with different registries and evaluators, and the figure does not imply that one line can substitute for another.](../output/figures/line_set_compass.png){#fig:line-set-compass width=95%}
+![Historical orientation: refusal, method, aspiration, and absence. Historical schematic of the original four-line orientation: Red Line is the refusal boundary and explicit No document; Black Line is the positive wire for strong, concise, intelligent work; Golden Line is an aspirational direction rather than a pass/fail rule; and White Line records what is absent, withheld, uncertain, or left outside a claim. The colors are semantic accents, not severity scores. The four works are standalone instruments with different registries and evaluators; this figure is not the current membership declaration and does not imply that one line can substitute for another.](../output/figures/line_set_compass.png){#fig:line-set-compass width=95%}
 
 The current project therefore remains narrow by design. Its questions are:
 
@@ -53,25 +53,27 @@ scope. One is a finding of absence after inspection; the other is a declination
 to inspect. The overlap is declared rather than accidental, and neither sense
 may be read into the other.
 
-A fifth work, `line_set`, is a thin reader that declares the set and checks that
-no two lines gave the same spelling to different things — including the shared
-token just named. It adds no substantive instrument, and Red Line does not
-import, depend on, or defer to it.
+The current [Line Set declaration](https://github.com/docxology/line_set)
+declares eight colors: Red, Black, Golden, White, Silver, Blue, Violet, and Green.
+Declaration does not guarantee installed or accessible sources; optional or
+access-controlled availability is reported separately. The reader `line_set`
+and Witness Register are companions, not colors. The reader adds no
+substantive instrument, and Red Line does not import, depend on, or defer to it.
 
 ## Note on the name
 
 This paper's alchemical stage is **Rubedo**, the reddening — the culminating
 phase of the classical *magnum opus* — and the color openly echoes that opus.
-The set's four colors (black, white, gold, red) name the stages of the
+The original orientation's four colors (black, white, gold, red) name the stages of the
 alchemical work in plain sight. That echo is read here only in Carl Jung's
 symbolic-psychological register, where the *opus* is a map of individuation; it
 is not an empirical, mystical, or causal claim about matter, minds, or this
 instrument. "Green is not proof" applies to a fluent symbolic parallel as much
 as to a passed test. The opus reads rubedo as a culmination, but the name is
 borrowed as symbol, not as rank: Red Line is not the completion of the set nor
-superior to the other three instruments — the four are peers, and Red Line is
-merely the one that answers what to refuse. Note too that the set's working
-order — refuse, method, aspire, absence — is functional, chosen for how the
+superior to the other instruments. The original four are peers, and Red Line is
+merely the one that answers what to refuse. The original working
+order — refuse, method, aspire, absence — was functional, chosen for how the
 instruments are used, and
 does not reenact the classical stage sequence (in which reddening comes last,
 not first). The full framing, with its single Jung citation and the honest
