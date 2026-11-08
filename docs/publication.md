@@ -2,10 +2,10 @@
 
 ## How to cite
 
-Cite version 0.5.0 through its repository until its own DOI is reserved and verified:
+Cite version 0.5.1 through its repository until its own archive identifier is verified:
 
 > Friedman, D. A. (2026). *Personal Red Lines for Development* (version
-> 0.5.0) [Software and manuscript]. GitHub.
+> 0.5.1) [Software and manuscript]. GitHub.
 > <https://github.com/docxology/red_line>
 
 BibTeX:
@@ -14,7 +14,7 @@ BibTeX:
 @software{friedman_red_line_2026,
   author  = {Friedman, Daniel Ari},
   title   = {Personal Red Lines for Development},
-  version = {0.5.0},
+  version = {0.5.1},
   year    = {2026},
   url     = {https://github.com/docxology/red_line}
 }
@@ -25,7 +25,15 @@ BibTeX:
 `tests/test_publication_metadata.py` fails if they disagree. Historical
 identifiers remain separate references rather than current-version identifiers.
 
-## Migrating to 0.5.0
+## Current documentation-only patch
+
+Version 0.5.1 updates current family orientation and descriptive metadata only.
+Native semantics, registry identity, and schemas are unchanged. New reports
+identify their actual current producer; no retained report, canary, source
+capture, or earlier render is relabeled. Current renders and release receipts
+must be produced separately; this source edit is not publication evidence.
+
+## Historical migration to 0.5.0
 
 Use `evaluate_action(action, as_of=...)` for action readiness and retain its
 classification and decision trace. `Exemption.satisfied`,
@@ -56,16 +64,25 @@ Historical render evidence must not be relabeled as a 0.5.0 render.
 ## Persistent Identifiers and Verification
 
 This repository carries an asserted, verified Zenodo DOI (`10.5281/zenodo.21754240`).
-Version 0.5.0 retains that last verified DOI in historical references; no new
-Zenodo version has been reserved or minted by this run. It must not be read as
-confirmation that the 0.5.0 artifacts are deposited there. Daniel reserves the
-successor version DOI before updating the metadata and depositing its render.
+Version 0.5.1 retains that DOI only in historical references. No successor DOI
+is asserted in this source snapshot, and the earlier identifier must not be
+read as confirmation that the 0.5.1 artifacts are deposited there.
 `tests/test_publication_metadata.py` refuses any unverified DOI-shaped string in
 the citation metadata unless that exact DOI is listed as verified inside the test
 itself. A placeholder DOI that renders like a real one is worse than no DOI: it
 survives copy-and-paste into someone else's bibliography and points nowhere.
 
-## Reserving and Minting DOIs (reserve-first order)
+## Authorized automatic publication for this release
+
+On November 8, 2026, the owner authorized this GitHub Release campaign with the
+existing public repositories' Zenodo hooks left active. Inspect the authenticated
+hook state immediately before publication and verify the resulting archive's
+repository, tag, version, and contents. Never prefill a DOI or amend an immutable
+tag to add one learned afterward. PyPI, private-source disclosure, and new
+private-sibling deposit automation remain unauthorized. The manual procedure
+below is an alternative, not a prerequisite for this authorized integration.
+
+## Manual reserve-first DOI publication
 
 1. Create the Zenodo deposition **without publishing it**, and reserve its DOI.
 2. Record the reserved DOI in this repository: add it under `identifiers:` in
@@ -80,11 +97,14 @@ survives copy-and-paste into someone else's bibliography and points nowhere.
 ## The other works
 
 The table retains historical publication references, not an exhaustive current
-membership list or evidence of successor publication. Current membership is the
-eight-color [Line Set declaration](https://github.com/docxology/line_set);
+membership list or evidence of successor publication. Current membership belongs
+to the [Line Set declaration](https://github.com/docxology/line_set);
 the reader and Witness Register are companions, not colors. Native instruments
 remain independent, and the report-envelope schema is aligned by convention
 rather than dependency. Source availability is distinct from declaration.
+Copper's dimensioned resource accounting and Iron's recorded scenario-target
+recovery comparisons neither grant permission nor compensate for refusal.
+Violet, Copper, and Iron sources are access-controlled.
 
 | Work | Role | Repository | DOI |
 | --- | --- | --- | --- |

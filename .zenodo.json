@@ -12,7 +12,7 @@
   ],
   "license": "cc-by-4.0",
   "access_right": "open",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "keywords": [
     "red lines",
     "AI governance",
@@ -88,5 +88,5 @@
       "scheme": "doi"
     }
   ],
-  "notes": "An independently maintained instrument in the Line Set. The retained sibling DOI citations form a citation cohort, not an exhaustive current membership list; the line_set declaration owns membership. The self-reference DOI is the last verified historical archive, not a DOI assigned to version 0.5.0. Daniel reserves and verifies a successor DOI before depositing that version."
+  "notes": "An independently maintained instrument in the Line Set; https://github.com/docxology/line_set owns current membership. Copper records dimensioned resource use, outstanding commitments, and attributed burdens; Iron compares recorded recovery exercises with scenario-specific targets. Neither grants permission or compensates for Red refusal. Violet, Copper, and Iron sources are access-controlled. Retained DOI citations are a historical cohort, not current membership; the self-reference DOI identifies the last verified historical archive, not version 0.5.1. No deposit or new DOI is asserted."
 }

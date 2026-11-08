@@ -10,7 +10,7 @@ description: >-
   coverage, has a red line changed, propose a red-line edit.
 source: docxology/daf-skills (private)
 public_descriptor: true
-version: 0.5.0
+version: 0.5.1
 ---
 
 # personal-red-lines
@@ -186,11 +186,14 @@ average, or merge it across lines.
 ## Line-set orientation
 
 The original four-instrument orientation used Red, Black, Golden, and White.
-That is historical framing, not current membership. The current eight-color
+That is historical framing, not current membership. The current
 declaration and ordering belong to <https://github.com/docxology/line_set>.
 Each instrument remains independent. Line Set is the reader companion;
 Witness Register (<https://github.com/docxology/witness_register>) co-registers
 report envelopes without aggregating their native conclusions.
+Copper's dimensioned resource accounting and Iron's scenario-bound recorded
+recovery comparisons neither grant permission nor compensate for Red refusal.
+Violet, Copper, and Iron sources are access-controlled; membership is not access.
 
 ## Boundary
 

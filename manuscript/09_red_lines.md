@@ -1,7 +1,7 @@
 # The red-line registry {#sec:red-lines}
 
 This is the beacon: the author's personal security boundary and explicit No
-document at version `0.5.0`. The registry is first-person, dated, revisable,
+document at version `0.5.1`. The registry is first-person, dated, revisable,
 and non-exhaustive. It is not a universal ethics code and not a claim made by
 any AI system that assisted with its preparation.
 

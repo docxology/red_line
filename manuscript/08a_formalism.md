@@ -350,10 +350,11 @@ consistent pair, so consistency alone never proves an archive unedited.
 
 ## What binds each proposition
 
-Every row names a test in `tests/integration/test_formalism_bindings.py` that
-re-derives the proposition's content from the code and then asserts the
-manuscript states it. Corrupting the sentence reddens the row; corrupting the
-code reddens the derivation inside it.
+The table points to native behavior and calculation checks in
+`tests/integration/test_formalism_bindings.py`. Authored sentences, copied field
+lists, branch-source order, and test-name wiring are not independent validation.
+The checks exercise declared inputs; the table is a reading aid, not a proof
+that every sentence is verified.
 
 | Proposition | Claim in one line | Verifying test |
 |---|---|---|

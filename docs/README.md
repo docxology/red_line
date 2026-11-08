@@ -94,7 +94,7 @@ four validators are its siblings in
 `claim_register`, `proposed_red_lines`, and `release_bindings`.
 
 Red Line remains the refusal boundary. The historical four-instrument orientation
-does not exhaust current membership; use the eight-color
+does not exhaust current membership; use the current
 [Line Set declaration](https://github.com/docxology/line_set).
 
 See [AGENTS.md](AGENTS.md) for the working contract.

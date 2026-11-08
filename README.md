@@ -25,7 +25,7 @@ It is two things at once:
   staleness of a fresh attestation is the signal), **not** the legal instrument: it
   makes weakening the standard visible and auditable; it does not prevent it.
 
-> Version `0.5.0` · registry SHA-256 `72835fd8…f5aad7` · living document — versioned, revisable, diffable (publicly so once published).
+> Version `0.5.1` · registry SHA-256 `72835fd8…f5aad7` · living document — versioned, revisable, diffable (publicly so once published).
 
 ## What it does
 
@@ -66,10 +66,12 @@ explicit No document. The original orientation paired it with three works:
 The works are standalone and non-redundant, and each is its own repository:
 `docxology/black_line`, `docxology/golden_line`, and `docxology/white_line`.
 This is a historical four-instrument account, not current exhaustive membership.
-The [Line Set declaration](https://github.com/docxology/line_set) now declares
-eight colors: Red, Black, Golden, White, Silver, Blue, Violet, and Green.
-Declaration does not establish that every source is installed or accessible;
-optional or access-controlled sources must be reported as such.
+The [current Line Set declaration](https://github.com/docxology/line_set) owns
+membership. Copper records dimensioned finite resource use, outstanding
+commitments, and attributed burdens; Iron compares recorded recovery exercises
+with scenario-specific targets. Neither grants permission or compensates for a
+Red refusal. Violet, Copper, and Iron have access-controlled sources; declaration
+does not establish installation or access.
 
 The reader `line_set` and the Witness Register are companions, not additional
 colors. Red Line does not import, depend on, or defer to them. The historical
