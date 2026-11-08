@@ -337,7 +337,6 @@ def test_intake_precedence_holds_against_every_registry() -> None:
     )
 
 
-
 def test_evidence_conjunction_matches_the_executed_sweep() -> None:
     """[@prop:evidence-conjunction]: 45 perturbations, all blocked and localized."""
 
@@ -349,7 +348,6 @@ def test_evidence_conjunction_matches_the_executed_sweep() -> None:
     assert report.localized_count == report.evaluation_count
     assert report.conjunctive
     assert {cell.reached for cell in report.cells} == {Classification.INSUFFICIENT_INFORMATION}
-
 
 
 def test_outcome_precedence_is_exhaustive_and_ordered() -> None:
@@ -372,7 +370,6 @@ def test_outcome_precedence_is_exhaustive_and_ordered() -> None:
         assert reached.value.upper() == expected, expected
 
 
-
 def test_outcome_reachability_matches_the_executed_battery() -> None:
     """[@prop:outcome-reachability]: all five reached; the empty registry is not."""
 
@@ -389,7 +386,6 @@ def test_outcome_reachability_matches_the_executed_battery() -> None:
     }
 
 
-
 def test_exemption_evidence_floor_is_derived_from_the_registry() -> None:
     """[@prop:exemption-evidence]: 16 exemptions, minimum two evidence kinds."""
 
@@ -398,7 +394,6 @@ def test_exemption_evidence_floor_is_derived_from_the_registry() -> None:
 
     assert unevidenced_exemptions() == ()
     assert minimum >= 2
-
 
 
 def test_trigger_mode_counts_match_the_executed_probe() -> None:
@@ -421,7 +416,6 @@ def test_trigger_mode_counts_match_the_executed_probe() -> None:
             assert row.single_match_count == len(row.trigger_scope)
 
 
-
 def test_tier_monotonicity_numbers_match_the_executed_sweep() -> None:
     """[@prop:tier-monotone]: 108 evaluations, zero inversions."""
 
@@ -431,7 +425,6 @@ def test_tier_monotonicity_numbers_match_the_executed_sweep() -> None:
     assert report.inversion_count == 0
     assert report.evaluation_count == report.keyword_count * len(TIERS_BY_DESCENDING_OVERSIGHT)
     assert report.tiers == TIERS_BY_DESCENDING_OVERSIGHT
-
 
 
 def test_normalization_closure_is_executed_not_asserted() -> None:
@@ -470,7 +463,6 @@ def test_normalization_closure_is_executed_not_asserted() -> None:
     assert assessment.classification is Classification.INSUFFICIENT_INFORMATION
     assert AssessmentReasonCode.INVALID_SCOPE in assessment.reason_codes
     assert assessment.normalized_scope == ()
-
 
 
 def test_reason_code_vocabulary_is_closed_and_duplicate_free() -> None:
@@ -567,4 +559,3 @@ def test_staleness_exclusive_boundary_is_derived_from_the_code() -> None:
     edge = recorded + timedelta(days=DEFAULT_EVIDENCE_MAX_AGE_DAYS)
     assert record.is_stale(edge) is False
     assert record.is_stale(edge + timedelta(days=1)) is True
-
