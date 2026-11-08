@@ -19,9 +19,13 @@ from red_line.contracts import (
 from .provenance import digest_tree, find_template_root, git_dirty, git_revision, sha256_file
 from .receipt import render_binding_issues
 
-MANIFEST_SCHEMA_VERSION = "1.1"
+MANIFEST_SCHEMA_VERSION = "1.2"
 MANIFEST_FILENAME = "release_manifest.json"
 CANDIDATE_LEDGER = "data/proposed_red_lines.json"
+# Native publication attestations are content, not engine custody catalogs.
+# The engine independently inventories these files and this manifest; hashing
+# its catalogs back into this manifest would create a recursive digest cycle.
+NATIVE_REPORTS = ("render_determinism.json", "render_comparison_binding.json")
 
 
 def _manifest_files(root: Path, directory: str, suffixes: Iterable[str]) -> dict[str, str]:
@@ -66,12 +70,12 @@ def template_validation(path: Path) -> dict:
         return {
             "passed": False,
             "errors": report.get("errors", ["template output validation failed"]),
-            "report_sha256": sha256_file(path),
+            # Engine report bytes belong to engine current-provenance custody.
         }
     return {
         "passed": True,
         "errors": [],
-        "report_sha256": sha256_file(path),
+        # Keep the genuine verdict, without recursively hashing its catalog.
     }
 
 
@@ -223,7 +227,11 @@ def build_manifest(
             **_manifest_files(root, "output/data", (".json",)),
             **_manifest_files(root, "output/pdf", (".pdf",)),
             **_manifest_files(root, "output/web", (".html",)),
-            **_manifest_files(root, "output/reports", (".json", ".md")),
+            **{
+                f"output/reports/{name}": sha256_file(root / "output/reports" / name)
+                for name in NATIVE_REPORTS
+                if (root / "output/reports" / name).is_file()
+            },
         },
         "validation_results": validation,
         "publication_gate": {

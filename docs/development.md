@@ -111,10 +111,25 @@ packet records the image-backed scratch setup, process-scoped fsmonitor setting
 and unchanged engine checks. Detach the scratch volume after the run and retain
 the backing image and evidence.
 
-Manifest schema 1.1 records candidate-version state separately from historical
-public repository availability. Passing readiness checks does not attest that
-the version was tagged, pushed or deposited; record those verified actions in
-the dated packet.
+Manifest schema 1.2 records candidate-version state separately from historical
+public repository availability. It authenticates publication data, PDF, HTML,
+figures, and the native `render_determinism.json` and
+`render_comparison_binding.json` reports. Engine catalogs, validation reports,
+and operational diagnostics belong to the engine's independent current-output
+inventory and rendered-provenance custody, not to this native content digest.
+The native manifest still requires the genuine engine validation verdict,
+without embedding that report's changing digest. This acyclic boundary avoids
+a native-manifest ↔ engine-catalog hash cycle; it does not waive either gate.
+Both native strict readiness and engine Stage04/current provenance must pass
+on the same final output bytes. After writing native reports, refresh the
+engine's complete current-output snapshot with its actual collector, rerun
+Stage04 and write its rendered-provenance receipt, then recheck both consumers.
+Pass the authentic comparison's `rendered_at` as `--render-timestamp` when
+rebuilding the native manifest so its bytes remain stable across that closure.
+Engine-only attestation tampering must still fail engine current validation;
+publication content and native comparison/binding drift must fail native checks.
+Passing readiness checks does not attest that the version was tagged, pushed
+or deposited; record those verified actions in the dated packet.
 
 When `RED_LINE_TEMPLATE_ROOT` is unset, `red_line.release.provenance.find_template_root` searches the
 ancestors of this project root for a directory named `template` that actually

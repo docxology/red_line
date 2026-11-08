@@ -51,10 +51,15 @@ external receipt and propagates the failure. The strict manifest rechecks both
 bindings; a later PDF byte edit fails even when its extracted text is unchanged.
 Text equality does not establish identical PDF layout or independent attestation.
 
-Manifest schema 1.1 identifies a generated version record as `candidate` and
-records the repository's public availability separately. `release_ready`
-checks validation and checkout state; it does not verify tagging, remote
-publication or deposit. Those actions need their own release-packet evidence.
+Manifest schema 1.2 identifies a generated version record as `candidate` and
+records the repository's public availability separately. Native hashes bind
+publication content plus the comparison and final binding, not recursively
+the engine's custody catalogs. The genuine engine validation verdict remains
+required; engine Stage04 and current provenance independently authenticate
+engine attestations and the complete output inventory. Both gates must pass
+on the same bytes. See [the closure procedure](../../../docs/development.md).
+`release_ready` checks validation and checkout state; it does not verify tagging,
+remote publication or deposit. Those actions need their own release-packet evidence.
 
 ## Related
 

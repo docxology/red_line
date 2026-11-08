@@ -95,17 +95,17 @@ class TestTemplateValidation:
         result = template_validation(_report(tmp_path / "failed.json", payload))
         assert result["passed"] is False
         assert result["errors"] == ["figure binding drifted"]
-        assert len(result["report_sha256"]) == 64
+        assert "report_sha256" not in result
 
     def test_failed_summary_without_errors_uses_a_default_message(self, tmp_path):
         result = template_validation(_report(tmp_path / "bare.json", {"summary": {"all_passed": False}}))
         assert result["errors"] == ["template output validation failed"]
 
-    def test_passing_summary_reports_the_report_digest(self, tmp_path):
+    def test_passing_summary_retains_verdict_without_recursive_engine_digest(self, tmp_path):
         result = template_validation(_report(tmp_path / "ok.json", {"summary": {"all_passed": True}}))
         assert result["passed"] is True
         assert result["errors"] == []
-        assert len(result["report_sha256"]) == 64
+        assert "report_sha256" not in result
 
 
 class TestRenderValidation:
@@ -259,7 +259,7 @@ class TestBuildManifest:
         manifest = build_manifest(ROOT, as_of="2026-07-17", render_timestamp="2026-07-17T00:00:00Z")
         assert manifest["render_timestamp"] == "2026-07-17T00:00:00Z"
         assert manifest["freshness_as_of"] == "2026-07-17"
-        assert manifest["manifest_schema_version"] == "1.1"
+        assert manifest["manifest_schema_version"] == "1.2"
 
     def test_omitted_render_timestamp_is_generated_in_utc(self):
         manifest = build_manifest(ROOT, as_of="2026-07-17")
@@ -271,6 +271,44 @@ class TestBuildManifest:
         manifest = build_manifest(ROOT, as_of="2026-07-17", render_timestamp="2026-07-17T00:00:00Z")
         assert "output/reports/release_manifest.json" not in manifest["artifact_hashes"]
         assert manifest["figure_hashes"]
+
+    def test_publication_content_and_engine_attestation_have_acyclic_custody(self, tmp_path):
+        root = tmp_path / "red_line"
+        shutil.copytree(ROOT, root, ignore=_IGNORE_GENERATED)
+        reports = root / "output/reports"
+        reports.mkdir(parents=True)
+        native = ("render_determinism.json", "render_comparison_binding.json")
+        for name in native:
+            _report(reports / name, {})
+        primary = (
+            "data/release_inputs.json", "pdf/red_line.pdf", "web/index.html",
+            "figures/registry.json", "figures/plate.svg", "figures/plate.png",
+        )
+        for name in primary:
+            path = root / "output" / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("publication content")
+        engine = ("artifact_manifest.json", "rendered_provenance.json", "validation_report.json")
+        for name in engine:
+            _report(reports / name, {"summary": {"all_passed": True}, "generation": 1})
+        options = {"as_of": "2026-11-07", "render_timestamp": "2026-11-07T00:00:00Z"}
+        before = build_manifest(root, **options)
+        assert before["validation_results"]["template_output"] == {"passed": True, "errors": []}
+        assert set(before["artifact_hashes"]) == {
+            *(f"output/{name}" for name in primary[:3]),
+            *(f"output/reports/{name}" for name in native),
+        }
+        for name in engine:
+            _report(reports / name, {"summary": {"all_passed": True}, "generation": 2})
+        assert build_manifest(root, **options) == before
+        for name in (*primary, *(f"reports/{name}" for name in native)):
+            path = root / "output" / name
+            original = path.read_bytes()
+            path.write_bytes(original + b" ")
+            assert build_manifest(root, **options) != before
+            path.write_bytes(original)
+        _report(reports / "validation_report.json", {"summary": {"all_passed": False}})
+        assert build_manifest(root, **options)["validation_results"]["template_output"]["passed"] is False
 
     def test_manifest_records_absence_when_no_render_toolchain_is_beside_the_checkout(
         self, tmp_path, monkeypatch

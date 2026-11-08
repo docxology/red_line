@@ -87,7 +87,7 @@ def test_release_manifest_carries_source_canary_and_artifact_hashes():
         as_of="2026-07-17",
         render_timestamp="2026-07-17T00:00:00Z",
     )
-    assert manifest["manifest_schema_version"] == "1.1"
+    assert manifest["manifest_schema_version"] == "1.2"
     assert manifest["package_version"]
     assert len(manifest["registry_hash"]) == 64
     assert manifest["canary_statement"]["registry_digest"] == manifest["registry_hash"]

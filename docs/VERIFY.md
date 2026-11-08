@@ -110,12 +110,17 @@ figures through `../figures/`:
 python3 -m http.server 8765 --directory output
 ```
 
-Manifest schema 1.1 records the version's publication gate as `candidate` and
+Manifest schema 1.2 records the version's publication gate as `candidate` and
 the repository's historical availability separately as `public`. The builder
 does not verify version publication: even passing strict readiness checks does
 not establish that a version was tagged, pushed or deposited. The dated release
 packet records those separately verified actions. Historical schema 1.0's
 `released` literal did not establish version publication.
+Native publication-content hashes do not recursively hash engine custody
+catalogs. The genuine engine verdict is still mandatory. Require engine
+Stage04/current provenance and native strict readiness together on the final
+bytes, following [the closure procedure](development.md); native readiness
+alone is not an engine-attestation integrity check.
 An external witness and independent reviewer have not yet been
 obtained (`external_witness.status: not_published`, `independent_reviewer.status: not_obtained`).
 Those fields should be filled in with an exact witness locator and preserved
