@@ -93,4 +93,4 @@ can conceal, whose knowledge is being organized—but it does not convert a
 plural reading list into universal legitimacy. The claim register makes this
 stopping rule auditable.
 
-The paper proceeds as follows. [@sec:turner-background] records the mechanism source. [Section @sec:formalism](#sec:formalism) states the instrument as formal definitions and propositions. The red-line registry is composed in [Section @sec:red-lines](#sec:red-lines), and [Section @sec:limitations](#sec:limitations) closes with the instrument's limitations and negative space.
+The paper proceeds as follows. [@sec:turner-background] records the mechanism source. Section [-@sec:formalism] states the instrument as formal definitions and propositions. The red-line registry is composed in Section [-@sec:red-lines], and Section [-@sec:limitations] closes with the instrument's limitations and negative space.

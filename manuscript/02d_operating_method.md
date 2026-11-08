@@ -1,6 +1,6 @@
 # Operating method: from first principles to a bounded release {#sec:operating-method}
 
-The first-principles reconstruction ([Section @sec:first-principles](#sec:first-principles)) fixes the order; this section gives the procedure.
+The first-principles reconstruction (Section [-@sec:first-principles]) fixes the order; this section gives the procedure.
 
 The first-principles section identifies the artifact's irreducible job: help one
 practitioner decline or narrow high-risk development work before commitment,

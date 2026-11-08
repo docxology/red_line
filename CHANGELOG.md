@@ -2,6 +2,8 @@
 
 ## 0.5.0 — 2026-11-06
 
+- Use native numbered section citations without duplicated prefixes or nested
+  hand-written links in the manuscript roadmap and operating method.
 - Emit figure registry schema 2.0 with authored `alt_text` and no retired `alt`
   field; native visual validation rejects stale schemas and retired fields.
 - Remove `Exemption.satisfied`, `RedLine.satisfied_exemptions`, and
