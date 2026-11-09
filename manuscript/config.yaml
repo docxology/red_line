@@ -4,8 +4,8 @@
 paper:
   title: "Personal Red Lines for Development"
   subtitle: "An Evidence-Gated Personal Security Boundary and Explicit No Document for Dual-Use Development"
-  version: "0.5.1"
-  date: "2026-11-08"
+  version: "0.5.2"
+  date: "2026-11-09"
   description: "A personal security boundary and explicit No document for dual-use development."
   cover:
     image: "assets/cover/red_line_cover.png"
@@ -19,6 +19,8 @@ authors:
     corresponding: true
 
 publication:
+  archived_version: "0.5.1"
+  archived_version_doi: "10.5281/zenodo.24069256"
   github_repository: "docxology/red_line"
   repository_url: "https://github.com/docxology/red_line"
 
@@ -43,7 +45,7 @@ analysis:
 project_config:
   historical_archive:
     doi: "10.5281/zenodo.21754240"
-    note: "Last verified archive identifier; not the DOI of version 0.5.1."
+    note: "Earlier historical archive identifier; not the current software or a standalone manuscript."
   source_framework:
     author: "Alex Turner"
     title: "A Red Line and Oversight Framework for Government AI Contracts"
@@ -74,6 +76,7 @@ rendering:
   cover_height_fraction: 0.56
 
 metadata:
+  language: "en-US"
   license: "CC-BY-4.0 (prose); MIT (code)"
   status: "living document — versioned and revisable; public diffability begins after release"
   editorial_hero_image: "assets/cover/red_line_hero.png"

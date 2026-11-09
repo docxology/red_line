@@ -12,7 +12,7 @@
   ],
   "license": "cc-by-4.0",
   "access_right": "open",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "keywords": [
     "red lines",
     "AI governance",
@@ -27,6 +27,7 @@
     "sociotechnical systems"
   ],
   "related_identifiers": [
+    {"identifier": "10.5281/zenodo.24069256", "relation": "references", "scheme": "doi"},
     {
       "identifier": "10.5281/zenodo.21754240",
       "relation": "references",
@@ -88,5 +89,5 @@
       "scheme": "doi"
     }
   ],
-  "notes": "An independently maintained instrument in the Line Set; https://github.com/docxology/line_set owns current membership. Copper records dimensioned resource use, outstanding commitments, and attributed burdens; Iron compares recorded recovery exercises with scenario-specific targets. Neither grants permission or compensates for Red refusal. Violet, Copper, and Iron sources are access-controlled. Retained DOI citations are a historical cohort, not current membership; the self-reference DOI identifies the last verified historical archive, not version 0.5.1. No deposit or new DOI is asserted."
+  "notes": "An independently maintained instrument in the Line Set; https://github.com/docxology/line_set owns current membership. Copper records dimensioned resource use, outstanding commitments, and attributed burdens; Iron compares recorded recovery exercises with scenario-specific targets. Neither grants permission or compensates for Red refusal. Violet, Copper, and Iron sources are access-controlled. Retained DOI citations are a historical cohort, not current membership. Previously verified source archive: 0.5.1, DOI 10.5281/zenodo.24069256; identifies that source ZIP only, not a standalone manuscript. DOI 10.5281/zenodo.21754240 remains an earlier historical archive reference. This metadata cites later source through its repository until that exact edition/object is independently verified."
 }

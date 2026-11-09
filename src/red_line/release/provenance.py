@@ -37,7 +37,7 @@ def git_revision(path: Path) -> str | None:
         return None
     try:
         return subprocess.run(
-            ["git", "-C", str(path), "rev-parse", "HEAD"],
+            ["git", "--no-optional-locks", "-C", str(path), "rev-parse", "HEAD"],
             check=True,
             capture_output=True,
             text=True,
@@ -47,14 +47,14 @@ def git_revision(path: Path) -> str | None:
 
 
 def git_dirty(path: Path) -> bool | None:
-    """Report whether the checkout has uncommitted changes, or ``None`` when unknown."""
+    """Report checkout dirtiness without refreshing its index; unknown returns ``None``."""
 
     if not (path / ".git").exists():
         return None
     try:
         return bool(
             subprocess.run(
-                ["git", "-C", str(path), "status", "--porcelain", "--", "."],
+                ["git", "--no-optional-locks", "-C", str(path), "status", "--porcelain", "--", "."],
                 check=True,
                 capture_output=True,
                 text=True,
@@ -141,7 +141,7 @@ def render_source_binding(root: Path) -> dict:
     hashes = {}
     if revision is not None:
         result = subprocess.run(
-            ["git", "-C", str(root), "ls-files", "-z"],
+            ["git", "--no-optional-locks", "-C", str(root), "ls-files", "-z"],
             capture_output=True,
             check=True,
         )
