@@ -4,8 +4,8 @@
 paper:
   title: "Personal Red Lines for Development"
   subtitle: "An Evidence-Gated Personal Security Boundary and Explicit No Document for Dual-Use Development"
-  version: "0.5.0"
-  date: "2026-11-06"
+  version: "0.5.1"
+  date: "2026-11-08"
   description: "A personal security boundary and explicit No document for dual-use development."
   cover:
     image: "assets/cover/red_line_cover.png"
@@ -43,7 +43,7 @@ analysis:
 project_config:
   historical_archive:
     doi: "10.5281/zenodo.21754240"
-    note: "Last verified archive identifier; not the DOI of version 0.5.0."
+    note: "Last verified archive identifier; not the DOI of version 0.5.1."
   source_framework:
     author: "Alex Turner"
     title: "A Red Line and Oversight Framework for Government AI Contracts"

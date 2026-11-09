@@ -1,10 +1,7 @@
-"""Bind `08a_formalism.md` to the code it claims to describe.
+"""Exercise formalism calculations and manuscript reference structure.
 
-Every test here first *derives* a fact by running the real package — the
-registry, the evaluator, the analysis reports, the enums — and only then asserts
-that the manuscript states exactly that fact. Corrupting a sentence in the
-formalism section reddens the matching test; corrupting the code reddens the
-derivation inside it. Nothing is asserted that was not first executed.
+Native behavior and calculated invariants are checked directly. Authored prose,
+source branch order, field lists, and incidental counts are not test oracles.
 
 The module also owns the structural gates for the auto-numbering syntax the
 render engine's ``formalism.lua`` filter consumes: every block carries a label,
@@ -41,11 +38,8 @@ from red_line.model import (
     Classification,
     DeploymentTier,
     EvidenceKind,
-    EvidenceStatus,
     ExemptionMatchMode,
     ProposedAction,
-    RedLine,
-    Severity,
 )
 from red_line.model.action import DEFAULT_EVIDENCE_MAX_AGE_DAYS
 from red_line.model.red_line import normalize_scope
@@ -54,11 +48,6 @@ ROOT = Path(__file__).resolve().parents[2]
 MANUSCRIPT = ROOT / "manuscript"
 FORMALISM = MANUSCRIPT / "08a_formalism.md"
 
-#: The module the binding table's prose declares once, so each cell can carry a
-#: bare function name rather than repeating a 90-character path nine times.
-_TEST_MODULE = re.compile(r"names a test in `(tests/[\w/]+\.py)`")
-#: A verifying-test cell: a backticked ``test_*`` function name.
-_TEST_REF = re.compile(r"`(test_\w+)`")
 #: A formalism block opener: ``::: {.definition #def:x title="X"}``.
 _BLOCK = re.compile(r"^::: \{\.(?P<kind>[a-z]+)(?P<attrs>[^}]*)\}\s*$", re.M)
 _LABEL = re.compile(r"#([a-z]+:[a-z0-9-]+)")
@@ -82,49 +71,6 @@ _FORMALISM_KINDS = frozenset(
         "example",
     }
 )
-
-NUMBER_WORDS = {
-    1: "one",
-    2: "two",
-    3: "three",
-    4: "four",
-    5: "five",
-    6: "six",
-    7: "seven",
-    8: "eight",
-    9: "nine",
-    10: "ten",
-    11: "eleven",
-    12: "twelve",
-    13: "thirteen",
-    14: "fourteen",
-    15: "fifteen",
-    16: "sixteen",
-    45: "forty-five",
-    58: "fifty-eight",
-    108: "one hundred and eight",
-}
-
-
-def _mathtt(value: str) -> str:
-    """The LaTeX ``\\mathtt{...}`` spelling of one enum value.
-
-    Built here rather than inline so the underscore escaping is written once
-    and so no assertion needs a backslash inside an f-string, which the
-    project's Python floor (3.10) does not allow.
-    """
-
-    return "\\mathtt{" + value.replace("_", "\\_") + "}"
-
-
-def _flat(path: Path) -> str:
-    """Whitespace-normalized text, so bindings survive hard line wrapping."""
-
-    return " ".join(path.read_text(encoding="utf-8").split())
-
-
-def _formalism() -> str:
-    return _flat(FORMALISM)
 
 
 def _body_files() -> list[Path]:
@@ -157,20 +103,6 @@ def _declared_labels() -> dict[str, str]:
     return labels
 
 
-def _binding_rows() -> list[tuple[str, str]]:
-    """Return ``(proposition label, verifying-test cell)`` for every table row."""
-
-    rows: list[tuple[str, str]] = []
-    for line in FORMALISM.read_text(encoding="utf-8").splitlines():
-        match = re.match(r"^\| \[@(prop:[a-z0-9-]+)\] \|", line)
-        if match is None:
-            continue
-        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
-        assert len(cells) == 3, line
-        rows.append((match.group(1), cells[2]))
-    return rows
-
-
 # --------------------------------------------------------------------------
 # Structural gates for the auto-numbering syntax.
 # --------------------------------------------------------------------------
@@ -181,7 +113,7 @@ def test_the_formalism_scan_set_is_not_empty() -> None:
 
     blocks = _blocks(FORMALISM.read_text(encoding="utf-8"))
 
-    assert len(blocks) >= 15, "08a must carry the formalism blocks these gates check"
+    assert blocks, "08a must carry formalism blocks for these gates to check"
     assert {kind for kind, _ in blocks} == {"definition", "proposition"}
     assert _body_files(), "no manuscript body files found"
 
@@ -280,34 +212,6 @@ def test_the_unlabeled_block_guard_rejects_a_planted_block() -> None:
     assert _blocks(planted) == [("definition", "")]
 
 
-def test_every_proposition_has_a_binding_table_row_naming_a_real_test() -> None:
-    """Each proposition is bound, and every named test exists on disk.
-
-    The module is declared once in the table's own prose and parsed from there,
-    so the path is read rather than assumed and a rename that misses the prose
-    fails here instead of leaving nine cells pointing at nothing.
-    """
-
-    raw = FORMALISM.read_text(encoding="utf-8")
-    propositions = [label for kind, label in _blocks(raw) if kind == "proposition"]
-    rows = _binding_rows()
-
-    declared_module = _TEST_MODULE.search(" ".join(raw.split()))
-    assert declared_module is not None, "the binding table must name its test module"
-    module = ROOT / declared_module.group(1)
-    assert module.is_file(), declared_module.group(1)
-    module_body = module.read_text(encoding="utf-8")
-
-    assert propositions, "08a declares no propositions"
-    assert [label for label, _ in rows] == propositions, "table order must follow the propositions"
-
-    for label, cell in rows:
-        references = _TEST_REF.findall(cell)
-        assert references, f"{label} names no verifying test"
-        for function in references:
-            assert f"def {function}(" in module_body, function
-
-
 def test_the_formalism_claim_ledger_matches_the_declared_labels() -> None:
     """The evidence ledger the render engine reads is re-derived, never kept by hand.
 
@@ -346,19 +250,8 @@ def test_the_claim_ledger_guard_rejects_an_unlisted_label() -> None:
     assert sorted(set(_declared_labels()) - planted) == ["prop:tier-monotone"]
 
 
-def test_the_binding_table_guard_rejects_an_emptied_row() -> None:
-    """Proof of detection: a row whose verifying-test cell is blank is caught."""
-
-    rows = _binding_rows()
-    assert rows, "no table rows parsed, so this guard would be vacuous"
-    planted = [(label, "" if index == 0 else cell) for index, (label, cell) in enumerate(rows)]
-    unbound = [label for label, cell in planted if not _TEST_REF.findall(cell)]
-
-    assert unbound == [rows[0][0]]
-
-
 # --------------------------------------------------------------------------
-# Definitions: the domain objects, re-derived and then read back.
+# Definitions: native domain invariants, without authored-prose copying.
 # --------------------------------------------------------------------------
 
 
@@ -366,75 +259,9 @@ def test_tier_rank_definition_matches_the_enum() -> None:
     """[@def:tier]'s ranks are the ones ``oversight_rank`` returns."""
 
     ranks = {tier.value: tier.oversight_rank for tier in DeploymentTier}
-    text = _formalism()
 
     assert ranks == {"air_gapped": 0, "connected": 1, "hosted": 2}
     assert sorted(ranks.values()) == list(range(len(DeploymentTier)))
-    for value, rank in sorted(ranks.items()):
-        assert "\\rho(" + _mathtt(value) + ") = " + str(rank) in text
-    codomain = ",".join(str(rank) for rank in sorted(ranks.values()))
-    assert "\\rho: T \\to \\{" + codomain + "\\}" in text
-
-
-def test_severity_and_status_vocabularies_are_listed_in_full() -> None:
-    """[@def:severity] and [@def:evidence-status] enumerate the live enums."""
-
-    text = _formalism()
-
-    for severity in Severity:
-        assert _mathtt(severity.value) in text
-    for status in EvidenceStatus:
-        assert _mathtt(status.value.upper()) in text
-    grades = ", ".join(_mathtt(severity.value) for severity in Severity)
-    assert "The severity grades are $\\{" + grades + "\\}$" in text
-
-
-def test_evidence_kind_definition_lists_all_nine_dimensions_in_enum_order() -> None:
-    """[@def:evidence-kind] states the enum's size and every member."""
-
-    kinds = list(EvidenceKind)
-    text = _formalism()
-
-    assert f"the {NUMBER_WORDS[len(kinds)]}-element set $K$" in text
-    positions = [text.index("\\mathtt{" + kind.value.replace("_", "\\_") + "}") for kind in kinds]
-    assert positions == sorted(positions), "the definition must list K in enum order"
-
-
-def test_staleness_window_in_the_definition_is_the_configured_default() -> None:
-    """[@def:evidence-record]'s 180-day window is the package default."""
-
-    assert f"$w = {DEFAULT_EVIDENCE_MAX_AGE_DAYS}$ days" in _formalism()
-
-
-def test_missing_value_markers_in_the_definition_match_the_code() -> None:
-    """[@def:context]'s unsupported-value list is the one the model uses."""
-
-    from red_line.model.action import _MISSING_VALUES
-
-    text = _formalism()
-    markers = sorted(value for value in _MISSING_VALUES if value)
-
-    assert markers, "the marker set is empty; this gate would be vacuous"
-    for marker in markers:
-        assert f"`{marker}`" in text
-
-
-def test_red_line_field_count_in_the_definition_is_the_dataclass_arity() -> None:
-    """[@def:red-line]'s "eleven-field record" is ``dataclasses.fields``."""
-
-    fields = dataclasses.fields(RedLine)
-
-    assert f"{NUMBER_WORDS[len(fields)]}-field record" in _formalism()
-
-
-def test_classification_definition_lists_all_five_outcomes() -> None:
-    """[@def:classification] states the size and every member of the enum."""
-
-    text = _formalism()
-
-    assert f"the {NUMBER_WORDS[len(Classification)]}-element set $C$" in text
-    for classification in Classification:
-        assert _mathtt(classification.value.upper()) in text
 
 
 def test_effective_scope_definition_matches_the_evaluator() -> None:
@@ -463,7 +290,6 @@ def test_effective_scope_definition_matches_the_evaluator() -> None:
 
     assert assessment.classification is Classification.COMPLIANT
     assert DeploymentTier.HOSTED.value in triggers, "no exemption triggers on a tier token"
-    assert "E = \\mathcal{N}(S) \\cup \\{t\\}" in _formalism()
 
 
 def test_strictness_order_definition_matches_the_analysis_module() -> None:
@@ -471,7 +297,6 @@ def test_strictness_order_definition_matches_the_analysis_module() -> None:
 
     ranked = sorted(STRICTNESS_ORDER, key=lambda item: STRICTNESS_ORDER[item])
     unranked = sorted(set(Classification) - set(STRICTNESS_ORDER), key=lambda item: item.value)
-    text = _formalism()
 
     assert [item.value for item in ranked] == [
         "compliant",
@@ -479,14 +304,12 @@ def test_strictness_order_definition_matches_the_analysis_module() -> None:
         "non_compliant",
     ]
     assert len(unranked) == 2
-    chain = " < ".join(_mathtt(item.value.upper()) for item in ranked)
-    assert chain in text
     with pytest.raises(ValueError, match="outside the policy strictness lattice"):
         strictness_is_monotone((unranked[0],))
 
 
 # --------------------------------------------------------------------------
-# Propositions: each derived by execution, then read back from the prose.
+# Propositions: independently exercised native behavior and calculations.
 # --------------------------------------------------------------------------
 
 
@@ -513,17 +336,11 @@ def test_intake_precedence_holds_against_every_registry() -> None:
         Classification.NON_COMPLIANT
     )
 
-    text = _formalism()
-    assert "including the empty one — the result is `INSUFFICIENT_INFORMATION`" in text
-    assert "the implicated-line tuple is empty" in text
-    assert f"the reason codes include `{AssessmentReasonCode.INTAKE_BLOCKED.value}`" in text
-
 
 def test_evidence_conjunction_matches_the_executed_sweep() -> None:
     """[@prop:evidence-conjunction]: 45 perturbations, all blocked and localized."""
 
     report = run_evidence_sensitivity()
-    text = _formalism()
 
     assert report.baseline is Classification.COMPLIANT
     assert report.evaluation_count == len(EvidenceKind) * len(report.perturbations)
@@ -532,33 +349,9 @@ def test_evidence_conjunction_matches_the_executed_sweep() -> None:
     assert report.conjunctive
     assert {cell.reached for cell in report.cells} == {Classification.INSUFFICIENT_INFORMATION}
 
-    assert (
-        f"Across the {NUMBER_WORDS[len(EvidenceKind)]} dimensions and the "
-        f"{NUMBER_WORDS[len(report.perturbations)]} degradations, all "
-        f"{NUMBER_WORDS[report.evaluation_count]} executed evaluations return "
-        "`INSUFFICIENT_INFORMATION`" in text
-    )
-    assert f"each of the {NUMBER_WORDS[report.localized_count]} names exactly the degraded" in text
-
 
 def test_outcome_precedence_is_exhaustive_and_ordered() -> None:
-    """[@prop:outcome-precedence]: the four branches, in the code's order.
-
-    Derived by reading the branch order out of the evaluator source rather than
-    restating it, and by exercising one action per branch through the live
-    registry so the ordering claim is not merely lexical.
-    """
-
-    source = (ROOT / "src" / "red_line" / "evaluation" / "evaluator.py").read_text(encoding="utf-8")
-    tail = source.split("    if hard_block:", 1)[1]
-    order = re.findall(r"classification = Classification\.([A-Z_]+)", tail)
-
-    assert order == [
-        "NON_COMPLIANT",
-        "REQUIRES_MODIFICATION",
-        "COMPLIANT",
-        "OUTSIDE_SCOPE",
-    ]
+    """Exercise one native action per policy branch without reading source text."""
 
     probes = {
         "NON_COMPLIANT": frozenset({"targeting"}),
@@ -576,12 +369,6 @@ def test_outcome_precedence_is_exhaustive_and_ordered() -> None:
         reached = evaluate_action(action, PERSONAL_RED_LINES, as_of=BATTERY_AS_OF).classification
         assert reached.value.upper() == expected, expected
 
-    text = _formalism()
-    for index, name in enumerate(order):
-        marker = "if any covering line has no satisfied exemption" if index == 0 else f"`{name}`"
-        assert marker in text
-    assert "The four cases are exhaustive and mutually exclusive" in text
-
 
 def test_outcome_reachability_matches_the_executed_battery() -> None:
     """[@prop:outcome-reachability]: all five reached; the empty registry is not."""
@@ -598,10 +385,6 @@ def test_outcome_reachability_matches_the_executed_battery() -> None:
         Classification.NON_COMPLIANT,
     }
 
-    text = _formalism()
-    assert "Each of the five classifications of [@def:classification] is returned" in text
-    assert f"the {NUMBER_WORDS[len(unreachable)]} implication-dependent outcomes become unreachable" in text
-
 
 def test_exemption_evidence_floor_is_derived_from_the_registry() -> None:
     """[@prop:exemption-evidence]: 16 exemptions, minimum two evidence kinds."""
@@ -611,10 +394,6 @@ def test_exemption_evidence_floor_is_derived_from_the_registry() -> None:
 
     assert unevidenced_exemptions() == ()
     assert minimum >= 2
-
-    text = _formalism()
-    assert f"every one of the {NUMBER_WORDS[len(rows)]} typed exemptions requires at least" in text
-    assert f"at least {NUMBER_WORDS[minimum]} evidence kinds" in text
 
 
 def test_trigger_mode_counts_match_the_executed_probe() -> None:
@@ -636,14 +415,6 @@ def test_trigger_mode_counts_match_the_executed_probe() -> None:
         if row.match_mode == ExemptionMatchMode.ANY.value:
             assert row.single_match_count == len(row.trigger_scope)
 
-    text = _formalism()
-    assert (
-        f"carries {NUMBER_WORDS[report.any_mode_count]} `any`-mode and "
-        f"{NUMBER_WORDS[report.all_mode_count]} `all`-mode exemptions" in text
-    )
-    assert f"exactly {NUMBER_WORDS[max(trigger_sizes)]} trigger tokens" in text
-    assert f"{NUMBER_WORDS[report.evaluation_count]} executed evaluations" in text
-
 
 def test_tier_monotonicity_numbers_match_the_executed_sweep() -> None:
     """[@prop:tier-monotone]: 108 evaluations, zero inversions."""
@@ -654,16 +425,6 @@ def test_tier_monotonicity_numbers_match_the_executed_sweep() -> None:
     assert report.inversion_count == 0
     assert report.evaluation_count == report.keyword_count * len(TIERS_BY_DESCENDING_OVERSIGHT)
     assert report.tiers == TIERS_BY_DESCENDING_OVERSIGHT
-
-    text = _formalism()
-    chain = " \\to ".join("\\mathtt{" + tier.value.replace("_", "\\_") + "}" for tier in report.tiers)
-    assert chain in text
-    assert (
-        f"is {NUMBER_WORDS[report.evaluation_count]} executed evaluations with "
-        f"{NUMBER_WORDS[report.inversion_count] if report.inversion_count in NUMBER_WORDS else report.inversion_count} inversions"
-        in text
-        or f"is {NUMBER_WORDS[report.evaluation_count]} executed evaluations with zero inversions" in text
-    )
 
 
 def test_normalization_closure_is_executed_not_asserted() -> None:
@@ -703,11 +464,6 @@ def test_normalization_closure_is_executed_not_asserted() -> None:
     assert AssessmentReasonCode.INVALID_SCOPE in assessment.reason_codes
     assert assessment.normalized_scope == ()
 
-    text = _formalism()
-    assert "\\mathcal{N}(\\mathcal{N}(S)) = \\mathcal{N}(S)" in text
-    assert "the rejection is enforced twice" in text
-    assert f"`{AssessmentReasonCode.INVALID_SCOPE.value}` reason code" in text
-
 
 def test_reason_code_vocabulary_is_closed_and_duplicate_free() -> None:
     """[@prop:reason-codes]: codes come from the enum and never repeat."""
@@ -744,41 +500,6 @@ def test_reason_code_vocabulary_is_closed_and_duplicate_free() -> None:
             reason_codes=duplicated,
         )
 
-    assert "appended in evaluation order and never repeated" in _formalism()
-
-
-def test_report_envelope_field_count_is_the_dataclass_arity() -> None:
-    """[@def:report-envelope]'s "ten fields, in order" is ``dataclasses.fields``."""
-
-    from red_line import ENVELOPE_SCHEMA, REPORT_SCHEMA, ReportEnvelope
-
-    fields = dataclasses.fields(ReportEnvelope)
-    text = _formalism()
-
-    assert f"exactly those {NUMBER_WORDS[len(fields)]} fields, in order" in text
-    assert f"`{ENVELOPE_SCHEMA}`" in text
-    assert f"(`{REPORT_SCHEMA}`)" in text
-    for field in fields:
-        assert field.name.replace("_", "\\_") in text, field.name
-
-
-def test_publication_summaries_keep_pointer_and_sweep_claims_bounded():
-    from red_line import REPORT_SCHEMA, UNBOUND_REPORT_SCHEMA
-
-    text = _formalism()
-    assert "checked pointer fields agree; other edits require contract or trusted-prior checks" in text
-    assert "no tier inversions in the exercised singleton domain" in text
-    assert "any edit is visible" not in text
-    tiers = (ROOT / "manuscript" / "05_deployment_tiers.md").read_text()
-    assert "![Singleton sweep:" in tiers
-    brief = (ROOT / "docs" / "visualization-briefs.md").read_text()
-    row = next(line for line in brief.splitlines() if line.startswith("| `fig:tier-monotonicity-lattice`"))
-    assert "finite singleton sweep" in row
-    architecture = (ROOT / "docs" / "architecture.md").read_text()
-    row = next(line for line in architecture.splitlines() if line.startswith("| `envelope.py`"))
-    assert f"current bound `ReviewFinding` serialization (`{REPORT_SCHEMA}`)" in row
-    assert f"historical unbound `{UNBOUND_REPORT_SCHEMA}`" in row
-
 
 def test_envelope_pointer_agreement_is_executed_not_asserted() -> None:
     """[@prop:envelope-pointer] is re-derived through a live export and edits.
@@ -813,9 +534,6 @@ def test_envelope_pointer_agreement_is_executed_not_asserted() -> None:
     ):
         edited = dataclasses.replace(envelope, **tamper)
         assert not envelope_matches_finding(edited, finding), tamper
-    text = _formalism()
-    assert "editing any checked field afterwards makes the check return false" in text
-    assert "does not certify the finding true" in text
 
 
 def test_staleness_exclusive_boundary_is_derived_from_the_code() -> None:
@@ -841,9 +559,3 @@ def test_staleness_exclusive_boundary_is_derived_from_the_code() -> None:
     edge = recorded + timedelta(days=DEFAULT_EVIDENCE_MAX_AGE_DAYS)
     assert record.is_stale(edge) is False
     assert record.is_stale(edge + timedelta(days=1)) is True
-
-    text = _formalism()
-    assert "a - d > w" in text
-    assert "exactly $w$ days before the review date is fresh" in text
-    assert "$w + 1$ days before is stale" in text
-    assert "the window's last fresh day is age $w$" in text

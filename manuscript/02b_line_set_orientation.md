@@ -53,12 +53,14 @@ scope. One is a finding of absence after inspection; the other is a declination
 to inspect. The overlap is declared rather than accidental, and neither sense
 may be read into the other.
 
-The current [Line Set declaration](https://github.com/docxology/line_set)
-declares eight colors: Red, Black, Golden, White, Silver, Blue, Violet, and Green.
-Declaration does not guarantee installed or accessible sources; optional or
-access-controlled availability is reported separately. The reader `line_set`
-and Witness Register are companions, not colors. The reader adds no
-substantive instrument, and Red Line does not import, depend on, or defer to it.
+The current [Line Set declaration](https://github.com/docxology/line_set) owns
+membership. Copper records dimensioned finite resource use, outstanding
+commitments, and attributed burdens; Iron compares recorded recovery exercises
+with scenario-specific targets. Neither grants permission or compensates for a
+Red refusal. Violet, Copper, and Iron have access-controlled sources; declaration
+does not guarantee installation or access. The reader `line_set` and Witness
+Register are companions, not colors. The reader adds no substantive instrument,
+and Red Line does not import, depend on, or defer to it.
 
 ## Note on the name
 

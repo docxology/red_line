@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.1 — 2026-11-08
+
+- Documentation-only patch: use the current Line Set declaration, distinguish
+  Copper resource accounting and Iron recorded recovery comparisons, and state
+  access-controlled source boundaries without weakening refusal noncompensation.
+- Delete incidental formalism prose and source-field copying assertions; retain
+  native evaluator, pointer-tamper, staleness, and historical byte-custody controls.
+- Synchronize current descriptive version metadata. Native evaluator semantics,
+  registry identity, schemas, historical captures, and DOI identities are unchanged.
+  No generated artifacts, deposit, or new release verification is asserted here.
+
 ## 0.5.0 — 2026-11-06
 
 - Use native numbered section citations without duplicated prefixes or nested

@@ -96,12 +96,14 @@ current membership list:
 Red Line does not import, depend on, or defer to any of them, and none of them
 needs to be present for anything in this repository to run.
 
-The [current Line Set declaration](https://github.com/docxology/line_set)
-declares eight colors: Red, Black, Golden, White, Silver, Blue, Violet, and Green.
-Declaration is distinct from installed or accessible source availability.
-Optional or access-controlled sources need not be present in a standalone
-copy. The reader and Witness Register are companions, not colors. The
-historical orientation remains an acknowledgment, not a combined evaluator.
+The [current Line Set declaration](https://github.com/docxology/line_set) owns
+membership. Copper records dimensioned finite resource use, outstanding
+commitments, and attributed burdens; Iron compares recorded recovery exercises
+with scenario-specific targets. Neither grants permission or compensates for a
+Red refusal. Violet, Copper, and Iron have access-controlled sources; membership
+does not establish installation or access. The reader and Witness Register are
+companions, not colors. The historical orientation remains an acknowledgment,
+not a combined evaluator.
 
 ## Validation after separation
 
