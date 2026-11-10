@@ -2,6 +2,9 @@
 
 ## 0.5.2 — 2026-11-09
 
+- Disable caller fsmonitor configuration for authoritative read-only render
+  provenance observations, without changing global Git settings or evidence
+  eligibility.
 - Keep companion repository identities on separate manuscript lines so print
   wrapping does not split the owner name mid-token.
 - Require exact ASCII calendar review dates and Unicode scalar text before new
