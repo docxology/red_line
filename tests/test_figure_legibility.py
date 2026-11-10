@@ -360,7 +360,7 @@ def test_configured_height_fraction_is_the_one_the_renderer_injected() -> None:
 def test_page_geometry_ignores_commented_out_margins():
     config = (
         '# geometry: "left=0in,right=0in,top=0in,bottom=0in"\n'
-        'metadata:\n'
+        "metadata:\n"
         '  # geometry: "left=2in,right=2in,top=2in,bottom=2in"\n'
         '  geometry: "left=1in,right=1in,top=1in,bottom=1in" # active\n'
     )
@@ -395,7 +395,7 @@ def test_font_inventory_reads_xml_attributes_not_comment_or_text_lookalikes():
         '<desc>font-size="2px"</desc>'
         '<text font-size="18px">font-size="3px"</text>'
         "<text font-size='12px'>active</text>"
-        '</svg>'
+        "</svg>"
     )
     assert min_font_px(svg) == 12
     assert min_font_px('<svg><g font-size="9px"><text>inherited</text></g></svg>') == 9

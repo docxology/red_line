@@ -175,15 +175,26 @@ def test_snapshot_reader_rejects_raw_non_scalar_text(text):
 
 def test_scalar_unicode_intake_preserves_identity_bytes_and_replay():
     import json
-    from red_line import action_from_snapshot, canonical_intake, intake_digest, registry_hash, PERSONAL_RED_LINES
+    from red_line import (
+        action_from_snapshot,
+        canonical_intake,
+        intake_digest,
+        registry_hash,
+        PERSONAL_RED_LINES,
+    )
 
     text = "résumé / 研究 / \U0001f600"
     candidate = make_action(text, frozenset({"targeting"}))
     record = replace(candidate.context.evidence[0], reference="record://" + text, summary=text)
-    candidate = replace(candidate, context=replace(
-        candidate.context, purpose=text, evidence=(record,) + candidate.context.evidence[1:],
-        unknowns=[text],
-    ))
+    candidate = replace(
+        candidate,
+        context=replace(
+            candidate.context,
+            purpose=text,
+            evidence=(record,) + candidate.context.evidence[1:],
+            unknowns=[text],
+        ),
+    )
     snapshot = canonical_intake(candidate)
     restored = action_from_snapshot(snapshot)
     assert restored == candidate

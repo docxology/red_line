@@ -68,7 +68,9 @@ DEFAULT_FIGURE_HEIGHT_FRACTION = 0.50
 
 _GEOMETRY_RE = re.compile(r'^[ \t]*geometry:[ \t]*"([^"]+)"', re.MULTILINE)
 _GEOMETRY_KEY_RE = re.compile(r"(left|right|top|bottom)\s*=\s*([0-9.]+)in")
-_HEIGHT_FRACTION_RE = re.compile(r"^[ \t]{2,}figure_height_fraction:[ \t]*([0-9.]+)[ \t]*(?:#.*)?$", re.MULTILINE)
+_HEIGHT_FRACTION_RE = re.compile(
+    r"^[ \t]{2,}figure_height_fraction:[ \t]*([0-9.]+)[ \t]*(?:#.*)?$", re.MULTILINE
+)
 _RENDERING_BLOCK_RE = re.compile(r"^rendering:[ \t]*(?:#.*)?$", re.MULTILINE)
 _EMBED_RE = re.compile(r"\{#(fig:[a-z0-9-]+)([^}]*)\}")
 _WIDTH_ATTR_RE = re.compile(r"width=([0-9.]+)%")
