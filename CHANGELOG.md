@@ -2,6 +2,8 @@
 
 ## 0.5.2 — 2026-11-09
 
+- Keep companion repository identities on separate manuscript lines so print
+  wrapping does not split the owner name mid-token.
 - Require exact ASCII calendar review dates and Unicode scalar text before new
   native intake, registry, finding, or envelope custody; preserve valid Unicode
   canonical bytes and the existing evidence-date policy.
