@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.2 — Unreleased
+## 0.5.2 — 2026-11-09
 
 - Require exact ASCII calendar review dates and Unicode scalar text before new
   native intake, registry, finding, or envelope custody; preserve valid Unicode
