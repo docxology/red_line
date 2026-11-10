@@ -40,6 +40,13 @@ UNKNOWN_SCOPE_MARKERS = frozenset({"unknown", "unspecified", "tbd", "unclear"})
 _IDENTIFIER = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
+def _require_scalar_strings(values: tuple[str, ...]) -> None:
+    """Reject code units that cannot retain their identity through JSON replay."""
+
+    if any(0xD800 <= ord(char) <= 0xDFFF for value in values for char in value):
+        raise ValueError("text must contain only Unicode scalar values")
+
+
 def _clean_token(token: str) -> str:
     """Normalize spelling before explicit alias lookup."""
 
@@ -115,6 +122,7 @@ class Exemption:
             raise ValueError("exemption id is required")
         if not isinstance(self.description, str) or not self.description.strip():
             raise ValueError("exemption description is required")
+        _require_scalar_strings((self.id, self.description))
         if not isinstance(self.trigger_scope, (frozenset, set, tuple)):
             raise TypeError("exemption trigger_scope must be a set-like collection")
         if not isinstance(self.required_evidence, (frozenset, set, tuple)):
@@ -185,6 +193,7 @@ class RedLine:
         text_fields = (self.id, self.title, self.standard, self.rationale, self.stated_by, self.stated_on)
         if any(not isinstance(value, str) for value in text_fields):
             raise TypeError("red-line identifiers, prose, and provenance must be strings")
+        _require_scalar_strings(text_fields)
         if not self.id.strip() or not _IDENTIFIER.fullmatch(self.id):
             raise ValueError("red-line id must be a non-empty lowercase hyphenated identifier")
         if any(not value.strip() for value in (self.title, self.standard, self.rationale, self.stated_by)):
@@ -205,6 +214,7 @@ class RedLine:
             raise ValueError("red-line scope must contain non-empty string tokens")
         if any(not isinstance(clause, str) or not clause.strip() for clause in self.carve_outs):
             raise ValueError("red-line carve_outs must contain non-empty strings")
+        _require_scalar_strings(tuple(self.carve_outs))
         if any(not isinstance(exemption, Exemption) for exemption in self.exemptions):
             raise TypeError("red-line exemptions must contain Exemption values")
         if not isinstance(self.max_tier, DeploymentTier) or not isinstance(self.severity, Severity):

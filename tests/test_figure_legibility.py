@@ -237,14 +237,6 @@ def test_declared_width_fractions_match_the_generated_latex() -> None:
     assert seen == len(expected_by_file), "every registered figure must appear in the rendered LaTeX"
 
 
-def test_configured_height_fraction_is_read_from_the_rendering_block() -> None:
-    """The knob only works inside ``rendering:``; assert the project uses it."""
-
-    config_text = (ROOT / "manuscript" / "config.yaml").read_text(encoding="utf-8")
-
-    assert parse_figure_height_fraction(config_text) > DEFAULT_FIGURE_HEIGHT_FRACTION
-
-
 def test_height_fraction_falls_back_when_the_key_sits_outside_rendering() -> None:
     """A knob in the wrong block is dead config, so the default must apply."""
 
@@ -363,3 +355,49 @@ def test_configured_height_fraction_is_the_one_the_renderer_injected() -> None:
         assert abs(float(declared.group(1)) - configured) < 1e-9, match.group(2)
         seen += 1
     assert seen == len(filenames), "every registered figure must appear in the rendered LaTeX"
+
+
+def test_page_geometry_ignores_commented_out_margins():
+    config = (
+        '# geometry: "left=0in,right=0in,top=0in,bottom=0in"\n'
+        'metadata:\n'
+        '  # geometry: "left=2in,right=2in,top=2in,bottom=2in"\n'
+        '  geometry: "left=1in,right=1in,top=1in,bottom=1in" # active\n'
+    )
+    geometry = parse_page_geometry(config)
+    assert geometry.text_width_pt == pytest.approx(6.5 * 72.27)
+    assert geometry.text_height_pt == pytest.approx(9 * 72.27)
+    with pytest.raises(ValueError):
+        parse_page_geometry('# geometry: "left=0in,right=0in,top=0in,bottom=0in"\n')
+
+
+def test_height_fraction_honors_trailing_comments_and_ignores_disabled_values():
+    config = (
+        "rendering: # renderer settings\n"
+        "  # figure_height_fraction: 0.9\n"
+        "  figure_height_fraction: 0.25 # active height cap\n"
+    )
+    cap = parse_figure_height_fraction(config)
+    assert cap == 0.25
+    geometry = PageGeometry(400, 600)
+    width, height_bound = rendered_width_pt(100, 200, 1.0, geometry, cap)
+    assert height_bound
+    assert width == 75
+    assert parse_figure_height_fraction("rendering:\n  # figure_height_fraction: 0.25\n") == (
+        DEFAULT_FIGURE_HEIGHT_FRACTION
+    )
+
+
+def test_font_inventory_reads_xml_attributes_not_comment_or_text_lookalikes():
+    svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg">'
+        '<!-- <text font-size="1px">disabled</text> -->'
+        '<desc>font-size="2px"</desc>'
+        '<text font-size="18px">font-size="3px"</text>'
+        "<text font-size='12px'>active</text>"
+        '</svg>'
+    )
+    assert min_font_px(svg) == 12
+    assert min_font_px('<svg><g font-size="9px"><text>inherited</text></g></svg>') == 9
+    with pytest.raises(ValueError):
+        min_font_px('<svg><!-- font-size="1px" --><text>font-size="2px"</text></svg>')

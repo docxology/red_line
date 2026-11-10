@@ -7,7 +7,7 @@ from datetime import date
 import re
 
 from .enums import AssessmentReasonCode, Classification, DeploymentTier, EvidenceKind, EvidenceStatus
-from .red_line import RedLine
+from .red_line import RedLine, _require_scalar_strings
 
 
 REQUIRED_EVIDENCE_KINDS: tuple[EvidenceKind, ...] = tuple(EvidenceKind)
@@ -35,6 +35,7 @@ class EvidenceRecord:
             raise TypeError("evidence reference and summary must be strings")
         if not isinstance(self.recorded_on, str):
             raise TypeError("recorded_on must be an ISO date string")
+        _require_scalar_strings((self.reference, self.summary, self.recorded_on))
         if not self.reference.strip() or not self.summary.strip():
             raise ValueError("evidence reference and summary are required")
         if any(marker in self.reference.casefold() for marker in _SENSITIVE_REFERENCE_MARKERS):
@@ -106,6 +107,7 @@ class ActionContext:
         )
         if any(not isinstance(value, str) for value in fields):
             raise TypeError("all ActionContext fields must be strings")
+        _require_scalar_strings(fields)
         if not isinstance(self.evidence, (tuple, list)):
             raise TypeError("ActionContext evidence must be a tuple or list")
         if not isinstance(self.unknowns, (tuple, list)):
@@ -114,6 +116,7 @@ class ActionContext:
             raise TypeError("ActionContext evidence must contain EvidenceRecord values")
         if any(not isinstance(value, str) for value in self.unknowns):
             raise TypeError("ActionContext unknowns must contain strings")
+        _require_scalar_strings(tuple(self.unknowns))
         object.__setattr__(self, "evidence", tuple(self.evidence))
         object.__setattr__(self, "unknowns", tuple(self.unknowns))
 
@@ -239,6 +242,7 @@ class ProposedAction:
     def __post_init__(self) -> None:
         if not isinstance(self.description, str):
             raise TypeError("action description must be a string")
+        _require_scalar_strings((self.description,))
         if not self.description.strip():
             raise ValueError("action description is required")
         if not isinstance(self.scope, (frozenset, set, tuple)):
@@ -269,6 +273,7 @@ class LineDecision:
     def __post_init__(self) -> None:
         if not isinstance(self.line_id, str) or not self.line_id.strip():
             raise ValueError("decision trace requires a line id")
+        _require_scalar_strings((self.line_id,))
         if not isinstance(self.below_tier_floor, bool):
             raise TypeError("decision trace tier flag must be boolean")
         for name in ("coverage_hits", "matched_exemption_ids", "supported_exemption_ids"):
@@ -277,6 +282,7 @@ class LineDecision:
                 raise TypeError("decision trace dimensions must be tuples or lists")
             if any(not isinstance(value, str) or not value.strip() for value in values):
                 raise ValueError("decision trace dimensions require nonblank strings")
+            _require_scalar_strings(tuple(values))
             if len(values) != len(set(values)):
                 raise ValueError("decision trace dimensions must be unique")
             object.__setattr__(self, name, tuple(values))

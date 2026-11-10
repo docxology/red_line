@@ -128,3 +128,80 @@ def test_decision_trace_is_typed_and_immutable():
         ActionAssessment(candidate, Classification.NON_COMPLIANT, (), decision_trace=("bad",))
     with pytest.raises(TypeError, match="LineDecision"):
         replace(review_engagement(candidate), decision_trace=("bad",))
+
+
+@pytest.mark.parametrize("text", ["\ud800", "\udfff", "\ud83d\ude00"])
+def test_native_custody_rejects_non_scalar_text_before_serialization(text):
+    from red_line import PERSONAL_RED_LINES, ReviewAuthorization, review_engagement
+
+    candidate = make_action("synthetic", frozenset({"targeting"}))
+    with pytest.raises(ValueError):
+        replace(candidate, description=text)
+    for kind in EvidenceKind:
+        with pytest.raises(ValueError):
+            replace(candidate.context, **{kind.value: text})
+    with pytest.raises(ValueError):
+        replace(candidate.context, unknowns=(text,))
+    for name in ("reference", "summary"):
+        with pytest.raises(ValueError):
+            replace(candidate.context.evidence[0], **{name: text})
+    line = PERSONAL_RED_LINES[0]
+    for name in ("title", "standard", "rationale", "stated_by"):
+        with pytest.raises(ValueError):
+            replace(line, **{name: "I " + text})
+    with pytest.raises(ValueError):
+        replace(line, carve_outs=(text,))
+    with pytest.raises(ValueError):
+        replace(line.exemptions[0], description=text)
+    with pytest.raises(ValueError):
+        ReviewAuthorization(text, "authority", "rationale", "2026-11-10")
+    finding = review_engagement(candidate)
+    for name in ("engagement", "finding", "evaluator_id"):
+        with pytest.raises(ValueError):
+            replace(finding, **{name: text})
+
+
+@pytest.mark.parametrize("text", ["\ud800", "\udfff", "\ud83d\ude00"])
+def test_snapshot_reader_rejects_raw_non_scalar_text(text):
+    import json
+    from red_line import action_from_snapshot, canonical_intake
+
+    payload = json.loads(canonical_intake(make_action("synthetic", frozenset({"targeting"}))))
+    payload["description"] = text
+    snapshot = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    with pytest.raises(ValueError):
+        action_from_snapshot(snapshot)
+
+
+def test_scalar_unicode_intake_preserves_identity_bytes_and_replay():
+    import json
+    from red_line import action_from_snapshot, canonical_intake, intake_digest, registry_hash, PERSONAL_RED_LINES
+
+    text = "résumé / 研究 / \U0001f600"
+    candidate = make_action(text, frozenset({"targeting"}))
+    record = replace(candidate.context.evidence[0], reference="record://" + text, summary=text)
+    candidate = replace(candidate, context=replace(
+        candidate.context, purpose=text, evidence=(record,) + candidate.context.evidence[1:],
+        unknowns=[text],
+    ))
+    snapshot = canonical_intake(candidate)
+    restored = action_from_snapshot(snapshot)
+    assert restored == candidate
+    assert json.loads(snapshot)["description"] == text
+    assert canonical_intake(restored) == snapshot
+    assert intake_digest(canonical_intake(restored)) == intake_digest(snapshot)
+    alternate = replace(candidate, description=text + "\U0001f601")
+    assert intake_digest(canonical_intake(alternate)) != intake_digest(snapshot)
+    line = replace(PERSONAL_RED_LINES[0], title=text)
+    assert line.title == text
+    assert registry_hash((line,)) != registry_hash((PERSONAL_RED_LINES[0],))
+
+
+def test_evidence_date_policy_keeps_supported_basic_and_week_spellings():
+    from datetime import date
+
+    record = make_action("synthetic", frozenset({"targeting"})).context.evidence[0]
+    for value in ("20261110", "2026-W46-2"):
+        admitted = replace(record, recorded_on=value)
+        assert admitted.recorded_on == value
+        assert not admitted.is_stale(date(2026, 11, 10))

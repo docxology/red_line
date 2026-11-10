@@ -26,6 +26,12 @@ and the real evaluator. No figure should be read as a measured safety outcome.
 - At mobile widths, the static export remains the source of truth: captions and
   alt text carry the long explanation, while the image preserves the primary
   reading path. No controls or permissions are required.
+- The legibility reader uses active quoted geometry and supported numeric
+  figure-height settings, honoring ordinary trailing YAML comments while
+  ignoring commented-out settings. Font inventory reads explicit pixel-valued
+  XML `font-size` attributes, not comments or text that resembles attributes.
+  It does not infer a CSS cascade. The US Letter/inch geometry model and
+  six-point rendered floor remain unchanged.
 
 ## Layer inventory
 

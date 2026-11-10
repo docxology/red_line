@@ -1,7 +1,14 @@
 # Changelog
 
-## 0.5.2 — 2026-11-09
+## 0.5.2 — Unreleased
 
+- Require exact ASCII calendar review dates and Unicode scalar text before new
+  native intake, registry, finding, or envelope custody; preserve valid Unicode
+  canonical bytes and the existing evidence-date policy.
+- Reject unbound findings with current-only decision traces instead of silently
+  omitting the trace from schema 1; authentic historical schema-1 bytes are unchanged.
+- Ignore commented-out figure geometry and XML font lookalikes, and honor trailing
+  YAML comments on supported figure-height scalars without changing the print floor.
 - Correct constructor/invariant guidance: RedLine construction and dataclasses.replace reject non-enum fields; the battery also detects corrupted records that bypass construction.
 - Document existing restricted intake, replay diagnostics, evidence gates, and per-line decisions in their owning API inventories.
 - Separate current repository citations from the verified 0.5.1 source archive and older historical identifiers; retain exact edition/object boundaries without a future DOI assertion.

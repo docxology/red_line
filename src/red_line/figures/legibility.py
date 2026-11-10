@@ -40,6 +40,7 @@ import re
 import struct
 from dataclasses import dataclass
 from pathlib import Path
+from xml.etree import ElementTree
 
 from .registry import GENERATORS
 from .text import FIGURE_TEXT
@@ -65,13 +66,13 @@ MIN_LEGIBLE_PT = 6.0
 #: LaTeX — and it is the single largest cause of shrunken plates.
 DEFAULT_FIGURE_HEIGHT_FRACTION = 0.50
 
-_GEOMETRY_RE = re.compile(r'geometry:\s*"([^"]+)"')
+_GEOMETRY_RE = re.compile(r'^[ \t]*geometry:[ \t]*"([^"]+)"', re.MULTILINE)
 _GEOMETRY_KEY_RE = re.compile(r"(left|right|top|bottom)\s*=\s*([0-9.]+)in")
-_HEIGHT_FRACTION_RE = re.compile(r"^\s{2,}figure_height_fraction:\s*([0-9.]+)\s*$", re.MULTILINE)
-_RENDERING_BLOCK_RE = re.compile(r"^rendering:\s*$", re.MULTILINE)
+_HEIGHT_FRACTION_RE = re.compile(r"^[ \t]{2,}figure_height_fraction:[ \t]*([0-9.]+)[ \t]*(?:#.*)?$", re.MULTILINE)
+_RENDERING_BLOCK_RE = re.compile(r"^rendering:[ \t]*(?:#.*)?$", re.MULTILINE)
 _EMBED_RE = re.compile(r"\{#(fig:[a-z0-9-]+)([^}]*)\}")
 _WIDTH_ATTR_RE = re.compile(r"width=([0-9.]+)%")
-_FONT_SIZE_RE = re.compile(r'font-size="([0-9.]+)px"')
+_FONT_SIZE_RE = re.compile(r"([0-9.]+)px")
 _SVG_SIZE_RE = re.compile(r'<svg[^>]*?width="([0-9.]+)"[^>]*?height="([0-9.]+)"')
 
 
@@ -176,7 +177,11 @@ def declared_width_fractions(manuscript_dir: Path) -> dict[str, float]:
 def min_font_px(svg_text: str) -> float:
     """Return the smallest ``font-size`` in an SVG document, in canvas units."""
 
-    sizes = [float(size) for size in _FONT_SIZE_RE.findall(svg_text)]
+    sizes = [
+        float(match.group(1))
+        for element in ElementTree.fromstring(svg_text).iter()
+        if (match := _FONT_SIZE_RE.fullmatch(element.get("font-size", ""))) is not None
+    ]
     if not sizes:
         raise ValueError("SVG document carries no font-size declaration")
     return min(sizes)

@@ -40,6 +40,13 @@ means “verified for this review record,” not “independently true,” “la
    uncertainty; never fill a gap with a convenient assumption.
 5. Run `evaluate_action(action, as_of=...)` with a stated review date.
 
+New native records admit Unicode scalar text only: isolated surrogate code
+points and surrogate code-unit pairs are rejected rather than repaired into
+a different identity. Ordinary non-ASCII and supplementary characters retain
+their existing canonical bytes. This applies to action/context/evidence text
+and registry prose before restricted intake custody or replay admission.
+The existing evidence `recorded_on` date policy is unchanged.
+
 Compare the structured declarations against the underlying records before using
 the result. Dangerous prose with misleading benign scope can remain
 `OUTSIDE_SCOPE`. Check every matched exemption's substantive conditions: generic
@@ -94,6 +101,13 @@ and package/source revision as well. `replay_finding(finding, snapshot, lines)`
 reports missing provenance or disagreement and checks the complete computation
 in the matching runtime. It does not verify source facts.
 
+`review_engagement` and newly constructed `ReviewFinding` values require an
+actual calendar date spelled exactly as ASCII `YYYY-MM-DD`; basic ISO and
+week-date spellings are not review-date aliases. Envelope contract checks
+apply the same rule. Caller-supplied envelope subjects may remain blank, but
+must be scalar strings; each source reference must be nonblank scalar text.
+Supported reference lists are detached in order, never split from a bare string.
+
 For shared records, check `envelope_contract_issues` and
 `envelope_finding_issues`. `report_pointer_matches_finding` (also available as
 `envelope_matches_finding`) is only narrow pointer agreement. Archive integrity
@@ -101,6 +115,9 @@ requires `archive_envelope_issues(envelope, trusted_digest)` against a previousl
 retained digest outside the current writer's control. A regenerated consistent
 pair proves no independence. Schema 1.0 reports retain their original bytes and
 are explicitly unbound; they cannot acquire today's provenance by rewrapping.
+An unbound finding cannot carry a current-only decision trace: schema 1 has
+no field for it, so admitting that hybrid would silently lose recorded data.
+Preserve authentic schema-1 records rather than adding modern trace fields.
 
 ## Maintain and publish
 
