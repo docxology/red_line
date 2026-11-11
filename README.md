@@ -25,7 +25,7 @@ It is two things at once:
   staleness of a fresh attestation is the signal), **not** the legal instrument: it
   makes weakening the standard visible and auditable; it does not prevent it.
 
-> Version `0.5.1` · registry SHA-256 `72835fd8…f5aad7` · living document — versioned, revisable, diffable (publicly so once published).
+> Version `0.5.2` · registry SHA-256 `72835fd8…f5aad7` · living document — versioned, revisable, diffable (publicly so once published).
 
 ## What it does
 

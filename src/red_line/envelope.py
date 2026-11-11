@@ -35,6 +35,7 @@ from collections.abc import Iterable
 
 from .canary import registry_hash
 from .model import RedLine
+from .model.red_line import _require_scalar_strings
 from .oversight import ReviewFinding
 from .registry import PERSONAL_RED_LINES
 
@@ -155,6 +156,7 @@ class ReportEnvelope:
         )
         if any(not isinstance(value, str) for value in strings):
             raise TypeError("envelope scalar fields must be strings")
+        _require_scalar_strings(strings)
         for name, values in (
             ("source_snapshot_refs", self.source_snapshot_refs),
             ("scope_and_nonclaims", self.scope_and_nonclaims),
@@ -163,6 +165,7 @@ class ReportEnvelope:
                 raise TypeError(f"envelope {name} must be a tuple or list")
             if any(not isinstance(value, str) or not value.strip() for value in values):
                 raise ValueError(f"envelope {name} must contain non-blank strings")
+            _require_scalar_strings(tuple(values))
             object.__setattr__(self, name, tuple(values))
 
 
@@ -255,9 +258,10 @@ def envelope_contract_issues(envelope: ReportEnvelope) -> tuple[str, ...]:
     from datetime import date
 
     try:
-        date.fromisoformat(envelope.review_date)
+        if date.fromisoformat(envelope.review_date).isoformat() != envelope.review_date:
+            raise ValueError("noncanonical date")
     except ValueError:
-        issues.append("review_date is not an ISO date")
+        issues.append("review_date is not an ASCII YYYY-MM-DD calendar date")
     from .model import Classification
 
     if envelope.native_status not in {value.value for value in Classification}:

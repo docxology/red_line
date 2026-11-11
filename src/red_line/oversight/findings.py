@@ -20,6 +20,15 @@ from ..canary import registry_hash
 from ..version import PROJECT_VERSION
 from .intake import EVALUATOR_ID, canonical_intake, intake_digest, action_from_snapshot
 from ..model.action import LineDecision
+from ..model.red_line import _require_scalar_strings
+
+
+def _validate_review_date(value: str) -> None:
+    try:
+        if date.fromisoformat(value).isoformat() != value:
+            raise ValueError("noncanonical date")
+    except (TypeError, ValueError) as exc:
+        raise ValueError("reviewed_on must be an ISO date in ASCII YYYY-MM-DD calendar form") from exc
 
 
 @dataclass(frozen=True)
@@ -37,6 +46,7 @@ class ReviewAuthorization:
             raise TypeError("authorization fields must be strings")
         if not isinstance(self.recorded_on, str):
             raise TypeError("authorization recorded_on must be an ISO date string")
+        _require_scalar_strings((*fields, self.recorded_on))
         if not all(value.strip() for value in fields):
             raise ValueError("authorization requires reviewer, authority, and rationale")
         try:
@@ -76,6 +86,7 @@ class ReviewFinding:
             raise TypeError("reviewed_on must be an ISO date string")
         if not self.engagement.strip() or not self.finding.strip():
             raise ValueError("review findings require engagement and finding text")
+        _require_scalar_strings((self.engagement, self.finding))
         if not isinstance(self.classification, Classification):
             raise TypeError("classification must use the declared enum")
         if not isinstance(self.implicated_ids, (tuple, list)):
@@ -84,6 +95,7 @@ class ReviewFinding:
             not isinstance(identifier, str) or not identifier.strip() for identifier in self.implicated_ids
         ):
             raise ValueError("implicated_ids must contain non-empty strings")
+        _require_scalar_strings(tuple(self.implicated_ids))
         if len(self.implicated_ids) != len(set(self.implicated_ids)):
             raise ValueError("implicated_ids must be unique")
         if self.authorization is not None and not isinstance(self.authorization, ReviewAuthorization):
@@ -97,6 +109,7 @@ class ReviewFinding:
             raise TypeError("declared_scope must be a scope collection")
         if any(not isinstance(token, str) for token in self.declared_scope):
             raise TypeError("declared_scope tokens must be strings")
+        _require_scalar_strings(tuple(self.declared_scope))
         if not isinstance(self.tier, str):
             raise TypeError("tier must be a string")
         if self.tier and self.tier not in {tier.value for tier in DeploymentTier}:
@@ -114,12 +127,10 @@ class ReviewFinding:
                 raise TypeError(f"{name} must be a tuple or list")
             if any(not isinstance(value, str) or not value.strip() for value in values):
                 raise ValueError(f"{name} must contain non-empty strings")
+            _require_scalar_strings(tuple(values))
             if len(values) != len(set(values)):
                 raise ValueError(f"{name} must not contain duplicates")
-        try:
-            date.fromisoformat(self.reviewed_on)
-        except (TypeError, ValueError) as exc:
-            raise ValueError("reviewed_on must be an ISO date") from exc
+        _validate_review_date(self.reviewed_on)
         object.__setattr__(self, "implicated_ids", tuple(self.implicated_ids))
         object.__setattr__(
             self, "declared_scope", tuple(sorted(normalize_scope(frozenset(self.declared_scope))))
@@ -133,6 +144,7 @@ class ReviewFinding:
         bindings = (self.registry_digest, self.evaluator_version, self.evaluator_id, self.intake_digest)
         if any(not isinstance(value, str) for value in bindings):
             raise TypeError("review provenance bindings must be strings")
+        _require_scalar_strings(bindings)
         if any(bindings) and not all(bindings):
             raise ValueError("review provenance bindings must be all present or all absent (unbound)")
         for digest in (self.registry_digest, self.intake_digest):
@@ -142,6 +154,8 @@ class ReviewFinding:
             not isinstance(entry, LineDecision) for entry in self.decision_trace
         ):
             raise TypeError("finding decision_trace requires LineDecision values")
+        if self.decision_trace and not self.registry_digest:
+            raise ValueError("unbound findings cannot carry a current decision_trace")
         object.__setattr__(self, "decision_trace", tuple(self.decision_trace))
 
     @property
@@ -163,10 +177,7 @@ def review_engagement(
     """Produce a written finding; authorization never releases a blocking result."""
 
     on = reviewed_on if reviewed_on is not None else date.today().isoformat()
-    try:
-        date.fromisoformat(on)
-    except (TypeError, ValueError) as exc:
-        raise ValueError("reviewed_on must be an ISO date") from exc
+    _validate_review_date(on)
     # Bind evidence freshness to the date printed on the finding. Without this
     # explicit as_of, a backdated record could silently be evaluated against a
     # different day than the record claims.

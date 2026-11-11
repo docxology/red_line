@@ -169,13 +169,10 @@ gap the presence check cannot see.
 `severity` is a real `Severity` member. Reports any line with a non-enum value in
 either field.
 
-**Why it matters:** `RedLine` is a plain dataclass, and dataclasses do not
-type-check their fields at construction or under `dataclasses.replace`.
-`dataclasses.replace(rl, max_tier="garbage")` succeeds silently, producing a line
-whose tier is a string. That string would then fail — or worse, misbehave — in the
-tier comparisons `evaluate_action` and `canary_not_air_gapped` rely on, in
-unpredictable ways. This check restores the type guarantee the dataclass does not
-give, so every downstream comparison is over genuine enum members.
+**Why it matters:** `RedLine.__post_init__` rejects non-enum fields, including
+when `dataclasses.replace` calls the constructor. This check also detects a
+corrupted or otherwise reconstructed record that bypassed those checks, before
+downstream tier and severity comparisons rely on it.
 
 ### 9. `nonempty_text` — `check_nonempty_standard_text`
 
@@ -271,7 +268,7 @@ check names the defect at its source.
 | `canary_not_air_gapped` | `check_standard_analogs_not_air_gapped` | A CANARY Standard permitted past oversight into the air-gapped tier |
 | `has_both_standards` | `check_has_both_standards` | Either Turner Standard analog deleted from the registry |
 | `standard_analogs_are_canary` | `check_standard_analogs_are_canary` | Standard analog demoted from CANARY, losing warrant-canary semantics |
-| `enum_field_types` | `check_enum_field_types` | Non-enum value stuffed into `max_tier`/`severity` via `replace` |
+| `enum_field_types` | `check_enum_field_types` | Non-enum value introduced by bypassing the constructor's field checks |
 | `nonempty_text` | `check_nonempty_standard_text` | `standard` or `rationale` blanked — a structurally valid, hollow line |
 | `provenance` | `check_provenance` | Author, date, or first-person form stripped — a personal commitment reread as an anonymous rule |
 | `unique_exemption_ids` | `check_unique_exemption_ids` | Two narrowings answering to one id, so a finding cannot be replayed |

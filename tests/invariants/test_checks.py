@@ -100,7 +100,7 @@ def test_canary_demotion_detected():
 
 
 def test_invalid_enum_field_detected():
-    """A non-enum max_tier (possible via dataclasses.replace) trips the battery."""
+    """A corrupted max_tier that bypassed construction trips the battery."""
     from red_line.invariants import check_enum_field_types
 
     corrupted = (_corrupt(PERSONAL_RED_LINES[0], max_tier="garbage"),) + PERSONAL_RED_LINES[1:]
@@ -226,9 +226,7 @@ def test_summary_table_covers_the_same_battery_as_the_sections():
     rows = _TABLE_ROW_RE.findall(body)
 
     assert [name for name, _ in rows] == _live_invariant_names()
-    assert [function for _, function in rows] == [
-        function for _, _, function in _SECTION_RE.findall(body)
-    ]
+    assert [function for _, function in rows] == [function for _, _, function in _SECTION_RE.findall(body)]
 
 
 def test_the_documentation_gate_fails_on_a_removed_section(tmp_path):

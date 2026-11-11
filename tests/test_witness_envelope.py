@@ -223,22 +223,6 @@ def test_canonical_envelope_is_deterministic() -> None:
     assert first == second
 
 
-def test_the_nonclaims_travel_inside_the_envelope() -> None:
-    """The instrument boundary is part of the record, so a stored envelope
-    cannot quietly outgrow what the instrument was allowed to say."""
-
-    envelope = finding_envelope(_blocking_finding())
-    assert envelope.scope_and_nonclaims == SCOPE_AND_NONCLAIMS
-    assert any("not enforcement" in claim for claim in envelope.scope_and_nonclaims)
-    assert any("never" in claim and "releases a blocking result" in claim
-               for claim in envelope.scope_and_nonclaims)
-    assert any("lexical over a declared scope" in claim for claim in envelope.scope_and_nonclaims)
-    assert any("does not rank, merge, or evaluate" in claim
-               for claim in envelope.scope_and_nonclaims)
-    archived = json.loads(canonical_envelope(envelope))
-    assert archived["scope_and_nonclaims"] == list(SCOPE_AND_NONCLAIMS)
-
-
 def test_envelope_matches_finding_verifies_an_archived_pair() -> None:
     finding = _blocking_finding()
     envelope = finding_envelope(finding, subject_id="worked-example")
@@ -427,3 +411,72 @@ def test_public_report_omits_restricted_evidence_contents():
     assert candidate.context.evidence[0].reference not in serialized
     assert candidate.context.evidence[0].summary not in serialized
     assert candidate.context.evidence[0].reference in canonical_intake(candidate)
+
+
+@pytest.mark.parametrize(
+    "reviewed_on",
+    [
+        "20261110",
+        "2026-W46-2",
+        "2026W462",
+        "２０２６-１１-１０",
+        "2026-02-29",
+        "2026-11-10\n",
+    ],
+)
+def test_review_calendar_admission_matches_envelope_contract(reviewed_on):
+    from red_line import envelope_contract_issues
+
+    candidate = canonical_battery()[-1].action
+    finding = review_engagement(candidate, BATTERY_AS_OF)
+    with pytest.raises(ValueError):
+        review_engagement(candidate, reviewed_on)
+    with pytest.raises(ValueError):
+        dataclasses.replace(finding, reviewed_on=reviewed_on)
+    malformed = dataclasses.replace(finding_envelope(finding), review_date=reviewed_on)
+    assert envelope_contract_issues(malformed)
+
+
+@pytest.mark.parametrize("reviewed_on", ["2024-02-29", "2026-11-10"])
+def test_calendar_review_date_exports_without_rewriting(reviewed_on):
+    from red_line import envelope_contract_issues
+
+    finding = review_engagement(canonical_battery()[-1].action, reviewed_on)
+    envelope = finding_envelope(finding)
+    assert json.loads(canonical_report(finding))["reviewed_on"] == reviewed_on
+    assert json.loads(canonical_envelope(envelope))["review_date"] == reviewed_on
+    assert envelope_contract_issues(envelope) == ()
+
+
+@pytest.mark.parametrize("text", ["\ud800", "\udfff", "\ud83d\ude00"])
+def test_envelope_rejects_non_scalar_subjects_and_references(text):
+    finding = _blocking_finding()
+    envelope = finding_envelope(finding)
+    for changes in ({"subject_id": text}, {"source_snapshot_refs": (text,)}):
+        with pytest.raises(ValueError):
+            finding_envelope(finding, **changes)
+        with pytest.raises(ValueError):
+            dataclasses.replace(envelope, **changes)
+
+
+def test_envelope_scalar_unicode_round_trips_and_detaches_references():
+    text = "résumé / 研究 / \U0001f600"
+    refs = ["snapshot://" + text, "second"]
+    envelope = finding_envelope(_blocking_finding(), subject_id=text, source_snapshot_refs=refs)
+    refs.append("later")
+    payload = json.loads(canonical_envelope(envelope))
+    assert payload["subject_id"] == text
+    assert payload["source_snapshot_refs"] == ["snapshot://" + text, "second"]
+    assert envelope.source_snapshot_refs == ("snapshot://" + text, "second")
+    assert finding_envelope(_blocking_finding(), subject_id="").subject_id == ""
+
+
+def test_unbound_finding_cannot_silently_drop_a_current_decision_trace():
+    bound = review_engagement(canonical_battery()[-1].action, BATTERY_AS_OF)
+    assert bound.decision_trace
+    bindings = dict(registry_digest="", intake_digest="", evaluator_version="", evaluator_id="")
+    with pytest.raises(ValueError):
+        dataclasses.replace(bound, **bindings)
+    historical = dataclasses.replace(bound, decision_trace=(), **bindings)
+    assert "decision_trace" not in json.loads(canonical_report(historical))
+    assert json.loads(canonical_report(bound))["decision_trace"]

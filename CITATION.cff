@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "Cite this version through the repository. The DOI in references identifies a historical archive, not this version."
 type: software
 title: "Personal Red Lines for Development"
-version: "0.5.1"
-date-released: "2026-11-08"
+version: "0.5.2"
+date-released: "2026-11-09"
 authors:
   - family-names: "Friedman"
     given-names: "Daniel Ari"
@@ -40,12 +40,20 @@ abstract: >-
   or external certification.
 references:
   - type: software
+    title: "Personal Red Lines for Development"
+    version: "0.5.1"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+    doi: "10.5281/zenodo.24069256"
+    notes: "Previously verified source ZIP only; not a standalone manuscript identifier."
+  - type: software
     title: "Personal Red Lines for Development — historical archive"
     authors:
       - family-names: "Friedman"
         given-names: "Daniel Ari"
     doi: "10.5281/zenodo.21754240"
-    notes: "Last verified archive identifier; it does not identify version 0.5.1. No DOI for version 0.5.1 has been assigned."
+    notes: "Historical archive identifier; not an identifier for the current software."
   - type: software
     title: "black_line"
     authors:

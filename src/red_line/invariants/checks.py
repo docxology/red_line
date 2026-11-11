@@ -127,10 +127,10 @@ def check_standard_analogs_are_canary(lines: tuple[RedLine, ...]) -> list[Invari
 
 
 def check_enum_field_types(lines: tuple[RedLine, ...]) -> list[InvariantResult]:
-    """max_tier / severity must be real enum members — dataclasses don't type-check.
+    """Defend enum fields on corrupted or otherwise reconstructed records.
 
-    ``dataclasses.replace(rl, max_tier="garbage")`` succeeds silently; a
-    string would then fail comparisons in unpredictable ways downstream.
+    RedLine construction, including dataclasses.replace, rejects non-enum
+    fields. This check also detects records that bypassed that constructor.
     """
     bad = [
         rl.id

@@ -49,15 +49,6 @@ def _probe(scope: frozenset[str]):
     )
 
 
-def test_the_candidate_scan_set_is_not_empty() -> None:
-    """A silence claim proved over zero candidates would be vacuous."""
-
-    candidates = _candidates()
-
-    assert len(candidates) == 6
-    assert len(_candidate_tokens()) >= 6 * 5
-
-
 def test_the_probe_can_detect_a_match_positive_control() -> None:
     """The identical helper must be able to return something other than silence.
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -82,10 +83,17 @@ class TestGitProvenance:
         assert revision is not None
         assert len(revision) == 40
         assert all(character in "0123456789abcdef" for character in revision)
+        tracked = repo / "tracked.txt"
+        stat = tracked.stat()
+        os.utime(tracked, ns=(stat.st_atime_ns, stat.st_mtime_ns + 2_000_000_000))
+        index = repo / ".git" / "index"
+        index_before = index.read_bytes()
         assert git_dirty(repo) is False
+        assert index.read_bytes() == index_before
 
         (repo / "tracked.txt").write_text("second\n", encoding="utf-8")
         assert git_dirty(repo) is True
+        assert index.read_bytes() == index_before
 
 
 def _plant_template(directory: Path) -> Path:

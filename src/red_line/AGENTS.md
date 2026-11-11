@@ -8,6 +8,10 @@ This folder is the package root for `red_line`. It re-exports the public API fro
 | --- | --- | --- | --- |
 | `canonical_report` | `def canonical_report(finding: ReviewFinding) -> str` | Schema 2 binds registry, evaluator and restricted intake identity; unbound schema 1 keeps its original bytes. | [envelope.py](envelope.py) |
 | `report_digest` | `def report_digest(finding: ReviewFinding) -> str` | SHA-256 hex over `canonical_report`; the pointer an envelope carries. | [envelope.py](envelope.py) |
+| `replay_finding` | `(finding, snapshot, lines=PERSONAL_RED_LINES) -> tuple[str, ...]` | Diagnose unavailable provenance or replay disagreement without verifying external facts. | [oversight/findings.py](oversight/findings.py) |
+| `canonical_intake` / `intake_digest` / `action_from_snapshot` | `(action) -> str` / `(snapshot) -> str` / `(snapshot) -> ProposedAction` | Retain and restore restricted intake; a public envelope carries its digest, not its contents. | [oversight/intake.py](oversight/intake.py) |
+| `INTAKE_SCHEMA` / `EVALUATOR_ID` | constants | Restricted snapshot schema and producing evaluator identity, independent of package version. | [oversight/intake.py](oversight/intake.py) |
+| `EvidenceGate` / `LineDecision` | frozen dataclasses | Typed evidence readiness and per-line decision trace. | [model/action.py](model/action.py) |
 | `ReportEnvelope` | frozen dataclass, ten fields | The common `line.report-envelope/1.0` witness record; fail-closed `__post_init__`. | [envelope.py](envelope.py) |
 | `finding_envelope` | `def finding_envelope(finding, subject_id="", source_snapshot_refs=(), lines=None) -> ReportEnvelope` | Copies bound review-time identity; rejects a mismatched explicit registry or an unbound finding. | [envelope.py](envelope.py) |
 | `canonical_envelope` | `def canonical_envelope(envelope: ReportEnvelope) -> str` | Stable JSON of an envelope for archiving beside its report. | [envelope.py](envelope.py) |
@@ -21,7 +25,7 @@ This folder is the package root for `red_line`. It re-exports the public API fro
 | `model/` | Actions, contexts, evidence records, and enums. | [model/AGENTS.md](model/AGENTS.md) |
 | `registry/` | The live personal red-line set. | [registry/AGENTS.md](registry/AGENTS.md) |
 | `evaluation/` | The evaluator that classifies a proposed action. | [evaluation/AGENTS.md](evaluation/AGENTS.md) |
-| `oversight/` | Review findings and transparency reporting. | [oversight/AGENTS.md](oversight/AGENTS.md) |
+| `oversight/` | Review findings, restricted intake snapshots, replay diagnostics, and transparency reporting. | [oversight/AGENTS.md](oversight/AGENTS.md) |
 | `invariants/` | Structural checks over the registry and model. | [invariants/AGENTS.md](invariants/AGENTS.md) |
 | `canary/` | Registry hashing, canary issuance, and verification. | [canary/AGENTS.md](canary/AGENTS.md) |
 | `analysis/` | Derived metrics over the registry and evaluator. | [analysis/AGENTS.md](analysis/AGENTS.md) |

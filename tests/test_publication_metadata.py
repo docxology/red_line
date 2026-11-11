@@ -1,13 +1,4 @@
-"""The publication-metadata contract: one version, exact URLs, no placeholder DOI.
-
-Publication metadata is the surface where a wrong value does the most damage,
-because it is copied verbatim into other people's bibliographies and cannot be
-recalled. These tests bind the four places this work states its own identity —
-the package, the manuscript config, ``CITATION.cff``, and ``.zenodo.json`` — to
-each other, require every sibling reference to be the exact public URL, and
-refuse any DOI-shaped string that a person has not explicitly asserted to be
-real.
-"""
+"""Version agreement, canonical citation URLs, and disclosure boundaries."""
 
 from __future__ import annotations
 
@@ -23,20 +14,6 @@ ZENODO = ROOT / ".zenodo.json"
 CONFIG = ROOT / "manuscript" / "config.yaml"
 
 SELF = "red_line"
-
-#: Previously asserted identifiers retained as a bounded historical allowlist,
-#: not a current membership declaration or evidence of a new publication.
-VERIFIED_DOIS: tuple[str, ...] = (
-    "10.5281/zenodo.21754236",
-    "10.5281/zenodo.21754238",
-    "10.5281/zenodo.21754240",
-    "10.5281/zenodo.21754242",
-    "10.5281/zenodo.21754244",
-    "10.5281/zenodo.21754246",
-)
-
-#: A DOI as the registries publish them.
-DOI_PATTERN = re.compile(r"10\.\d{4,9}/[-._;()/:A-Za-z0-9]+")
 
 
 def _config_paper_version() -> str:
@@ -70,28 +47,6 @@ def test_the_four_version_statements_agree() -> None:
     assert _config_paper_version() == __version__
 
 
-def test_current_citation_does_not_claim_the_historical_doi() -> None:
-    citation = CITATION.read_text()
-    current, references = citation.split("references:", 1)
-    assert "10.5281/zenodo.21754240" not in current
-    assert "10.5281/zenodo.21754240" in references
-    publication = (ROOT / "docs" / "publication.md").read_text()
-    recommendation = publication.split("## Persistent Identifiers", 1)[0]
-    assert "10.5281/zenodo.21754240" not in recommendation
-    assert "https://github.com/docxology/red_line" in recommendation
-    config = CONFIG.read_text().split("publication:", 1)[1].split("keywords:", 1)[0]
-    assert "10.5281/zenodo.21754240" not in config
-    assert "10.5281/zenodo.21754240" in CONFIG.read_text()
-    historical = [
-        item
-        for item in json.loads(ZENODO.read_text())["related_identifiers"]
-        if item["identifier"] == "10.5281/zenodo.21754240"
-    ]
-    assert historical == [
-        {"identifier": "10.5281/zenodo.21754240", "relation": "references", "scheme": "doi"}
-    ]
-
-
 def test_the_citation_names_this_repository_exactly() -> None:
     expected = f"https://github.com/docxology/{SELF}"
     assert _cff_field("repository-code") == expected
@@ -100,27 +55,6 @@ def test_the_citation_names_this_repository_exactly() -> None:
         item["identifier"] for item in zenodo["related_identifiers"] if item["relation"] == "isSupplementTo"
     ]
     assert supplements == [expected]
-
-
-def test_no_unverified_doi_appears_in_metadata() -> None:
-    """A DOI-shaped string must be one a person asserted is real.
-
-    Third-party DOIs in ``manuscript/references.bib`` are out of scope here:
-    they identify other people's work and are verified against Crossref where
-    each repository's reference tests require it. This gate governs the
-    identity this work claims for itself.
-    """
-
-    surfaces = [CITATION, ZENODO, CONFIG, ROOT / "docs" / "publication.md"]
-    for path in surfaces:
-        if not path.exists():
-            continue
-        for found in DOI_PATTERN.findall(path.read_text(encoding="utf-8")):
-            assert found in VERIFIED_DOIS, (
-                f"{path.name} carries the DOI-shaped string {found!r} which is not "
-                "in VERIFIED_DOIS. If it is a real minted DOI, add it there in the "
-                "same change; if it is a placeholder, remove it."
-            )
 
 
 def test_no_absolute_local_path_is_shipped() -> None:

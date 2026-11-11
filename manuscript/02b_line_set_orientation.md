@@ -16,8 +16,12 @@ The separation is substantive. Red Line does not turn good method into permissio
 Black Line does not turn aspiration into prohibition; Golden Line does not turn
 uncertainty into failure; White Line does not turn silence into evidence. Each
 work has its own registry, vocabulary, executable interface, sources,
-figures, tests, and limitations, and each is its own repository —
-`docxology/black_line`, `docxology/golden_line`, and `docxology/white_line`.
+figures, tests, and limitations, and each is its own repository:
+
+- `docxology/black_line`
+- `docxology/golden_line`
+- `docxology/white_line`
+
 The relationship is recorded in the companion `line_set` work
 (<https://github.com/docxology/line_set>), which declares the set and checks
 that no two instruments gave the same spelling to different things.
