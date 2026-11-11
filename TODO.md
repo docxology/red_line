@@ -356,3 +356,7 @@ spelling. They describe earlier trees, not current membership or verification.
   completed the Test layout table in `docs/development.md` with the
   integration release suites and root-level suites. No boundary, beacon, or
   canary statement wording was altered.
+
+## Workflowz review — 2026-11-10
+
+Coverage note: this read-only review covered the bounded evidence packet only (5 project files and 22 source files with excerpts, including 17 marker excerpts, out of 128 source candidates and 257 total files), not every line or an executed test suite. No concrete correctness, maintainability, documentation, validation, or dead-code improvement with exact packet evidence survived; no new checklist item is added. Re-review on a concrete failure or source change.
