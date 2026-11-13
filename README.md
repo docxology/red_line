@@ -3,6 +3,8 @@
 **A versioned personal security boundary — a beacon, canary, and explicit No
 document — for dual-use development work.**
 
+![Red Line hero illustration](manuscript/assets/cover/red_line_hero.png)
+
 `red_line` makes explicit the boundaries its author (Daniel Ari Friedman,
 [docxology](https://github.com/docxology)) will not cross while developing
 open-source scientific software, proprietary modeling, and cognitive-security and
