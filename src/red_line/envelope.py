@@ -52,7 +52,7 @@ RED_LINE_ID = "red_line"
 
 #: The non-claims every envelope carries, restating the instrument boundary
 #: (README limitations, ``docs/README.md`` honesty boundary, and
-#: ``manuscript/10_limitations.md``) in transportable form.
+#: ``docs/manuscript/10_limitations.md``) in transportable form.
 SCOPE_AND_NONCLAIMS: tuple[str, ...] = (
     "classifies one described action against the author's own dated, "
     "first-person, revisable red-line registry at a stated review date",

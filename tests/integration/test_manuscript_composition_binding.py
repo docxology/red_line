@@ -1,6 +1,6 @@
 """Composition-section binding: manuscript numbers must equal derived metrics.
 
-The registry-composition section (``manuscript/09a_registry_composition.md``)
+The registry-composition section (``docs/manuscript/09a_registry_composition.md``)
 states structural numbers — the per-line table, scope-token totals, shared
 tokens, evidence-depth distribution, and trigger-scope sizes — as *derived*
 data. These tests recompute every one of those numbers from
@@ -30,8 +30,8 @@ from red_line.analysis.registry_metrics import (
 )
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-COMPOSITION = ROOT / "manuscript" / "09a_registry_composition.md"
-EVALUATION = ROOT / "manuscript" / "08_ambiguity_and_evaluation.md"
+COMPOSITION = ROOT / "docs" / "manuscript" / "09a_registry_composition.md"
+EVALUATION = ROOT / "docs" / "manuscript" / "08_ambiguity_and_evaluation.md"
 
 _NUMBER_WORDS = {
     "one": 1,
@@ -179,7 +179,7 @@ def test_trigger_scope_size_distribution_matches():
 
 def test_beacon_derived_numbers_paragraph_matches_the_registry():
     """Every number in the 09_red_lines derived-numbers paragraph re-derives."""
-    body = (ROOT / "manuscript" / "09_red_lines.md").read_text(encoding="utf-8")
+    body = (ROOT / "docs" / "manuscript" / "09_red_lines.md").read_text(encoding="utf-8")
     matrix = exemption_evidence_matrix()
     demand = evidence_kind_demand()
     by_name = {kind.name: count for kind, count in demand.items()}
@@ -221,7 +221,7 @@ def test_beacon_derived_numbers_paragraph_matches_the_registry():
 
 def test_limitations_structural_counts_match():
     """The limitations section's structural count words match the code."""
-    body = (ROOT / "manuscript" / "10_limitations.md").read_text(encoding="utf-8")
+    body = (ROOT / "docs" / "manuscript" / "10_limitations.md").read_text(encoding="utf-8")
     assert re.search(r"bounded by seven personal\s+lines", body) is not None
     assert len(PERSONAL_RED_LINES) == _NUMBER_WORDS["seven"]
     report = run_outcome_coverage()

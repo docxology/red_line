@@ -60,7 +60,7 @@ anti-confusion rule.
    its criterion, record the defect and either amend it with a dated rationale
    or stop. Never replace an unresolved state with a favorable default.
 
-![An evidence-gated improvement loop keeps claim, action, and artifact boundaries aligned. The eight-step schematic moves from deconstruction and challenge through claim declaration, reconstruction, fail-closed evaluation, frozen records, source-to-render verification, and dated revision. The outside panel names semantic truth, legal validity, enforcement, independent witnessing, and real-world safety as claims this local loop cannot establish. It is a reproducible method map, not a measurement of improvement or safety.](../output/figures/improvement_method_loop.png){#fig:improvement-method-loop width=95%}
+![An evidence-gated improvement loop keeps claim, action, and artifact boundaries aligned. The eight-step schematic moves from deconstruction and challenge through claim declaration, reconstruction, fail-closed evaluation, frozen records, source-to-render verification, and dated revision. The outside panel names semantic truth, legal validity, enforcement, independent witnessing, and real-world safety as claims this local loop cannot establish. It is a reproducible method map, not a measurement of improvement or safety.](../../output/figures/improvement_method_loop.png){#fig:improvement-method-loop width=95%}
 
 ## Evidence states and stop points
 

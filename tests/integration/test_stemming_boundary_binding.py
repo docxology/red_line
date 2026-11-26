@@ -42,7 +42,7 @@ _PROFILING_TOKENS = frozenset(
 
 
 def _abstract() -> str:
-    return " ".join((ROOT / "manuscript" / "00_abstract.md").read_text(encoding="utf-8").split())
+    return " ".join((ROOT / "docs" / "manuscript" / "00_abstract.md").read_text(encoding="utf-8").split())
 
 
 def test_the_abstract_qualifies_the_stemming_claim_to_scope_normalization() -> None:

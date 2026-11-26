@@ -24,8 +24,8 @@ presented here as candidate scopes for review; a future adoption must provide
 typed exemptions and verified evidence rather than relying on a carve-out
 keyword. They are ready to consider only on explicit assent. Adding
 any of them changes the published registry hash and requires a full canary
-re-issue (recompute hash → update README + `manuscript/09_red_lines.md` pins +
-beacon prose + `manuscript/11_conclusion.md` count + regenerate
+re-issue (recompute hash → update README + `docs/manuscript/09_red_lines.md` pins +
+beacon prose + `docs/manuscript/11_conclusion.md` count + regenerate
 `tests/fixtures/canary_committed.json`).
 
 Severity note: `CANARY` grade stays reserved for the two Turner-Standard analogs

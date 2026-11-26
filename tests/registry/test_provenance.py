@@ -42,8 +42,8 @@ def test_registry_marked_non_exhaustive():
 # to the gate while three other files continued to state the same facts.
 #
 # These bind the three constants to the surfaces that restate them:
-# manuscript/config.yaml's project_config.source_framework block, CITATION.cff's
-# reference entry, and manuscript/references.bib. All four must agree.
+# docs/manuscript/config.yaml's project_config.source_framework block, CITATION.cff's
+# reference entry, and docs/manuscript/references.bib. All four must agree.
 # ---------------------------------------------------------------------------
 
 
@@ -63,7 +63,7 @@ def test_source_framework_constant_names_the_author_and_title_verbatim():
 def test_source_constants_match_the_manuscript_config_block():
     """`project_config.source_framework` is what the rendered front matter uses."""
 
-    config = _text("manuscript/config.yaml")
+    config = _text("docs/manuscript/config.yaml")
     author, _, title = SOURCE_FRAMEWORK.partition(", ")
 
     assert f'author: "{author}"' in config
@@ -89,7 +89,7 @@ def test_source_constants_match_the_citation_reference_block():
 def test_source_date_matches_the_bibliography_entry():
     """references.bib carries the same publication date, split across fields."""
 
-    bib = _text("manuscript/references.bib")
+    bib = _text("docs/manuscript/references.bib")
     entry = bib.split("@misc{turner2026redline,")[1].split("\n@")[0]
     year, month, day = SOURCE_DATE.split("-")
     months = (

@@ -27,7 +27,7 @@ template's ``\\includegraphics[width=...,height=...,keepaspectratio]``:
 When the height cap binds first, the whole plate shrinks and every label shrinks
 with it — the failure mode this module was written to catch.
 
-Page geometry is derived from ``manuscript/config.yaml`` rather than from a
+Page geometry is derived from ``docs/manuscript/config.yaml`` rather than from a
 build artifact, so the gate runs on a fresh checkout with no rendered PDF
 present. Lengths are TeX points (``1in = 72.27pt``), which is the unit both
 ``geometry`` and LaTeX font sizes use; the conversion cancels out of the ratio
@@ -272,16 +272,16 @@ def measure_figure_set(project_root: Path) -> tuple[FigureLegibility, ...]:
     """Measure every registered figure, sorted by label.
 
     Reads the built ``output/figures/`` artifacts, the manuscript embeds, and
-    ``manuscript/config.yaml``. Fails closed when a registered figure has no
+    ``docs/manuscript/config.yaml``. Fails closed when a registered figure has no
     embed, no rendered SVG, or no rendered PNG: an unmeasurable figure is a gap
     in the gate, not a pass.
     """
 
     root = project_root.resolve()
-    config_text = (root / "manuscript" / "config.yaml").read_text(encoding="utf-8")
+    config_text = (root / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8")
     geometry = parse_page_geometry(config_text)
     height_fraction = parse_figure_height_fraction(config_text)
-    fractions = declared_width_fractions(root / "manuscript")
+    fractions = declared_width_fractions(root / "docs" / "manuscript")
     figures_dir = root / "output" / "figures"
 
     measured: list[FigureLegibility] = []

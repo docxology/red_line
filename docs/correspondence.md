@@ -70,7 +70,7 @@ formalism bindings reject hand-written formal claims that no gate executed.
 ### Wave-3 update (2026-07-29, later the same day)
 
 The deferred manuscript formalism landed: `def:report-envelope` and
-`prop:envelope-pointer` in `manuscript/08a_formalism.md`, bound by two new
+`prop:envelope-pointer` in `docs/manuscript/08a_formalism.md`, bound by two new
 tests proven to bite via planted drifts, with the claim ledger and the
 fourteen suite-inventory sites moved (868 -> 870). Strict release evidence
 went green for the first time under the engine-pipeline-last-then-strict

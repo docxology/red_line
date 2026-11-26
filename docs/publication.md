@@ -21,9 +21,11 @@ BibTeX:
 ```
 
 `src/red_line/version.py` is the version authority. `CITATION.cff`,
-`.zenodo.json` and `manuscript/config.yaml` share its version;
+`.zenodo.json` and [manuscript configuration](manuscript/config.yaml) share its version;
 `tests/test_publication_metadata.py` fails if they disagree. Historical
 identifiers remain separate references rather than current-version identifiers.
+Update the source version in the [manuscript abstract](manuscript/00_abstract.md)
+with these fields so the combined HTML and Markdown carry the package version.
 
 ## Current documentation-only patch
 

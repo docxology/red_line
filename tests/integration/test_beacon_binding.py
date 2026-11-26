@@ -1,6 +1,6 @@
 """Beacon-to-code binding: the human-readable beacon must equal the registry.
 
-The manuscript beacon (``manuscript/09_red_lines.md``) and the README carry a
+The manuscript beacon (``docs/manuscript/09_red_lines.md``) and the README carry a
 pinned registry hash and prose renderings of the red lines. If someone edits a
 red line in ``src/red_line/registry/lines.py`` without re-issuing the beacon — or edits the
 prose so it no longer matches the code — the standard has silently forked. These
@@ -18,7 +18,7 @@ from red_line.canary import registry_hash
 from red_line import PERSONAL_RED_LINES, Severity
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-BEACON = ROOT / "manuscript" / "09_red_lines.md"
+BEACON = ROOT / "docs" / "manuscript" / "09_red_lines.md"
 README = ROOT / "README.md"
 
 

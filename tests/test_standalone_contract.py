@@ -1,4 +1,4 @@
-"""Executable form of `STANDALONE.md`: this copy must survive being separated.
+"""Executable form of `docs/standalone.md`: this copy must survive being separated.
 
 Red Line is developed inside a larger private projects tree and published as its
 own repository. Two defects only appear on the published side, and neither of
@@ -24,6 +24,7 @@ able to reject by running the same classifier over a planted escaping link.
 from __future__ import annotations
 
 from pathlib import Path
+from urllib.parse import unquote
 import re
 import shutil
 import subprocess
@@ -33,7 +34,7 @@ import pytest
 
 def test_engine_analysis_declares_only_data_producers():
     root = Path(__file__).resolve().parents[1]
-    config = (root / "manuscript" / "config.yaml").read_text()
+    config = (root / "docs" / "manuscript" / "config.yaml").read_text()
     section = re.search(r"(?m)^analysis:\n((?:[ \t].*\n|\n)+)", config)
     assert section is not None, "engine discovery would execute every script, including its own caller"
     scripts = re.findall(r"(?m)^\s+- ([a-z_]+\.py)$", section.group(1))
@@ -93,6 +94,17 @@ def escaping_links(path: Path, root: Path) -> list[str]:
         except ValueError:
             escaping.append(target)
     return escaping
+
+
+def missing_link_targets(path: Path) -> list[str]:
+    """Return repository-relative link targets missing on disk."""
+    targets = _LINK_RE.findall(path.read_text(encoding="utf-8"))
+    return [
+        target
+        for target in targets
+        if not target.startswith(_ADDRESSED_ELSEWHERE)
+        and not (path.parent / unquote(target.split("#", 1)[0])).exists()
+    ]
 
 
 def _linked_documents() -> list[Path]:
@@ -178,6 +190,16 @@ def test_no_relative_link_in_a_tracked_document_leaves_the_repository() -> None:
 
 
 @requires_git_checkout
+def test_relative_document_links_resolve() -> None:
+    offending = {
+        str(path.relative_to(ROOT)): missing
+        for path in _linked_documents()
+        if (missing := missing_link_targets(path))
+    }
+    assert offending == {}, f"missing relative Markdown link targets: {offending}"
+
+
+@requires_git_checkout
 def test_the_link_inventory_examined_a_real_body_of_links() -> None:
     """A classifier that finds no links at all would report zero escapes."""
 
@@ -194,9 +216,10 @@ def test_the_escape_check_rejects_a_planted_outward_link(tmp_path: Path) -> None
     document.write_text(
         "See the [line-set map](../../docs/line-set.md), the "
         "[local note](note.md), the [site](https://example.invalid/x), "
-        "and the [section](#heading).\n",
+        "the [section](#heading), and a [missing note](missing.md).\n",
         encoding="utf-8",
     )
     (repository / "docs" / "note.md").write_text("ok\n", encoding="utf-8")
 
     assert escaping_links(document, repository) == ["../../docs/line-set.md"]
+    assert missing_link_targets(document) == ["../../docs/line-set.md", "missing.md"]

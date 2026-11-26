@@ -7,7 +7,7 @@ The contracts package binds release-facing prose, metadata, figures, and ledgers
 ```mermaid
 flowchart LR
   data["data/ and docs/"] --> validators["contracts validators"]
-  manuscript["manuscript/"] --> validators
+  manuscript["docs/manuscript/"] --> validators
   figures["figures API and output/"] --> validators
   validators --> errors["list[str] errors"]
 ```

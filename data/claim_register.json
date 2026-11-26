@@ -19,7 +19,7 @@
       "claim_class": "implementation",
       "supporting_surface": [
         "src/red_line/registry/lines.py",
-        "manuscript/09_red_lines.md",
+        "docs/manuscript/09_red_lines.md",
         "beacon-binding tests"
       ],
       "status": "locally_bound_hash_pinned",

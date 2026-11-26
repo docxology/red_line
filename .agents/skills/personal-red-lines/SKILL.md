@@ -160,10 +160,10 @@ that parses arguments and calls one package function.
 | Release provenance, input snapshot, manifest, render determinism | `src/red_line/release/` | `scripts/build_release_data.py`, `scripts/build_release_manifest.py`, `scripts/compare_render_artifacts.py` |
 | Full local gate | `scripts/quality_gate.py` (sequencing only) | — |
 
-- `manuscript/09_red_lines.md` — the human-readable beacon;
-  `manuscript/09a_registry_composition.md` — the derived-data composition section.
+- `docs/manuscript/09_red_lines.md` — the human-readable beacon;
+  `docs/manuscript/09a_registry_composition.md` — the derived-data composition section.
 
-Version authority is `src/red_line/version.py`; `manuscript/config.yaml` and
+Version authority is `src/red_line/version.py`; `docs/manuscript/config.yaml` and
 other surfaces are bound to it by validation.
 
 ## The report envelope (cross-instrument transport)

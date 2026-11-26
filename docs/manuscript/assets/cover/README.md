@@ -3,7 +3,7 @@
 The cover artwork is a generated, text-free editorial substrate. The portrait
 asset is used by the PDF title page; the wide asset is reserved for HTML or other
 editorial surfaces and is registered as `metadata.editorial_hero_image` in
-`manuscript/config.yaml`. Title, subtitle, author, date, and citation text
+`docs/manuscript/config.yaml`. Title, subtitle, author, date, and citation text
 remain editable renderer output rather than raster text.
 
 ## Semantic contract

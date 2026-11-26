@@ -11,7 +11,7 @@ from red_line import __version__
 ROOT = Path(__file__).resolve().parents[1]
 CITATION = ROOT / "CITATION.cff"
 ZENODO = ROOT / ".zenodo.json"
-CONFIG = ROOT / "manuscript" / "config.yaml"
+CONFIG = ROOT / "docs" / "manuscript" / "config.yaml"
 
 SELF = "red_line"
 
@@ -27,7 +27,7 @@ def _config_paper_version() -> str:
             match = re.match(r'\s+version:\s*"([^"]+)"\s*$', line)
             if match:
                 return match.group(1)
-    raise AssertionError("paper.version not found in manuscript/config.yaml")
+    raise AssertionError("paper.version not found in docs/manuscript/config.yaml")
 
 
 def _cff_field(name: str) -> str:

@@ -21,8 +21,8 @@ content-hash canary, and the manuscript that explains all of it. It is a
 **beacon** — something to read and align to — and a **canary** — a dated hash
 whose staleness or removal is meant to be visible. It is not a compliance
 system, not an enforcement mechanism, and not a claim about anyone but its
-author. The epistemic limits are stated at length in the README's "Limitations
-(read this)" section and in `manuscript/10_limitations.md`; separation does not
+author. The epistemic limits are stated at length in the [README](../README.md)'s "Limitations
+(read this)" section and in `docs/manuscript/10_limitations.md`; separation does not
 soften any of them, and a copy must carry them forward unedited.
 
 ## What it can do alone
@@ -31,12 +31,12 @@ Everything except typeset itself.
 
 | Surface | Command | Needs anything external? |
 | --- | --- | --- |
-| Full test suite and coverage gate | `.venv/bin/python -m pytest tests/ --cov=red_line --cov-fail-under=90` | no |
+| Full test suite and coverage gate | `.venv/bin/python -m pytest tests/ --cov=red_line --cov-fail-under=90` | `rsvg-convert` for generated figure checks |
 | Deterministic figures (18 SVG + 18 PNG + registry) | `.venv/bin/python scripts/build_figures.py` | `rsvg-convert` for PNG rasterization |
 | Canary statement and hash | `scripts/build_canary.py`, `scripts/check_canary.py` | no |
 | Every contract validator | `scripts/validate_*.py` | no |
 | Release input snapshot and manifest | `scripts/build_release_data.py`, `scripts/build_release_manifest.py` | no |
-| Project quality gate (without `--render`) | `scripts/quality_gate.py --as-of <date>` | no |
+| Project quality gate (without `--render`) | `scripts/quality_gate.py --as-of <date>` | uv and `rsvg-convert` |
 
 `rsvg-convert` is a system tool, not a Python dependency; without it the SVG
 figures still build and the rasterization step fails loudly rather than
@@ -52,7 +52,7 @@ and is never vendored here. Locate it anywhere and name it with
 `red_line.release.provenance.find_template_root` searches the ancestors of the
 project root for a directory named `template` that actually carries
 `scripts/pipeline/stage_03_render.py`, and reports `None` rather than inventing
-a path. The exact invocation is in [`docs/development.md`](docs/development.md).
+a path. The exact invocation is in [development.md](development.md).
 
 The current engine's full core pipeline requires a real checkout named
 `red_line` under its `projects/working/` directory; a symlink is accepted by
@@ -77,7 +77,7 @@ Two consequences follow, and both are designed rather than tolerated:
 
 **Publish the canary externally.** The committed prior statement lives in this
 same repository, so verification is self-referential until a copy exists on a
-surface the author cannot rewrite. See [`docs/VERIFY.md`](docs/VERIFY.md). That
+surface the author cannot rewrite. See [VERIFY.md](VERIFY.md). That
 limit is a property of the instrument, not of the separation.
 
 ## Where the companion works are
@@ -117,8 +117,8 @@ path out of itself:
 
 That module is the executable form of this document. It asserts that every
 source file the suite needs is tracked by git (an untracked `conftest.py` is
-invisible to a clone), that no relative markdown link in a tracked file escapes
-the repository root, and that generated output is not tracked. It does not
+invisible to a clone), that relative Markdown links stay within the repository and resolve,
+and that generated output stays out of Git. It does not
 substitute documentation wording checks for native behavior.
 
 The local gates are necessary and not sufficient. Rendered PDF and HTML output

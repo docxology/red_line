@@ -22,7 +22,7 @@ same repo, and a force-push rewrites both).
 .venv/bin/python -c "from red_line.canary import registry_hash; print(registry_hash())"
 ```
 
-Compare against the hash pinned in `README.md`, `manuscript/09_red_lines.md`,
+Compare against the hash pinned in `README.md`, `docs/manuscript/09_red_lines.md`,
 and `tests/fixtures/canary_committed.json`. All three must agree; a mismatch
 means the registry changed without a full canary re-issue — itself a defect.
 

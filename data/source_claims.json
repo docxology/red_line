@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "source_document": "manuscript/references.bib",
+  "source_document": "docs/manuscript/references.bib",
   "interpretive_ledger": "docs/research-method.md",
   "record_policy": "Each record binds a cited source to a verified URL, locator, claim class, transferred question, stopping boundary, and manuscript use. Figure bindings below separately bind source-driven visual summaries to the source records. The source-specific prose remains in the human-readable research method.",
   "locator_coverage": {

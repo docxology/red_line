@@ -17,7 +17,7 @@ in [`src/red_line/contracts/`](../src/red_line/contracts/); everything under
 
 | ID | Claim made by the project | Claim class | Supporting surface | Verification mode | Verification status | Stopping point |
 |---|---|---|---|---|---|---|
-| `CLM-001` | The author has seven current, first-person red lines | implementation | `src/red_line/registry/lines.py`, `manuscript/09_red_lines.md`, beacon-binding tests | executable | locally_bound_hash_pinned | Not a universal ethics code and not exhaustive |
+| `CLM-001` | The author has seven current, first-person red lines | implementation | `src/red_line/registry/lines.py`, `docs/manuscript/09_red_lines.md`, beacon-binding tests | executable | locally_bound_hash_pinned | Not a universal ethics code and not exhaustive |
 | `CLM-002` | Missing or unresolved required context cannot produce COMPLIANT | implementation | `src/red_line/evaluation/evaluator.py`, evaluator tests, `docs/evaluator-semantics.md` | executable | executably_tested | A verified record is still not independently true |
 | `CLM-003` | Outside-scope work is distinct from compliance | implementation | `Classification.OUTSIDE_SCOPE`, assessment tests, manuscript section on evaluation | executable | executably_tested | Outside scope means only that this registry did not match |
 | `CLM-004` | Less retained oversight narrows the release envelope | implementation | `DeploymentTier`, registry floors, monotonicity tests, tier figure | executable | executably_tested_as_a_local_rule | Oversight retention is not safety, legality, or enforcement |

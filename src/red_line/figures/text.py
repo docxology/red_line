@@ -147,7 +147,7 @@ FIGURE_TEXT = {
             "project's own normative choices distinct from its sources."
         ),
         "alt": "Non-linear reading map with situated sources from China, India, Greece, the Islamic world, North Africa, Europe, Latin America, Aotearoa, Africa, and global institutions, including collective data-governance questions.",
-        "source": "docs/research-method.md and manuscript/references.bib",
+        "source": "docs/research-method.md and docs/manuscript/references.bib",
         "source_ids": (
             "sunzi1910artofwar",
             "kautilya2013arthasastra",
@@ -186,7 +186,7 @@ FIGURE_TEXT = {
             "line can substitute for another."
         ),
         "alt": "Four labeled historical panels distinguish Red refusal, Black method, Golden aspiration, and White absence, with arrows showing cross-reference without substitution; not a current membership list.",
-        "source": "https://github.com/docxology/line_set and manuscript/02b_line_set_orientation.md",
+        "source": "https://github.com/docxology/line_set and docs/manuscript/02b_line_set_orientation.md",
     },
     "fig:outcome-precedence": {
         "filename": "outcome_precedence_ladder.png",
@@ -224,7 +224,7 @@ FIGURE_TEXT = {
             "distinct from individual consent."
         ),
         "alt": "Matrix of situated source families, transferred questions, claim classes, and explicit interpretation limits.",
-        "source": "docs/research-method.md and manuscript/references.bib",
+        "source": "docs/research-method.md and docs/manuscript/references.bib",
         "source_ids": (
             "sunzi1910artofwar",
             "kautilya2013arthasastra",
@@ -299,7 +299,7 @@ FIGURE_TEXT = {
             "intake questions about perspective, uncertainty, contestability, classification, "
             "and hidden labor."
         ),
-        "source": "docs/research-method.md, manuscript/references.bib, and manuscript/02a_global_and_historical_scholarship.md",
+        "source": "docs/research-method.md, docs/manuscript/references.bib, and docs/manuscript/02a_global_and_historical_scholarship.md",
         "source_ids": (
             "haraway1988situated",
             "jasanoff2003humility",

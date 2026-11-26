@@ -20,6 +20,14 @@ Current registry SHA-256:
 72835fd81d1f7ecf70f47b1e0061cd56c385273dd846879ab639225913f5aad7
 ```
 
+## Start here
+
+- [Development setup and render commands](development.md)
+- [Standalone workflow and link checks](standalone.md)
+- [Manuscript and section order](manuscript/README.md)
+- [Publication and citation](publication.md)
+- [Release backlog](backlog.md) and [release history](../CHANGELOG.md)
+
 ## Core references
 
 | Area | Source |
@@ -38,7 +46,6 @@ Current registry SHA-256:
 | Canary mechanism | [`canary-and-trust-model.md`](canary-and-trust-model.md) |
 | Third-party verification | [`VERIFY.md`](VERIFY.md) |
 | Amendment runbook | [`amendment-runbook.md`](amendment-runbook.md) |
-| Development guide | [`development.md`](development.md) |
 | Glossary | [`glossary.md`](glossary.md) |
 | Hardening tests | [`hardening.md`](hardening.md) |
 | Structural invariants | [`invariants.md`](invariants.md) |
@@ -57,7 +64,7 @@ five results: `INSUFFICIENT_INFORMATION`, `NON_COMPLIANT`,
 typed `Exemption` records. `normalize_token` uses an explicit alias table;
 there is no heuristic pluralization or semantic inference.
 
-The manuscript's first-principles design section explains why these are
+The manuscript's [first-principles design section](manuscript/02c_first_principles_design.md) explains why these are
 separate surfaces: a declaration, a reviewable record, a local result, a
 change signal, and an external witness solve different problems and cannot
 substitute for one another.
