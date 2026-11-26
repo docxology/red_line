@@ -34,7 +34,7 @@ The body composes in lexical filename order. Whole-number files carry the main s
 | --- | --- |
 | [config.yaml](config.yaml) | Render metadata, cover settings, authorship metadata, project source-framework metadata, format toggles, and page geometry. |
 | [preamble.md](preamble.md) | LaTeX package and theorem setup injected into the render. |
-| [references.bib](references.bib) | Bibliography of 45 cited sources, bound to [source_claims.json](../data/source_claims.json) by [`validate_source_claims`](../src/red_line/contracts/source_claims.py). |
+| [references.bib](references.bib) | Bibliography of 45 cited sources, bound to [source_claims.json](../../data/source_claims.json) by [`validate_source_claims`](../../src/red_line/contracts/source_claims.py). |
 | [assets/cover/README.md](assets/cover/README.md) | Provenance and semantic contract for `red_line_cover.png` and `red_line_hero.png`. |
 
 ## `config.yaml` fields present
@@ -49,10 +49,12 @@ The body composes in lexical filename order. Whole-number files carry the main s
 
 ## Render path
 
-Do not render from this directory. Rendering runs in a separate checkout of the template engine, <https://github.com/docxology/template> — located anywhere and named by `RED_LINE_TEMPLATE_ROOT`, not assumed to sit at a fixed relative path — using its `scripts/pipeline/stage_03_render.py` and `scripts/pipeline/stage_04_validate.py` with the project name `working/red_line`. The engine is a stated external dependency: without it this repository still runs its full test suite, its figure build, and every script under `scripts/`, but it cannot typeset itself.
+Follow the [development guide](../development.md#rendered-publication-artifacts)
+for the pinned template checkout and the `working/red_line` render and
+validation commands.
 
 ## Invariants
 
 - Keep numbered section files in lexical order; do not hide body prose in `preamble.md` or under `assets/`.
-- Keep `references.bib` and [source_claims.json](../data/source_claims.json) synchronized; citation drift is a contract failure.
+- Keep `references.bib` and [source_claims.json](../../data/source_claims.json) synchronized; citation drift is a contract failure.
 - For cover assets, update the files and then update [assets/cover/README.md](assets/cover/README.md) rather than repeating the provenance here.

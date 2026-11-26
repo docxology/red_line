@@ -3,7 +3,7 @@
 **A versioned personal security boundary — a beacon, canary, and explicit No
 document — for dual-use development work.**
 
-![Red Line hero illustration](manuscript/assets/cover/red_line_hero.png)
+![Red Line hero illustration](docs/manuscript/assets/cover/red_line_hero.png)
 
 `red_line` makes explicit the boundaries its author (Daniel Ari Friedman,
 [docxology](https://github.com/docxology)) will not cross while developing
@@ -53,7 +53,8 @@ package function:
 
 The full architecture — the modular `src/red_line/` package, the import DAG, and how
 `tests/` mirrors it — is in [`docs/architecture.md`](docs/architecture.md); the
-[`docs/`](docs/README.md) directory is the complete reference.
+[documentation index](docs/README.md) links to setup, verification,
+publication, and the [manuscript](docs/manuscript/README.md).
 
 ## Historical four-line orientation
 
@@ -78,13 +79,15 @@ does not establish installation or access.
 The reader `line_set` and the Witness Register are companions, not additional
 colors. Red Line does not import, depend on, or defer to them. The historical
 orientation and shared-token acknowledgment are developed in
-[`manuscript/02b_line_set_orientation.md`](manuscript/02b_line_set_orientation.md).
+[`docs/manuscript/02b_line_set_orientation.md`](docs/manuscript/02b_line_set_orientation.md).
 
 ## Quick start
 
+Install uv and [`rsvg-convert`](docs/development.md#setup) before running the tests or building figures.
+
 ```bash
 # install the test tools declared under [project.optional-dependencies].dev
-uv sync --extra dev
+uv sync --locked --extra dev
 
 # run the gate (tests + coverage; ≥90% enforced on src/red_line/)
 uv run pytest tests/ --cov=red_line --cov-fail-under=90
@@ -130,9 +133,9 @@ print(evaluate_action(action, as_of="2026-07-17").classification)  # Classificat
 ## The red lines
 
 The full, human-readable beacon is in
-[`manuscript/09_red_lines.md`](manuscript/09_red_lines.md); the authoritative,
+[`docs/manuscript/09_red_lines.md`](docs/manuscript/09_red_lines.md); the authoritative,
 machine-readable source is `PERSONAL_RED_LINES` in `src/red_line/registry/lines.py`. The
-manuscript (`manuscript/`) explains the adaptation from Turner's framework in full.
+manuscript (`docs/manuscript/`) explains the adaptation from Turner's framework in full.
 
 ## Derived registry analytics
 
@@ -171,7 +174,7 @@ data): `exemption_evidence_matrix`, `outcome_coverage_plate`,
 [`src/red_line/figures/plates_analysis.py`](src/red_line/figures/plates_analysis.py)
 and written under `output/figures/` by the `scripts/build_figures.py` CLI. The derived numbers are
 written up in
-[`manuscript/09a_registry_composition.md`](manuscript/09a_registry_composition.md),
+[`docs/manuscript/09a_registry_composition.md`](docs/manuscript/09a_registry_composition.md),
 and every number in that prose is recomputed from the analysis code by two
 suites: `tests/integration/test_manuscript_composition_binding.py` covers the
 per-line table and the totals, and
@@ -183,7 +186,7 @@ new surface fails rather than drifts. This is the same prose-code binding
 discipline as the beacon itself. These views describe the
 registry's *shape*, not its strength: they are registry introspection, not a
 risk model, a safety score, or a basis for cross-author comparison (see
-[`manuscript/10_limitations.md`](manuscript/10_limitations.md)).
+[`docs/manuscript/10_limitations.md`](docs/manuscript/10_limitations.md)).
 
 ## The common report envelope
 
@@ -279,4 +282,4 @@ boundary you cannot trust, including for yourself.
 
 ## License
 
-Code: MIT. Prose (`manuscript/`): CC-BY-4.0.
+Code: MIT. Prose (`docs/manuscript/`): CC-BY-4.0.

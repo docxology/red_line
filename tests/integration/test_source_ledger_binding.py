@@ -33,7 +33,7 @@ def _flat(relative: str) -> str:
 
 METHOD_RAW = (ROOT / "docs" / "research-method.md").read_text(encoding="utf-8")
 METHOD = _flat("docs/research-method.md")
-SCHOLARSHIP = _flat("manuscript/02a_global_and_historical_scholarship.md")
+SCHOLARSHIP = _flat("docs/manuscript/02a_global_and_historical_scholarship.md")
 THREAT_MODEL = _flat("docs/security-threat-model.md")
 
 
@@ -197,10 +197,9 @@ def _synthetic_tree(tmp_path: Path, mutate) -> Path:
     (tmp_path / "data" / "source_claims.json").write_text(
         json.dumps(ledger, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    (tmp_path / "manuscript").mkdir(parents=True)
-    (tmp_path / "manuscript" / "references.bib").write_text("", encoding="utf-8")
-    (tmp_path / "manuscript" / "01_body.md").write_text("", encoding="utf-8")
-    (tmp_path / "docs").mkdir(parents=True)
+    (tmp_path / "docs" / "manuscript").mkdir(parents=True)
+    (tmp_path / "docs" / "manuscript" / "references.bib").write_text("", encoding="utf-8")
+    (tmp_path / "docs" / "manuscript" / "01_body.md").write_text("", encoding="utf-8")
     # The real method doc, because the row count is derived from its tables and
     # an empty stub would make every row assertion pass for the wrong reason.
     (tmp_path / "docs" / "research-method.md").write_text(METHOD_RAW, encoding="utf-8")

@@ -29,7 +29,7 @@ means “verified for this review record,” not “independently true,” “la
 
 ## Intake
 
-1. Read [`manuscript/09_red_lines.md`](../manuscript/09_red_lines.md) and stop
+1. Read [`docs/manuscript/09_red_lines.md`](manuscript/09_red_lines.md) and stop
    if the work is plainly inside a refusal.
 2. Create a `ProposedAction` with a declared scope and deployment tier.
 3. Complete all nine `ActionContext` values:

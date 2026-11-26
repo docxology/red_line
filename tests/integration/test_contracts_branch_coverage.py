@@ -75,8 +75,8 @@ def _copy_release_tree(destination_root: Path) -> None:
         "README.md",
         "CITATION.cff",
         "pyproject.toml",
-        "manuscript/09_red_lines.md",
-        "manuscript/config.yaml",
+        "docs/manuscript/09_red_lines.md",
+        "docs/manuscript/config.yaml",
         ".agents/skills/personal-red-lines/SKILL.md",
         "tests/fixtures/canary_committed.json",
     ):
@@ -88,7 +88,7 @@ def _copy_release_tree(destination_root: Path) -> None:
 def _copy_visual_tree(destination_root: Path) -> None:
     for relative in (
         "docs/visualization-briefs.md",
-        "manuscript",
+        "docs/manuscript",
         "data/source_claims.json",
         "output/figures",
     ):
@@ -125,7 +125,7 @@ def test_validate_source_claims_load_error_has_context(tmp_path: Path):
 
 def test_validate_source_claims_rejects_non_list_records(tmp_path: Path):
     _write_json(tmp_path / "data" / "source_claims.json", {"schema_version": "1.0", "records": {}})
-    _write(tmp_path / "manuscript" / "references.bib", "")
+    _write(tmp_path / "docs" / "manuscript" / "references.bib", "")
     _write(tmp_path / "docs" / "research-method.md", "")
     assert validate_source_claims(tmp_path) == ["source ledger records must be a list"]
 
@@ -135,8 +135,8 @@ def test_validate_source_claims_rejects_non_object_figure_bindings(tmp_path: Pat
         tmp_path / "data" / "source_claims.json",
         {"schema_version": "1.0", "records": [], "figure_bindings": []},
     )
-    _write(tmp_path / "manuscript" / "references.bib", "")
-    _write(tmp_path / "manuscript" / "01_text.md", "")
+    _write(tmp_path / "docs" / "manuscript" / "references.bib", "")
+    _write(tmp_path / "docs" / "manuscript" / "01_text.md", "")
     _write(tmp_path / "docs" / "research-method.md", "")
     errors = validate_source_claims(tmp_path)
     assert "source ledger figure_bindings must be an object" in errors
@@ -186,11 +186,11 @@ def test_validate_source_claims_reports_structural_errors(tmp_path: Path):
         },
     )
     _write(
-        tmp_path / "manuscript" / "references.bib",
+        tmp_path / "docs" / "manuscript" / "references.bib",
         "@article{dup,\n  url = {https://expected.example}\n}\n"
         "@article{known,\n  title = {Known without URL}\n}\n",
     )
-    _write(tmp_path / "manuscript" / "01_text.md", "Cites @dup, @known, @unknown, and @fig:ignore.\n")
+    _write(tmp_path / "docs" / "manuscript" / "01_text.md", "Cites @dup, @known, @unknown, and @fig:ignore.\n")
     _write(tmp_path / "docs" / "research-method.md", "\n")
     errors = validate_source_claims(tmp_path)
     assert "source ledger schema_version must be 1.0" in errors
@@ -467,7 +467,7 @@ def test_validate_release_bindings_detects_metadata_and_beacon_drift(tmp_path: P
     fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
     fixture["registry_digest"] = "0" * 64
     fixture_path.write_text(json.dumps(fixture, indent=2) + "\n", encoding="utf-8")
-    beacon_path = tmp_path / "manuscript" / "09_red_lines.md"
+    beacon_path = tmp_path / "docs" / "manuscript" / "09_red_lines.md"
     beacon_text = beacon_path.read_text(encoding="utf-8")
     evidence = next(kind for kind in exemption.required_evidence if kind.value == "end_use")
     beacon_text = beacon_text.replace(line.standard, "I will do the opposite of this standard.", 1)
@@ -560,7 +560,7 @@ def test_validate_visual_bindings_detects_label_and_output_drift(tmp_path: Path)
     brief_path.write_text(
         brief_path.read_text(encoding="utf-8").replace(label, "missing-label", 1), encoding="utf-8"
     )
-    for manuscript_path in sorted((tmp_path / "manuscript").glob("*.md")):
+    for manuscript_path in sorted((tmp_path / "docs" / "manuscript").glob("*.md")):
         manuscript_text = manuscript_path.read_text(encoding="utf-8")
         if label in manuscript_text:
             manuscript_path.write_text(

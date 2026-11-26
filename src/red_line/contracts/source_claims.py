@@ -123,7 +123,7 @@ def _bibliography_for(path: Path) -> dict[str, str | None]:
 
 def validate_source_claims(root: Path) -> list[str]:
     ledger_path = root / "data" / "source_claims.json"
-    bib_path = root / "manuscript" / "references.bib"
+    bib_path = root / "docs" / "manuscript" / "references.bib"
     method_path = root / "docs" / "research-method.md"
     try:
         ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
@@ -192,7 +192,7 @@ def validate_source_claims(root: Path) -> list[str]:
     tokens = set(
         re.findall(
             r"@([A-Za-z0-9_:-]+)",
-            "\n".join(path.read_text(encoding="utf-8") for path in (root / "manuscript").glob("*.md")),
+            "\n".join(path.read_text(encoding="utf-8") for path in (root / "docs" / "manuscript").glob("*.md")),
         )
     )
     # pandoc-crossref prefixes plus the formalism-block prefixes consumed by

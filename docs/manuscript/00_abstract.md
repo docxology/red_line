@@ -51,3 +51,5 @@ Red Line remains narrow. Black Line addresses positive operating discipline;
 Golden Line addresses aspiration; White Line addresses absence, restraint, and
 unknowability. They cross-reference one another without importing their
 substantive methods into this refusal boundary.
+
+This manuscript describes Red Line source version **0.5.2**.

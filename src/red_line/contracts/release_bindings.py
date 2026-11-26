@@ -25,9 +25,9 @@ def validate_release_bindings(root: Path, *, require_rendered: bool = False) -> 
     after the canonical PDF/HTML render has completed.
     """
 
-    beacon = (root / "manuscript" / "09_red_lines.md").read_text(encoding="utf-8")
+    beacon = (root / "docs" / "manuscript" / "09_red_lines.md").read_text(encoding="utf-8")
     readme = (root / "README.md").read_text(encoding="utf-8")
-    config = (root / "manuscript" / "config.yaml").read_text(encoding="utf-8")
+    config = (root / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8")
     citation = (root / "CITATION.cff").read_text(encoding="utf-8")
     pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
     skill = (root / ".agents" / "skills" / "personal-red-lines" / "SKILL.md").read_text(encoding="utf-8")

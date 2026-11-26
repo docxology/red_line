@@ -20,7 +20,7 @@ def validate_visual_bindings(root: Path) -> list[str]:
     brief = brief_path.read_text(encoding="utf-8") if brief_path.exists() else ""
     if not brief:
         errors.append("visualization brief is missing or empty")
-    manuscript_files = sorted((root / "manuscript").glob("*.md"))
+    manuscript_files = sorted((root / "docs" / "manuscript").glob("*.md"))
     manuscript = "\n".join(path.read_text(encoding="utf-8") for path in manuscript_files)
     ledger_path = root / "data" / "source_claims.json"
     try:

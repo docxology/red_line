@@ -125,7 +125,7 @@ def test_review_combination_sweep_covers_triggers_conflicts_and_aliases():
     assert report.rows == run_combination_sweep(as_of="2035-12-31").rows
     from pathlib import Path
 
-    prose = (Path(__file__).resolve().parents[2] / "manuscript" / "05_deployment_tiers.md").read_text()
+    prose = (Path(__file__).resolve().parents[2] / "docs" / "manuscript" / "05_deployment_tiers.md").read_text()
     assert f"executes {report.evaluation_count} evaluations" in prose
     assert f"{len(report.rows)} compound scope rows" in prose
 

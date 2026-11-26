@@ -25,7 +25,7 @@ tests exist to catch.
 | Machine-readable registry | `src/red_line/registry/lines.py` (`PERSONAL_RED_LINES`) | The authoritative red lines. Everything else is derived from this. |
 | Deterministic hash | `src/red_line/canary/hashing.py` (`registry_hash`) | SHA-256 over canonicalized `RedLine` content (no timestamps). |
 | README truncated pin | `README.md` | `` `first8…last6` `` form (`72835fd8…f5aad7` at v0.3.0). |
-| Beacon full pin + prose | `manuscript/09_red_lines.md` | The full 64-hex hash and the human-readable rendering of each line. |
+| Beacon full pin + prose | `docs/manuscript/09_red_lines.md` | The full 64-hex hash and the human-readable rendering of each line. |
 | Committed prior canary | `tests/fixtures/canary_committed.json` | The dated statement + hash + `line_ids` + per-line digests that `check_canary.py` and the trust-model tests verify against. |
 
 The current pinned registry hash (do not alter except by re-issuing a canary):
@@ -63,7 +63,7 @@ pytest tests/ --cov=red_line --cov-fail-under=90
 The whole design depends on the registry being pinned in multiple places:
 
 - `tests/integration/test_beacon_binding.py` recomputes `registry_hash` and
-  asserts it equals the full hash in `manuscript/09_red_lines.md` and the
+  asserts it equals the full hash in `docs/manuscript/09_red_lines.md` and the
   truncated `first8…last6` in `README.md`, and that the README's
   `(N lines, M CANARY-grade)` counts match the live registry.
 - `tests/canary/*` and `tests/integration/test_trust_model.py` pin the committed
@@ -96,7 +96,7 @@ Then update, in this order:
    hash's first 8 and last 6 hex chars. Also update the `(N lines, M CANARY-grade)`
    counts if the line set changed.
 2. **Beacon full pin** — replace the single 64-hex hash block in
-  `manuscript/09_red_lines.md` with the new full hash.
+  `docs/manuscript/09_red_lines.md` with the new full hash.
    (`test_beacon_pinned_hash_matches_registry` asserts the beacon carries
    **exactly one** 64-hex string, and that it equals the computed hash.)
 3. **Beacon prose for the edited line** — update the human-readable rendering
@@ -107,10 +107,10 @@ Then update, in this order:
    written out as a word in eight files, and all eight are now recomputed from
    `PERSONAL_RED_LINES` by
    `tests/integration/test_unbound_count_binding.py::test_every_restated_line_count_matches_the_registry`:
-   `manuscript/00_abstract.md`, `manuscript/01_introduction.md`,
-   `manuscript/05_deployment_tiers.md`, `manuscript/07_durability_canary.md`,
-   `manuscript/09_red_lines.md`, `manuscript/09a_registry_composition.md`,
-   `manuscript/10_limitations.md`, and `manuscript/11_conclusion.md`. That test
+   `docs/manuscript/00_abstract.md`, `docs/manuscript/01_introduction.md`,
+   `docs/manuscript/05_deployment_tiers.md`, `docs/manuscript/07_durability_canary.md`,
+   `docs/manuscript/09_red_lines.md`, `docs/manuscript/09a_registry_composition.md`,
+   `docs/manuscript/10_limitations.md`, and `docs/manuscript/11_conclusion.md`. That test
    also scans every manuscript file for an unlisted restatement, so a ninth
    surface fails rather than drifts. The composition section additionally
    restates the severity split, the tier-floor split, and the structural ranges;
@@ -175,7 +175,7 @@ being re-issued eventually trips this — that is the instrument working.
 ### 6. Commit with the change and the reason
 
 ```bash
-git add src/red_line/registry/lines.py README.md manuscript/09_red_lines.md \
+git add src/red_line/registry/lines.py README.md docs/manuscript/09_red_lines.md \
         tests/fixtures/canary_committed.json
 git commit -m "red-line: <what changed> — <why>"
 ```
@@ -205,7 +205,7 @@ sees the registry delta, the hash delta, and the rationale together. This is the
 
 - `docs/VERIFY.md` — how an external party verifies the canary once the prior
   statement lives on an independent timestamped surface.
-- `manuscript/07_durability_canary.md` — the canonicalization and hashing rationale.
+- `docs/manuscript/07_durability_canary.md` — the canonicalization and hashing rationale.
 - **`daf-red-line`** skill (in the author's private `docxology/daf-skills`
   repository; public descriptor stub at
   `.agents/skills/personal-red-lines/SKILL.md`) — the operational skill for

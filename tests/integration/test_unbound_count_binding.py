@@ -1,7 +1,7 @@
 """Close the count and hash claims that no test read.
 
 Two gaps were shipped together. First, three regions of
-``manuscript/09a_registry_composition.md`` stated registry-derived numbers that
+``docs/manuscript/09a_registry_composition.md`` stated registry-derived numbers that
 ``test_manuscript_composition_binding.py`` never touched — the severity and
 tier-floor distributions, the joint claim relating them, and the structural
 ranges — while ``README.md`` and ``ISA.md`` asserted that *every* number in that
@@ -34,7 +34,7 @@ from red_line.canary import registry_hash
 from red_line.model.enums import DeploymentTier
 
 ROOT = Path(__file__).resolve().parents[2]
-MANUSCRIPT = ROOT / "manuscript"
+MANUSCRIPT = ROOT / "docs" / "manuscript"
 
 NUMBER_WORDS = {
     1: "one",

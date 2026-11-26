@@ -45,7 +45,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def _built_tree(tmp_path: Path) -> Path:
     """Copy the manuscript and a freshly built figure set into a temp project."""
 
-    shutil.copytree(ROOT / "manuscript", tmp_path / "manuscript")
+    shutil.copytree(ROOT / "docs" / "manuscript", tmp_path / "docs" / "manuscript")
     build_figures(tmp_path)
     return tmp_path
 
@@ -129,7 +129,7 @@ def test_gate_catches_the_template_height_cap_reintroduced(tmp_path: Path) -> No
     """
 
     project = _built_tree(tmp_path)
-    config = project / "manuscript" / "config.yaml"
+    config = project / "docs" / "manuscript" / "config.yaml"
     config.write_text(
         re.sub(
             r"^(\s{2,}figure_height_fraction:)\s*[0-9.]+\s*$",
@@ -150,7 +150,7 @@ def test_gate_fails_closed_when_a_registered_figure_is_never_embedded(tmp_path: 
     """A figure with no manuscript embed is unmeasurable, so it must raise."""
 
     project = _built_tree(tmp_path)
-    embed = project / "manuscript" / "05_deployment_tiers.md"
+    embed = project / "docs" / "manuscript" / "05_deployment_tiers.md"
     embed.write_text(
         embed.read_text(encoding="utf-8").replace("{#fig:tier-monotonicity-lattice", "{#fig:removed"),
         encoding="utf-8",
@@ -163,7 +163,7 @@ def test_gate_fails_closed_when_a_registered_figure_is_never_embedded(tmp_path: 
 def test_gate_fails_closed_when_the_figures_are_not_built(tmp_path: Path) -> None:
     """An unbuilt figure set must raise, never silently measure nothing."""
 
-    shutil.copytree(ROOT / "manuscript", tmp_path / "manuscript")
+    shutil.copytree(ROOT / "docs" / "manuscript", tmp_path / "docs" / "manuscript")
 
     with pytest.raises(FileNotFoundError, match="build the figures first"):
         measure_figure_set(tmp_path)
@@ -206,7 +206,7 @@ def test_derived_page_geometry_matches_the_rendered_log() -> None:
     if not log_path.is_file():  # pragma: no cover - render artifact is optional
         pytest.skip("no rendered LaTeX log in this checkout")
     log = log_path.read_text(encoding="utf-8", errors="replace")
-    geometry = parse_page_geometry((ROOT / "manuscript" / "config.yaml").read_text(encoding="utf-8"))
+    geometry = parse_page_geometry((ROOT / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8"))
 
     logged_width = float(re.search(r"\\textwidth=([\d.]+)pt", log).group(1))
     logged_height = float(re.search(r"\\textheight=([\d.]+)pt", log).group(1))
@@ -222,7 +222,7 @@ def test_declared_width_fractions_match_the_generated_latex() -> None:
     if not tex_path.is_file():  # pragma: no cover - render artifact is optional
         pytest.skip("no rendered LaTeX source in this checkout")
     tex = tex_path.read_text(encoding="utf-8", errors="replace")
-    fractions = declared_width_fractions(ROOT / "manuscript")
+    fractions = declared_width_fractions(ROOT / "docs" / "manuscript")
     expected_by_file = {FIGURE_TEXT[label]["filename"]: fractions[label] for label in GENERATORS}
 
     seen = 0
@@ -230,7 +230,7 @@ def test_declared_width_fractions_match_the_generated_latex() -> None:
         name = match.group(2).rsplit("/", 1)[-1]
         if name not in expected_by_file:
             continue
-        declared = re.search(r"width=([\d.]*)\\linewidth", match.group(1))
+        declared = re.search(r"width=([\d.]*)\\(?:line|text)width", match.group(1))
         assert declared is not None, name
         assert abs(float(declared.group(1) or 1.0) - expected_by_file[name]) < 1e-9, name
         seen += 1
@@ -264,8 +264,8 @@ def test_page_geometry_rejects_a_geometry_string_missing_a_margin() -> None:
 
 
 def test_declared_width_defaults_to_full_line_when_the_embed_omits_width(tmp_path: Path) -> None:
-    manuscript = tmp_path / "manuscript"
-    manuscript.mkdir()
+    manuscript = tmp_path / "docs" / "manuscript"
+    manuscript.mkdir(parents=True)
     (manuscript / "01.md").write_text("![c](../output/figures/x.png){#fig:bare}\n", encoding="utf-8")
 
     assert declared_width_fractions(manuscript) == {"fig:bare": 1.0}
@@ -309,10 +309,10 @@ def test_theme_font_floor_is_the_value_the_page_geometry_demands() -> None:
     embed or widening the canvas reddens this test.
     """
 
-    geometry = parse_page_geometry((ROOT / "manuscript" / "config.yaml").read_text(encoding="utf-8"))
+    geometry = parse_page_geometry((ROOT / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8"))
     narrowest = min(
         fraction
-        for label, fraction in declared_width_fractions(ROOT / "manuscript").items()
+        for label, fraction in declared_width_fractions(ROOT / "docs" / "manuscript").items()
         if label in GENERATORS
     )
     required = MIN_LEGIBLE_PT * WIDTH / (narrowest * geometry.text_width_pt)
@@ -342,7 +342,7 @@ def test_configured_height_fraction_is_the_one_the_renderer_injected() -> None:
         pytest.skip("no rendered LaTeX source in this checkout")
     tex = tex_path.read_text(encoding="utf-8", errors="replace")
     configured = parse_figure_height_fraction(
-        (ROOT / "manuscript" / "config.yaml").read_text(encoding="utf-8")
+        (ROOT / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8")
     )
     filenames = {FIGURE_TEXT[label]["filename"] for label in GENERATORS}
 

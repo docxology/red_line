@@ -45,7 +45,7 @@ the working tree produced:
 | Canary | unchanged and fresh |
 
 The active working tree also contains a concurrent, in-scope manuscript edit in
-`manuscript/02b_line_set_orientation.md`; it is preserved as input to this
+`docs/manuscript/02b_line_set_orientation.md`; it is preserved as input to this
 pass, not overwritten.
 
 This record was re-audited on 2026-07-18. The current evidence is recorded in

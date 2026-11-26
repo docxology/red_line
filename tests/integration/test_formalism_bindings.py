@@ -45,7 +45,7 @@ from red_line.model.action import DEFAULT_EVIDENCE_MAX_AGE_DAYS
 from red_line.model.red_line import normalize_scope
 
 ROOT = Path(__file__).resolve().parents[2]
-MANUSCRIPT = ROOT / "manuscript"
+MANUSCRIPT = ROOT / "docs" / "manuscript"
 FORMALISM = MANUSCRIPT / "08a_formalism.md"
 
 #: A formalism block opener: ``::: {.definition #def:x title="X"}``.

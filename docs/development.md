@@ -15,10 +15,12 @@ moral claim, and not authored by any AI.
 
 ## Setup
 
-Pure-stdlib package; the only third-party dependencies are test tools.
+Use Python 3.11 or later and uv. The repository pins Python 3.15 in
+`.python-version`. Install `rsvg-convert` (the `librsvg2-bin` package on Debian)
+for the figure build, link checks, and test suite.
 
 ```bash
-uv sync --extra dev          # installs pytest + pytest-cov into .venv
+uv sync --locked --extra dev
 ```
 
 `.venv/bin/python` is the interpreter for every command below. There is no
@@ -74,20 +76,38 @@ Figures are a separate deterministic input stage. Regenerate them before the
 template render so both PDF and combined HTML see the current source-derived
 assets:
 
+The pinned [template renderer](https://github.com/docxology/template/tree/87704feae0a4490ef7dad9c931d268e8c30273c2)
+uses the numbered sections and [configuration](manuscript/config.yaml) in
+[docs/manuscript/](manuscript/README.md). In addition to the local prerequisites,
+install Pandoc, pandoc-crossref, XeLaTeX with the template's TeX packages, and
+Poppler for PDF verification.
+
+From the Red Line repository root, use a fresh engine checkout:
+
 ```bash
+red_line_root="$(pwd -P)"
 .venv/bin/python scripts/build_figures.py
+.venv/bin/python scripts/build_release_data.py
 
-# The render engine is a separate repository. Clone it wherever you like:
-git clone https://github.com/docxology/template /path/of/your/choosing/template
-export RED_LINE_TEMPLATE_ROOT=/path/of/your/choosing/template
+git clone https://github.com/docxology/template.git ../template
+export RED_LINE_TEMPLATE_ROOT="$(cd ../template && pwd -P)"
+git -C "$RED_LINE_TEMPLATE_ROOT" checkout --detach 87704feae0a4490ef7dad9c931d268e8c30273c2
+mkdir -p "$RED_LINE_TEMPLATE_ROOT/projects/working"
+ln -s "$red_line_root" "$RED_LINE_TEMPLATE_ROOT/projects/working/red_line"
 
-# Then render from that checkout, naming this project by its qualified name.
-# The engine expects the project reachable under its own projects/ tree; link
-# or copy this checkout there as `working/red_line`.
-(cd "$RED_LINE_TEMPLATE_ROOT" \
-  && uv run python scripts/pipeline/stage_03_render.py --project working/red_line \
-  && uv run python scripts/pipeline/stage_04_validate.py --project working/red_line)
+(
+  cd "$RED_LINE_TEMPLATE_ROOT"
+  uv sync --locked
+  uv run --no-sync python scripts/pipeline/stage_03_render.py --project working/red_line
+  uv run --no-sync python scripts/pipeline/stage_04_validate.py --project working/red_line
+)
 ```
+
+Stage 04 checks the rendered artifacts against the tracked source inventory.
+Run the [standalone link checks](standalone.md#validation-after-separation)
+from the Red Line checkout. Inspect the combined outputs for the numbered
+sections, the resolved bibliography, the cover, and the source-generated
+figures. The outputs are under this project's `output/` directory.
 
 `RED_LINE_TEMPLATE_ROOT` names the engine for both the render and the manifest.
 `RED_LINE_TEMPLATE_ENVIRONMENT` optionally selects a separate renderer uv
@@ -143,7 +163,7 @@ location searched, rather than handing the renderer a `cwd` that is not there.
 This is an honest external dependency, not a hidden one. Without the engine this
 repository still runs its full test suite, the coverage gate, the deterministic
 figure build, and every script under `scripts/`; what it cannot do is typeset
-itself. See [`STANDALONE.md`](../STANDALONE.md).
+itself. See [standalone guide](standalone.md).
 
 For a release candidate, run the render comparison after those inputs are
 current. The `--render` path also requires the strict release manifest: every
@@ -274,8 +294,8 @@ verified against the evidence-gated evaluator, plus the exact re-issue checklist
    the two Turner-Standard analogs (`STANDARD_ANALOG_IDS`); extensions are
    `ABSOLUTE` or `STRONG`, and a `CANARY` line may never be `AIR_GAPPED`.
 3. Recompute the hash and update every pin: `README.md`,
-   `manuscript/09_red_lines.md`, the beacon prose, the line count in
-   `manuscript/11_conclusion.md`, and regenerate
+   `docs/manuscript/09_red_lines.md`, the beacon prose, the line count in
+   `docs/manuscript/11_conclusion.md`, and regenerate
    `tests/fixtures/canary_committed.json`.
 4. Issue a dated **successor** canary (`build_canary.py --rationale ...`) so the
    prior attestation is not silently re-attested.

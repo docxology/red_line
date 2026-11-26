@@ -33,8 +33,8 @@ def _write_executable(path: Path, contents: str) -> Path:
 
 
 def test_cover_assets_are_sized_for_the_title_page() -> None:
-    cover = Path("manuscript/assets/cover/red_line_cover.png")
-    hero = Path("manuscript/assets/cover/red_line_hero.png")
+    cover = Path("docs/manuscript/assets/cover/red_line_cover.png")
+    hero = Path("docs/manuscript/assets/cover/red_line_hero.png")
 
     assert cover.exists()
     assert hero.exists()
@@ -164,7 +164,7 @@ def test_evidence_summary_reports_partial_verification() -> None:
 
 
 def test_manuscript_defines_every_registered_figure() -> None:
-    manuscript = "\n".join(path.read_text(encoding="utf-8") for path in Path("manuscript").glob("*.md"))
+    manuscript = "\n".join(path.read_text(encoding="utf-8") for path in Path("docs/manuscript").glob("*.md"))
     defined = set(re.findall(r"#(fig:[a-z0-9-]+)", manuscript))
     assert defined == set(FIGURE_TEXT)
 
@@ -180,7 +180,7 @@ def test_monotonicity_embed_numbers_re_derive_from_the_live_sweep() -> None:
     """
     # Flattened so a line wrap between two words of a bound phrase cannot make
     # an assertion silently stop matching — the prose is hard-wrapped at ~78.
-    body = " ".join(Path("manuscript/05_deployment_tiers.md").read_text(encoding="utf-8").split())
+    body = " ".join(Path("docs/manuscript/05_deployment_tiers.md").read_text(encoding="utf-8").split())
     report = run_monotonicity_sweep()
     assert report.monotone and report.inversion_count == 0
     slot_claims = re.findall(r"all (\d+) line/keyword slots \((\d+) distinct tokens\)", body)
@@ -205,7 +205,7 @@ def test_monotonicity_embed_numbers_re_derive_from_the_live_sweep() -> None:
 
 def test_governance_embed_enumerates_the_six_drawn_stages() -> None:
     """The 03 embed matches the six boxes the generator draws — no phantom node."""
-    body = Path("manuscript/03_adaptation_thesis.md").read_text(encoding="utf-8")
+    body = Path("docs/manuscript/03_adaptation_thesis.md").read_text(encoding="utf-8")
     assert f"{_NUMBER_WORDS[len(PERSONAL_RED_LINES)]}-line registry beacon" in body
     assert "draws six stages" in body
     for stage in (

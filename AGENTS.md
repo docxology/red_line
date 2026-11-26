@@ -3,7 +3,7 @@
 This project is its own repository — `docxology/red_line` — and is also
 developed as one project inside the author's private projects tree. It runs in
 both. Read this file with [`README.md`](README.md),
-[`STANDALONE.md`](STANDALONE.md), and the relevant documentation under
+[standalone guide](docs/standalone.md), and the relevant documentation under
 [`docs/`](docs/README.md) before editing. There is no parent guidance file to
 read: a copy of this repository is the whole of what is being edited, and any
 instruction that only makes sense one directory up does not travel with it.
@@ -21,8 +21,8 @@ instruction that only makes sense one directory up does not travel with it.
   <https://github.com/docxology/template>, located anywhere and named by
   `RED_LINE_TEMPLATE_ROOT`, with `scripts/pipeline/stage_03_render.py` and
   `scripts/pipeline/stage_04_validate.py` under the project name
-  `working/red_line`. See [`STANDALONE.md`](STANDALONE.md).
+  `working/red_line`. See [standalone guide](docs/standalone.md).
 
 The current project contract, release limitations, and historical verification
-records belong in the README, development guide, and TODO; do not copy
+records belong in the README, development guide, and [release backlog](docs/backlog.md); do not copy
 those documents into nested guidance files.
