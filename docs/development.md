@@ -82,7 +82,8 @@ uses the numbered sections and [configuration](manuscript/config.yaml) in
 install Pandoc, pandoc-crossref, XeLaTeX with the template's TeX packages, and
 Poppler for PDF verification.
 
-From the Red Line repository root, use a fresh engine checkout:
+From the root of a Red Line checkout named `red_line`, use a fresh engine
+checkout:
 
 ```bash
 red_line_root="$(pwd -P)"
